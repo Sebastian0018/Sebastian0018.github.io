@@ -2,13 +2,13 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-    --bg: #0d1117;
-    --bg-card: #161b22;
-    --border: #30363d;
-    --text: #e6edf3;
-    --text-muted: #8b949e;
-    --accent: #f0a500;
-    --accent-light: #ffc23a;
+    --bg: #000000;
+    --bg-card: #1d1d1f;
+    --border: #424245;
+    --text: #f5f5f7;
+    --text-muted: #86868b;
+    --accent: #2997ff;
+    --accent-light: #6ab8ff;
 }
 
 html { scroll-behavior: smooth; }
@@ -203,7 +203,7 @@ h2::after {
     letter-spacing: 0.05em;
 }
 
-.in-progress { background: rgba(240, 165, 0, 0.15); color: var(--accent); }
+.in-progress { background: rgba(41, 151, 255, 0.15); color: var(--accent); }
 .coming-soon { background: rgba(139, 148, 158, 0.15); color: var(--text-muted); }
 
 .project-card h3 {
@@ -226,7 +226,7 @@ h2::after {
 
 .project-tech span {
     font-size: 0.75rem;
-    background: rgba(240, 165, 0, 0.1);
+    background: rgba(41, 151, 255, 0.1);
     color: var(--accent);
     padding: 0.2rem 0.6rem;
     border-radius: 4px;
