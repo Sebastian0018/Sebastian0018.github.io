@@ -967,9 +967,10 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 .slide:not(.is-active) figcaption { visibility: hidden; }
 
 /* ------------------------------------------------------------
-   19. Loading screen — Boston drawn from David's photo
-   Hidden unless the <head> script adds .show-loader (first visit
-   in a browser session, JS on, no reduced-motion preference).
+   19. Loading screen — basic and smooth
+   Hidden unless the <head> script adds .show-loader (first page of a
+   browser session, JS on, no reduced-motion preference). The bar is a
+   CSS transform animation, so it runs on the compositor and never stutters.
    ------------------------------------------------------------ */
 .loader { display: none; }
 
@@ -978,7 +979,8 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 .hero-done .hero-reveal { animation: none; opacity: 1; }     /* safety net: never leave the hero invisible */
 
 .show-loader .loader {
-  display: block;
+  display: grid;
+  place-items: center;
   position: fixed;
   inset: 0;
   z-index: 500;
@@ -986,93 +988,47 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
   background-image: radial-gradient(circle, rgba(0, 0, 0, 0.13) 1px, transparent 1.3px);
   background-size: 20px 20px;
   cursor: pointer;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.45s ease;
 }
 .loader.is-done { opacity: 0; pointer-events: none; }
 
-.loader-art {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 76px;
-  width: 100%;
-  height: calc(100% - 76px);
-}
-.loader-art path {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1 1;          /* with pathLength="1": offset 1 = hidden, 0 = drawn */
-  stroke-dashoffset: 1;
-}
-.loader-art path.thin { stroke-width: 1.2; stroke: #4A4A4A; }
-.loader-art path.hl { stroke: var(--orange); stroke-width: 3.4; }
-.loader-art path.hl-thin { stroke: var(--orange); stroke-width: 1.8; }
-.loader-stamp {
-  font-family: var(--font-mono);
-  font-size: 44px;
-  font-weight: 700;
-  fill: var(--orange);
-  opacity: 0;
-  white-space: pre;
-}
-
-.loader-bar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--paper);
-  border-top: 1px solid var(--ink);
-  padding: 14px var(--gutter) 20px;
-}
-.loader-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.loader-pct { font-weight: 700; min-width: 4ch; text-align: right; }
-.loader-track {
-  height: 8px;
-  border: 1px solid var(--ink);
-  border-radius: var(--radius-pill);
-  overflow: hidden;
-}
-.loader-fill {
-  height: 100%;
-  background: var(--ink);
-  transform: scaleX(0);
-  transform-origin: left center;
-}
-
-.loader-title {
-  position: absolute;
-  top: 28px;
-  left: var(--gutter);
+.loader-center {
   display: grid;
+  justify-items: center;
   gap: 6px;
+  width: min(280px, 72vw);
+  animation: loader-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
-.loader-title strong { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
-.loader-title span {
+.loader.is-done .loader-center { transform: translateY(-6px); transition: transform 0.45s ease; }
+
+.loader-logo { width: 44px; height: 44px; margin-bottom: 10px; }
+.loader-name { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+.loader-role {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--steel);
-}
-@media (max-aspect-ratio: 1/1) {
-  .loader-title { top: 30%; left: 0; right: 0; justify-items: center; text-align: center; }
-  .loader-title strong { font-size: clamp(28px, 9vw, 44px); }
+  margin-bottom: 18px;
 }
 
-@media (max-width: 560px) {
-  .loader-meta span:first-child { max-width: 30ch; }
+.loader-track {
+  width: 100%;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
+.loader-fill {
+  height: 100%;
+  background: var(--ink);
+  transform-origin: left center;
+  will-change: transform;
+  animation: loader-fill 1.1s cubic-bezier(0.3, 0.6, 0.2, 1) both;
+}
+/* when the page is ready: finish the last stretch quickly */
+.loader.is-done .loader-fill { animation: loader-fill-end 0.3s ease-out both; }
+
+@keyframes loader-in   { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes loader-fill { from { transform: scaleX(0); } to { transform: scaleX(0.92); } }
+@keyframes loader-fill-end { from { transform: scaleX(0.92); } to { transform: scaleX(1); } }
