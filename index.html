@@ -27,8 +27,17 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap"></noscript>
+    <link rel="stylesheet" href="style.css?v=12">
+    <script>
+        /* motion hook set before first paint (below-the-fold reveals only);
+           failsafe: if the animation library never arrives, show everything */
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('js-motion');
+            setTimeout(function () { if (!window.gsap) document.documentElement.classList.remove('js-motion'); }, 4000);
+        }
+    </script>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "David Sebastian Becerra Davila", "jobTitle": "Civil Engineer", "address": {"@type": "PostalAddress", "addressLocality": "Boston", "addressRegion": "MA", "addressCountry": "US"}, "alumniOf": "Pontificia Universidad Javeriana", "url": "https://sebastian0018.github.io/", "sameAs": ["https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9", "https://github.com/Sebastian0018"]}</script>
 </head>
 <body class="page-home">
@@ -36,7 +45,7 @@
     <a class="skip" href="#main">Skip to content</a>
 
     <!-- ===== ANNOUNCEMENT BAR ===== -->
-    <aside class="announce" aria-label="Availability">Open to project coordination, implementation and construction-tech roles in Boston — <a href="contact.html">get in touch</a></aside>
+    <aside class="announce" aria-label="Availability"><span class="announce-long">Open to project coordination, implementation and construction-tech roles in Boston</span><span class="announce-short">Open to work in Boston</span> — <a href="contact.html">get in touch</a></aside>
 
     <!-- ===== NAVIGATION ===== -->
     <header class="nav">
@@ -76,17 +85,17 @@
             <div class="wrap">
                 <div class="hero-grid">
                     <div>
-                        <p class="eyebrow reveal hero-reveal">Civil Engineer · Boston, MA</p>
-                        <h1 class="display reveal hero-reveal">Built on job sites. <span class="accent">Learning to build software.</span></h1>
-                        <p class="lede reveal hero-reveal">I'm David Becerra — a civil engineer with construction project management and hydrosanitary design experience in Colombia. Now in Boston, I'm learning Python and AI tools to work on the software side of the industry.</p>
-                        <div class="btn-row reveal hero-reveal">
+                        <p class="eyebrow reveal hero-reveal" style="--i:0">Civil Engineer · Boston, MA</p>
+                        <h1 class="display reveal hero-reveal" style="--i:1">Built on job sites. <span class="accent">Learning to build software.</span></h1>
+                        <p class="lede reveal hero-reveal" style="--i:2">I'm David Becerra — a civil engineer with construction project management and hydrosanitary design experience in Colombia. Now in Boston, I'm learning Python and AI tools to work on the software side of the industry.</p>
+                        <div class="btn-row reveal hero-reveal" style="--i:3">
                             <a href="work.html" class="btn btn-primary">View work →</a>
                             <a href="CV_David_Becerra_updated.pdf" class="btn btn-outline" target="_blank" rel="noopener">Download resume</a>
                         </div>
                     </div>
 
                     <!-- spec sheet readout -->
-                    <aside class="card spec reveal hero-reveal" aria-label="At a glance">
+                    <aside class="card spec reveal hero-reveal" style="--i:4" aria-label="At a glance">
                         <div class="spec-head"><span>Spec · D. Becerra</span><span>Rev 05</span></div>
                         <dl>
                             <div><dt>Discipline</dt><dd>Civil Engineer — BEng, Pontificia Universidad Javeriana (2021)</dd></div>
@@ -418,8 +427,8 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="script.js?v=9"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script defer src="script.js?v=10"></script>
 </body>
 </html>

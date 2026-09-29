@@ -927,12 +927,27 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 }
 
 /* ------------------------------------------------------------
-   18. Motion hooks (GSAP adds .js-motion; content stays visible without it)
+   18. Motion hooks
+   · Hero entrance is pure CSS: it starts on first paint and never waits
+     for a script (items are numbered with style="--i:N" for the stagger).
+   · Everything below the fold is revealed by GSAP on scroll. An inline
+     script in <head> adds .js-motion before first paint, and removes it
+     after 4 s if GSAP never loads, so content can't stay hidden.
    ------------------------------------------------------------ */
 .reveal, .reveal-item { opacity: 1; }
-.js-motion .reveal, .js-motion .reveal-item { opacity: 0; }
+.js-motion .reveal:not(.hero-reveal), .js-motion .reveal-item { opacity: 0; }
+
+.hero-reveal {
+  animation: hero-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-reveal { animation: none; }
   .js-motion .reveal, .js-motion .reveal-item { opacity: 1 !important; transform: none !important; }
   .slider-track, .slide, .nav-panel { transition: none !important; }
   html { scroll-behavior: auto; }
@@ -940,6 +955,13 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 
 /* tighter band for a single component (stats banner) */
 .section--tight { padding: 56px 0; }
+
+/* availability bar: full sentence on wide screens, one short line on phones */
+.announce-short { display: none; }
+@media (max-width: 640px) {
+  .announce-long { display: none; }
+  .announce-short { display: inline; }
+}
 
 /* dimmed neighbour slides: hide the caption instead of showing unreadable text */
 .slide:not(.is-active) figcaption { visibility: hidden; }

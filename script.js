@@ -165,23 +165,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (typeof gsap === 'undefined' || prefersReducedMotion) {
+  // No animation library (blocked/offline) or reduced motion: show everything.
+  // .js-motion is set early by the inline <head> script so below-the-fold
+  // content is hidden before first paint; the hero animates in pure CSS.
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || prefersReducedMotion) {
+    document.documentElement.classList.remove('js-motion');
     return;
   }
 
   document.documentElement.classList.add('js-motion');
   gsap.registerPlugin(ScrollTrigger);
-
-  // Hero entrance
-  const heroTargets = gsap.utils.toArray('.hero-reveal');
-  if (heroTargets.length) {
-    gsap.fromTo(
-      heroTargets,
-      { opacity: 0, y: 24 },
-      { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.12 }
-    );
-  }
-
 
   // Elevation drawing: linework draws itself like a pen plotter, then hatching,
   // utilities and callouts fade in. Dashed utility lines are faded, not drawn,
