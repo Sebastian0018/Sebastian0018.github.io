@@ -665,6 +665,31 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
   .grid-3 { grid-template-columns: 1fr; }
 }
 
+/* About: portrait stacked above the quick-facts card */
+.about-side { display: grid; gap: 28px; align-content: start; }
+.portrait img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-bottom: 1px solid var(--ink);
+}
+.portrait figcaption {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 12px 16px;
+}
+.portrait figcaption span:last-child { color: var(--steel); }
+@media (max-width: 900px) {
+  .about-side { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+}
+@media (max-width: 560px) {
+  .about-side { grid-template-columns: 1fr; }
+}
+
 /* ------------------------------------------------------------
    12. Photography — "through the lens" strip
    ------------------------------------------------------------ */
