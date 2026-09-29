@@ -23,104 +23,225 @@
     <meta name="twitter:description" content="Photography — a few frames from outside work, explored page by page.">
     <meta name="twitter:image" content="https://sebastian0018.github.io/og-image.png">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=4">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Architects+Daughter&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <nav class="site-nav">
+<div class="sheet">
+    <p class="sheet-coords" aria-hidden="true">X 42.36°N<br>Y 71.06°W</p>
+    <a class="sheet-mail" href="mailto:davidsebastianbecerra123@gmail.com">davidsebastianbecerra123@gmail.com</a>
+
+    <nav class="site-nav" aria-label="Main">
         <div class="nav-inner">
-            <a href="index.html" class="nav-logo">David <span>Becerra</span></a>
+            <a href="index.html" class="nav-logo" aria-label="David Becerra — home">
+                <svg class="logo-mark" viewBox="0 0 34 34" aria-hidden="true">
+                    <rect x="0.5" y="0.5" width="33" height="33" fill="#1F4FD1" stroke="#2B2B2B"/>
+                    <path d="M9 9.5h16M9 24.5h16M17 9.5v15" stroke="#F4EDDC" stroke-width="3.2" fill="none"/>
+                </svg>
+                David Becerra
+            </a>
             <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
                 <span></span>
             </button>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
                 <li><a href="work.html">Work</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="beyond.html" aria-current="page">Beyond</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
+            <a href="contact.html" class="nav-cta">
+                <span class="cta-tile" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 14V9h4V5h4V2h4" fill="none" stroke="#FBF8F1" stroke-width="1.6"/></svg>
+                </span>
+                Get in touch
+            </a>
         </div>
     </nav>
 
-    <header class="hero panel panel-dark" style="padding-bottom: var(--space-4);">
-        <p class="corner-tag tl reveal hero-reveal">DB · Beyond</p>
-        <p class="corner-tag tr reveal hero-reveal book-counter" id="book-counter">01 / 12</p>
-
-        <div class="deco-parallax" data-parallax="0.15" style="top: 10%; right: 5%;">
-            <svg class="deco-shape float-delay" width="90" height="90" viewBox="0 0 110 110" fill="none" aria-hidden="true">
-                <polygon points="55,10 100,40 55,100 55,55" fill="#8FA8EE" fill-opacity="0.85"/>
-                <polygon points="55,10 10,40 55,100 55,55" fill="#10182C" stroke="#8FA8EE" stroke-width="2"/>
-            </svg>
-        </div>
-
+    <header class="hero">
         <div class="container">
             <p class="hero-label reveal hero-reveal">Beyond</p>
-            <h1 class="reveal hero-reveal" style="font-size: clamp(2.25rem, 5vw, 3.75rem); max-width: 18ch;">A few frames from outside work.</h1>
-            <p class="hero-tagline reveal hero-reveal">Photography, mostly film. Browse it like an album — arrows or the strip below to move between spreads.</p>
+            <br>
+            <h1 class="hero-title is-medium reveal hero-reveal">
+                <span class="annot annot-left" aria-hidden="true">Mostly film
+                    <svg class="draw" width="100" height="10" viewBox="0 0 100 10"><path d="M2 6 C 30 2, 65 8, 98 3"/></svg>
+                </span>
+                <span class="line">A few frames from</span><br><span class="line">outside work.</span>
+            </h1>
+            <p class="hero-tagline reveal hero-reveal">Drag, swipe, use the arrows — or jump from the strip below.</p>
 
-            <div class="book-wrap reveal hero-reveal">
-                <button class="book-nav prev" aria-label="Previous spread" disabled>‹</button>
-                <div class="book" id="book">
-                    <div class="book-spine"></div>
-                    <div class="page page-left">
-                        <div class="page-inner" id="left-inner">
-                            <div class="page-face page-front">
-                                <img id="left-front-img" src="photos/photo-01.jpg" alt="Photography by David Becerra — frame 1" loading="eager">
-                            </div>
-                            <div class="page-face page-back">
-                                <img id="left-back-img" src="photos/photo-01.jpg" alt="" loading="eager">
-                            </div>
-                        </div>
-                        <div class="page-shade shade-left"></div>
-                    </div>
-                    <div class="page page-right">
-                        <div class="page-inner" id="right-inner">
-                            <div class="page-face page-front">
-                                <img id="right-front-img" src="photos/photo-02.jpg" alt="Photography by David Becerra — frame 2" loading="eager">
-                            </div>
-                            <div class="page-face page-back">
-                                <img id="right-back-img" src="photos/photo-02.jpg" alt="" loading="eager">
-                            </div>
-                        </div>
-                        <div class="page-shade shade-right"></div>
+            <section class="slider reveal hero-reveal" aria-roledescription="carousel" aria-label="Photographs">
+                <div class="slider-viewport" id="slider-viewport">
+                    <div class="slider-track" id="slider-track" aria-live="polite">
+                        <figure class="slide is-active" data-index="0" aria-label="Photo 1 of 24">
+                            <img src="photos/photo-01.jpg" width="1800" height="1204" alt="Photograph by David Becerra, frame 1" loading="eager" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 01</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="1" aria-label="Photo 2 of 24">
+                            <img src="photos/photo-02.jpg" width="1800" height="1204" alt="Photograph by David Becerra, frame 2" loading="eager" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 02</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="2" aria-label="Photo 3 of 24">
+                            <img src="photos/photo-03.jpg" width="1800" height="1204" alt="Photograph by David Becerra, frame 3" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 03</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="3" aria-label="Photo 4 of 24">
+                            <img src="photos/photo-04.jpg" width="1800" height="1204" alt="Photograph by David Becerra, frame 4" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 04</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="4" aria-label="Photo 5 of 24">
+                            <img src="photos/photo-05.jpg" width="1800" height="1204" alt="Photograph by David Becerra, frame 5" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 05</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="5" aria-label="Photo 6 of 24">
+                            <img src="photos/photo-06.jpg" width="1800" height="1213" alt="Photograph by David Becerra, frame 6" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 06</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="6" aria-label="Photo 7 of 24">
+                            <img src="photos/photo-07.jpg" width="1800" height="1213" alt="Photograph by David Becerra, frame 7" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 07</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="7" aria-label="Photo 8 of 24">
+                            <img src="photos/photo-08.jpg" width="1800" height="1189" alt="Photograph by David Becerra, frame 8" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 08</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="8" aria-label="Photo 9 of 24">
+                            <img src="photos/photo-09.jpg" width="1800" height="1200" alt="Photograph by David Becerra, frame 9" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 09</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="9" aria-label="Photo 10 of 24">
+                            <img src="photos/photo-10.jpg" width="1800" height="985" alt="Photograph by David Becerra, frame 10" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 10</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="10" aria-label="Photo 11 of 24">
+                            <img src="photos/photo-11.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 11" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 11</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="11" aria-label="Photo 12 of 24">
+                            <img src="photos/photo-12.jpg" width="1800" height="1209" alt="Photograph by David Becerra, frame 12" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 12</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="12" aria-label="Photo 13 of 24">
+                            <img src="photos/photo-13.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 13" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 13</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="13" aria-label="Photo 14 of 24">
+                            <img src="photos/photo-14.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 14" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 14</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="14" aria-label="Photo 15 of 24">
+                            <img src="photos/photo-15.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 15" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 15</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="15" aria-label="Photo 16 of 24">
+                            <img src="photos/photo-16.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 16" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 16</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="16" aria-label="Photo 17 of 24">
+                            <img src="photos/photo-17.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 17" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 17</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="17" aria-label="Photo 18 of 24">
+                            <img src="photos/photo-18.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 18" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 18</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="18" aria-label="Photo 19 of 24">
+                            <img src="photos/photo-19.jpg" width="1800" height="1151" alt="Photograph by David Becerra, frame 19" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 19</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="19" aria-label="Photo 20 of 24">
+                            <img src="photos/photo-20.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 20" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 20</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="20" aria-label="Photo 21 of 24">
+                            <img src="photos/photo-21.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 21" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 21</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="21" aria-label="Photo 22 of 24">
+                            <img src="photos/photo-22.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 22" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 22</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="22" aria-label="Photo 23 of 24">
+                            <img src="photos/photo-23.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 23" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 23</span><span>DB · 35mm</span></figcaption>
+                        </figure>
+                        <figure class="slide" data-index="23" aria-label="Photo 24 of 24">
+                            <img src="photos/photo-24.jpg" width="1800" height="1193" alt="Photograph by David Becerra, frame 24" loading="lazy" decoding="async" draggable="false">
+                            <figcaption><span>Fig. 24</span><span>DB · 35mm</span></figcaption>
+                        </figure>
                     </div>
                 </div>
-                <button class="book-nav next" aria-label="Next spread">›</button>
-            </div>
 
-            <div class="book-thumbs" id="book-thumbs" aria-label="Jump to a photo"></div>
+                <div class="slider-controls">
+                    <button class="slider-btn prev" type="button" aria-label="Previous photo">
+                        <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3 L5 9 L11 15"/></svg>
+                    </button>
+                    <span class="slider-counter" id="slider-counter">01 / 24</span>
+                    <button class="slider-btn next" type="button" aria-label="Next photo">
+                        <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M7 3 L13 9 L7 15"/></svg>
+                    </button>
+                </div>
+
+                <div class="slider-thumbs" id="slider-thumbs" aria-label="Jump to a photo">
+                    <button type="button" data-index="0" aria-label="Show photo 1" class="is-active"><img src="photos/thumbs/photo-01.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="1" aria-label="Show photo 2"><img src="photos/thumbs/photo-02.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="2" aria-label="Show photo 3"><img src="photos/thumbs/photo-03.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="3" aria-label="Show photo 4"><img src="photos/thumbs/photo-04.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="4" aria-label="Show photo 5"><img src="photos/thumbs/photo-05.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="5" aria-label="Show photo 6"><img src="photos/thumbs/photo-06.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="6" aria-label="Show photo 7"><img src="photos/thumbs/photo-07.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="7" aria-label="Show photo 8"><img src="photos/thumbs/photo-08.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="8" aria-label="Show photo 9"><img src="photos/thumbs/photo-09.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="9" aria-label="Show photo 10"><img src="photos/thumbs/photo-10.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="10" aria-label="Show photo 11"><img src="photos/thumbs/photo-11.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="11" aria-label="Show photo 12"><img src="photos/thumbs/photo-12.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="12" aria-label="Show photo 13"><img src="photos/thumbs/photo-13.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="13" aria-label="Show photo 14"><img src="photos/thumbs/photo-14.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="14" aria-label="Show photo 15"><img src="photos/thumbs/photo-15.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="15" aria-label="Show photo 16"><img src="photos/thumbs/photo-16.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="16" aria-label="Show photo 17"><img src="photos/thumbs/photo-17.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="17" aria-label="Show photo 18"><img src="photos/thumbs/photo-18.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="18" aria-label="Show photo 19"><img src="photos/thumbs/photo-19.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="19" aria-label="Show photo 20"><img src="photos/thumbs/photo-20.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="20" aria-label="Show photo 21"><img src="photos/thumbs/photo-21.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="21" aria-label="Show photo 22"><img src="photos/thumbs/photo-22.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="22" aria-label="Show photo 23"><img src="photos/thumbs/photo-23.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                    <button type="button" data-index="23" aria-label="Show photo 24"><img src="photos/thumbs/photo-24.jpg" alt="" loading="lazy" width="68" height="46"></button>
+                </div>
+            </section>
         </div>
     </header>
 
-    <footer class="site-footer">
-        <div class="container">
-            <p class="footer-mark">David <span>Becerra</span></p>
-            <div class="footer-grid">
-                <nav class="footer-nav" aria-label="Footer navigation">
-                    <a href="index.html">Home</a>
-                    <a href="work.html">Work</a>
-                    <a href="about.html">About</a>
-                    <a href="beyond.html">Beyond</a>
-                    <a href="contact.html">Contact</a>
-                </nav>
-                <div class="footer-social">
-                    <a href="https://github.com/Sebastian0018" target="_blank" rel="noopener">GitHub</a>
-                    <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener">LinkedIn</a>
-                    <a href="mailto:davidsebastianbecerra123@gmail.com">Email</a>
-                </div>
-            </div>
-            <div class="footer-inner">
-                <p>David Sebastian Becerra Davila · Boston, MA · 2026</p>
+</div><!-- /.sheet -->
+
+<footer class="site-footer">
+    <div class="container">
+        <p class="footer-mark">David Becerra <span>Civil Eng → ConTech</span></p>
+        <div class="footer-grid">
+            <nav class="footer-nav" aria-label="Footer navigation">
+                <a href="index.html">Home</a>
+                <a href="work.html">Work</a>
+                <a href="about.html">About</a>
+                <a href="beyond.html">Beyond</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <div class="footer-social">
+                <a href="https://github.com/Sebastian0018" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="mailto:davidsebastianbecerra123@gmail.com">Email</a>
             </div>
         </div>
-    </footer>
+        <div class="footer-inner">
+            <p>David Sebastian Becerra Davila · Boston, MA · 2026</p>
+        </div>
+    </div>
+</footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>

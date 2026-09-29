@@ -23,57 +23,74 @@
     <meta name="twitter:description" content="Construction management field experience and early software projects, from Farmatodo store buildouts to Banco de la República to Python tools.">
     <meta name="twitter:image" content="https://sebastian0018.github.io/og-image.png">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=4">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Architects+Daughter&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <nav class="site-nav">
+<div class="sheet">
+    <p class="sheet-coords" aria-hidden="true">X 42.36°N<br>Y 71.06°W</p>
+    <a class="sheet-mail" href="mailto:davidsebastianbecerra123@gmail.com">davidsebastianbecerra123@gmail.com</a>
+
+    <nav class="site-nav" aria-label="Main">
         <div class="nav-inner">
-            <a href="index.html" class="nav-logo">David <span>Becerra</span></a>
+            <a href="index.html" class="nav-logo" aria-label="David Becerra — home">
+                <svg class="logo-mark" viewBox="0 0 34 34" aria-hidden="true">
+                    <rect x="0.5" y="0.5" width="33" height="33" fill="#1F4FD1" stroke="#2B2B2B"/>
+                    <path d="M9 9.5h16M9 24.5h16M17 9.5v15" stroke="#F4EDDC" stroke-width="3.2" fill="none"/>
+                </svg>
+                David Becerra
+            </a>
             <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
                 <span></span>
             </button>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
                 <li><a href="work.html" aria-current="page">Work</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="beyond.html">Beyond</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
+            <a href="contact.html" class="nav-cta">
+                <span class="cta-tile" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 14V9h4V5h4V2h4" fill="none" stroke="#FBF8F1" stroke-width="1.6"/></svg>
+                </span>
+                Get in touch
+            </a>
         </div>
     </nav>
 
-    <header class="hero panel panel-dark" style="padding-bottom: var(--space-4);">
-        <p class="corner-tag tl reveal hero-reveal">DB · Work</p>
-        <p class="corner-tag tr reveal hero-reveal">02 Sites — Software</p>
-
-        <div class="deco-parallax" data-parallax="0.2" style="top: 12%; right: 7%;">
-            <svg class="deco-shape" width="100" height="100" viewBox="0 0 120 120" fill="none" aria-hidden="true">
-                <polygon points="60,6 112,36 60,66 8,36" fill="#10182C" stroke="#8FA8EE" stroke-width="2"/>
-                <polygon points="8,36 60,66 60,120 8,90" fill="#8FA8EE" fill-opacity="0.7"/>
-                <polygon points="112,36 60,66 60,120 112,90" fill="#8FA8EE" fill-opacity="0.4"/>
+    <header class="hero">
+        <div class="deco-parallax" data-parallax="0.2" style="top: 22%; left: 5%;">
+            <svg class="deco-shape" width="100" height="100" viewBox="0 0 120 120" aria-hidden="true">
+                <polygon class="fill-soft" points="60,6 112,36 60,66 8,36"/>
+                <polygon points="8,36 60,66 60,118 8,88"/>
+                <polygon points="112,36 60,66 60,118 112,88"/>
             </svg>
         </div>
-
         <div class="container">
             <p class="hero-label reveal hero-reveal">Work</p>
-            <h1 class="reveal hero-reveal" style="font-size: clamp(2.5rem, 5.5vw, 4.25rem);">Field experience, then software.</h1>
-            <p class="hero-tagline reveal hero-reveal">Everything here is real: construction sites I managed, and the tools I'm now building to fix what those sites were missing.</p>
+            <br>
+            <h1 class="hero-title is-medium reveal hero-reveal">
+                <span class="line">Field experience,</span><br><span class="line">then software.</span>
+                <span class="annot annot-right" aria-hidden="true">
+                    <svg class="draw" width="34" height="14" viewBox="0 0 34 14"><path d="M1 8 C 10 4, 20 10, 31 6 M25 2 L31 6 L26 11"/></svg>
+                    <span>All of it real</span>
+                </span>
+            </h1>
+            <p class="hero-tagline reveal hero-reveal">Construction sites I managed, and the tools I'm now building to fix what those sites were missing.</p>
         </div>
     </header>
 
-    <!-- Software projects — light panel -->
-    <section class="section panel">
-        <p class="corner-tag tl reveal">Fig. 01 — Software</p>
+    <section class="section">
         <div class="container">
-            <p class="section-eyebrow reveal">Software projects</p>
+            <p class="section-eyebrow reveal">Fig. 01 — Software &amp; design</p>
             <h2 class="section-title reveal">Early tools, built while learning to code.</h2>
 
             <div class="card-grid" data-reveal-group>
-                <div class="card-wrap reveal-item"><div class="card">
+                <div class="card-wrap reveal-item"><article class="card">
+                    <span class="card-index">01</span>
                     <div class="tag-row">
                         <span class="tag status-paused">Paused / Prototype</span>
                     </div>
@@ -85,9 +102,10 @@
                         <span>Conversational UX</span>
                     </div>
                     <a href="https://github.com/Sebastian0018" class="card-link" target="_blank" rel="noopener">GitHub →</a>
-                </div></div>
+                </article></div>
 
-                <div class="card-wrap reveal-item"><div class="card">
+                <div class="card-wrap reveal-item"><article class="card">
+                    <span class="card-index">02</span>
                     <div class="tag-row">
                         <span class="tag status-soon">Academic Capstone</span>
                     </div>
@@ -105,23 +123,16 @@
                         <span>Hydrosanitary Design</span>
                         <span>AutoCAD</span>
                     </div>
-                </div></div>
+                </article></div>
             </div>
         </div>
     </section>
 
-    <!-- Field experience timeline — dark panel -->
-    <section class="section panel panel-dark">
-        <p class="corner-tag br">Fig. 02 — Field Experience</p>
-        <div class="deco-parallax" data-parallax="0.15" style="bottom: 8%; left: 5%;">
-            <svg class="deco-shape float-delay" width="80" height="80" viewBox="0 0 110 110" fill="none" aria-hidden="true">
-                <polygon points="55,10 100,40 55,100 55,55" fill="#8FA8EE" fill-opacity="0.8"/>
-                <polygon points="55,10 10,40 55,100 55,55" fill="#10182C" stroke="#8FA8EE" stroke-width="2"/>
-            </svg>
-        </div>
+    <hr class="rule">
 
+    <section class="section">
         <div class="container">
-            <p class="section-eyebrow reveal">Field experience</p>
+            <p class="section-eyebrow reveal">Fig. 02 — Field experience</p>
             <h2 class="section-title reveal">Construction management, Colombia &amp; Boston.</h2>
 
             <div class="timeline" data-reveal-group>
@@ -175,31 +186,33 @@
         </div>
     </section>
 
-    <footer class="site-footer">
-        <div class="container">
-            <p class="footer-mark">David <span>Becerra</span></p>
-            <div class="footer-grid">
-                <nav class="footer-nav" aria-label="Footer navigation">
-                    <a href="index.html">Home</a>
-                    <a href="work.html">Work</a>
-                    <a href="about.html">About</a>
-                    <a href="beyond.html">Beyond</a>
-                    <a href="contact.html">Contact</a>
-                </nav>
-                <div class="footer-social">
-                    <a href="https://github.com/Sebastian0018" target="_blank" rel="noopener">GitHub</a>
-                    <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener">LinkedIn</a>
-                    <a href="mailto:davidsebastianbecerra123@gmail.com">Email</a>
-                </div>
-            </div>
-            <div class="footer-inner">
-                <p>David Sebastian Becerra Davila · Boston, MA · 2026</p>
+</div><!-- /.sheet -->
+
+<footer class="site-footer">
+    <div class="container">
+        <p class="footer-mark">David Becerra <span>Civil Eng → ConTech</span></p>
+        <div class="footer-grid">
+            <nav class="footer-nav" aria-label="Footer navigation">
+                <a href="index.html">Home</a>
+                <a href="work.html">Work</a>
+                <a href="about.html">About</a>
+                <a href="beyond.html">Beyond</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <div class="footer-social">
+                <a href="https://github.com/Sebastian0018" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="mailto:davidsebastianbecerra123@gmail.com">Email</a>
             </div>
         </div>
-    </footer>
+        <div class="footer-inner">
+            <p>David Sebastian Becerra Davila · Boston, MA · 2026</p>
+        </div>
+    </div>
+</footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>

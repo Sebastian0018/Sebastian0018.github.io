@@ -1,5 +1,6 @@
 // David Becerra — Portfolio
-// Mobile nav toggle + GSAP scroll reveals/parallax. Degrades to plain visible content if GSAP fails to load.
+// Mobile nav toggle, Beyond photo slider, GSAP scroll reveals/parallax.
+// Degrades to plain visible content if GSAP fails to load.
 
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.querySelector('.nav-toggle');
@@ -21,146 +22,125 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Photo book (Beyond) — works with or without GSAP; GSAP adds a real page-turn
-  // (3D flip on the leading page's spine edge), not just a crossfade.
-  const book = document.getElementById('book');
-  if (book) {
-    const totalPhotos = 24;
-    const spreads = [];
-    for (let i = 1; i <= totalPhotos; i += 2) {
-      spreads.push([i, Math.min(i + 1, totalPhotos)]);
-    }
+  // Photo slider (Beyond) — one frame at a time. Movement is a single CSS
+  // transform transition on the track (GPU-composited), no JS per-frame work
+  // and no image swapping mid-animation, which is what made the old flip-book stutter.
+  const track = document.getElementById('slider-track');
+  if (track) {
+    const viewport = document.getElementById('slider-viewport');
+    const slides = Array.from(track.querySelectorAll('.slide'));
+    const thumbsWrap = document.getElementById('slider-thumbs');
+    const thumbs = Array.from(thumbsWrap.querySelectorAll('button'));
+    const counter = document.getElementById('slider-counter');
+    const prevBtn = document.querySelector('.slider-btn.prev');
+    const nextBtn = document.querySelector('.slider-btn.next');
+    const total = slides.length;
+    const pad = (n) => String(n).padStart(2, '0');
     let current = 0;
-    let isAnimating = false;
 
-    const leftInner = document.getElementById('left-inner');
-    const rightInner = document.getElementById('right-inner');
-    const leftFront = document.getElementById('left-front-img');
-    const leftBack = document.getElementById('left-back-img');
-    const rightFront = document.getElementById('right-front-img');
-    const rightBack = document.getElementById('right-back-img');
-    const shadeLeft = document.querySelector('.shade-left');
-    const shadeRight = document.querySelector('.shade-right');
-    const counter = document.getElementById('book-counter');
-    const prevBtn = document.querySelector('.book-nav.prev');
-    const nextBtn = document.querySelector('.book-nav.next');
-    const thumbsWrap = document.getElementById('book-thumbs');
+    // Offset that centers slide i inside the viewport
+    const offsetFor = (i) => {
+      const s = slides[i];
+      return -(s.offsetLeft - (viewport.clientWidth - s.offsetWidth) / 2);
+    };
 
-    const photoPath = (n) => `photos/photo-${String(n).padStart(2, '0')}.jpg`;
-    const thumbPath = (n) => `photos/thumbs/photo-${String(n).padStart(2, '0')}.jpg`;
+    const setX = (x) => { track.style.transform = `translate3d(${x}px, 0, 0)`; };
 
-    for (let n = 1; n <= totalPhotos; n++) {
-      const t = document.createElement('img');
-      t.src = thumbPath(n);
-      t.alt = `Jump to photo ${n}`;
-      t.loading = 'lazy';
-      t.dataset.n = String(n);
-      thumbsWrap.appendChild(t);
+    function preload(i) {
+      [i - 1, i + 1, i + 2].forEach((j) => {
+        const img = slides[j] && slides[j].querySelector('img');
+        if (img && img.loading === 'lazy') img.loading = 'eager';
+      });
     }
 
-    function setFace(imgEl, n) {
-      imgEl.src = photoPath(n);
-      imgEl.alt = `Photography by David Becerra — frame ${n}`;
+    function centerThumb(i, smooth) {
+      const t = thumbs[i];
+      const left = t.offsetLeft - (thumbsWrap.clientWidth - t.offsetWidth) / 2;
+      thumbsWrap.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
     }
 
-    function updateChrome(l, r) {
-      counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(spreads.length).padStart(2, '0')}`;
+    function goTo(i, { animate = true } = {}) {
+      current = Math.max(0, Math.min(total - 1, i));
+      track.classList.toggle('no-anim', !animate);
+      setX(offsetFor(current));
+      slides.forEach((s, j) => {
+        s.classList.toggle('is-active', j === current);
+        s.setAttribute('aria-hidden', String(j !== current));
+      });
+      thumbs.forEach((t, j) => t.classList.toggle('is-active', j === current));
+      counter.textContent = `${pad(current + 1)} / ${pad(total)}`;
       prevBtn.disabled = current === 0;
-      nextBtn.disabled = current === spreads.length - 1;
-      thumbsWrap.querySelectorAll('img').forEach((t) => {
-        const n = Number(t.dataset.n);
-        t.classList.toggle('is-active', n === l || n === r);
-      });
+      nextBtn.disabled = current === total - 1;
+      preload(current);
+      centerThumb(current, animate);
     }
 
-    // Rotates .page-inner on its spine hinge; back face already shows the
-    // destination photo (pre-rotated in CSS), so it reads correctly the instant
-    // the tween lands. angle is -180 (right page turning forward) or +180 (left
-    // page turning back).
-    function flipPage(inner, frontImg, backImg, shadeEl, newN, angle) {
-      return new Promise((resolve) => {
-        setFace(backImg, newN);
-        const proxy = { v: 0 };
-        gsap.to(proxy, {
-          v: angle,
-          duration: 0.7,
-          ease: 'power2.inOut',
-          onUpdate: () => {
-            inner.style.transform = `rotateY(${proxy.v}deg)`;
-            const progress = Math.abs(proxy.v / angle);
-            shadeEl.style.opacity = String(Math.max(0, 1 - Math.abs(progress - 0.5) * 2) * 0.9);
-          },
-          onComplete: () => {
-            setFace(frontImg, newN);
-            inner.style.transform = 'rotateY(0deg)';
-            shadeEl.style.opacity = '0';
-            resolve();
-          },
-        });
-      });
-    }
-
-    function crossfade(frontImg, newN) {
-      return new Promise((resolve) => {
-        gsap.to(frontImg, {
-          opacity: 0,
-          duration: 0.18,
-          ease: 'power2.in',
-          onComplete: () => {
-            setFace(frontImg, newN);
-            gsap.fromTo(
-              frontImg,
-              { opacity: 0 },
-              { opacity: 1, duration: 0.3, ease: 'power2.out', onComplete: resolve }
-            );
-          },
-        });
-      });
-    }
-
-    function goTo(index) {
-      if (isAnimating || index < 0 || index >= spreads.length || index === current) return;
-      const direction = index > current ? 'next' : 'prev';
-      const [newL, newR] = spreads[index];
-      current = index;
-
-      if (typeof gsap === 'undefined' || prefersReducedMotion) {
-        setFace(leftFront, newL);
-        setFace(rightFront, newR);
-        updateChrome(newL, newR);
-        return;
-      }
-
-      isAnimating = true;
-      prevBtn.disabled = true;
-      nextBtn.disabled = true;
-
-      const tasks =
-        direction === 'next'
-          ? [flipPage(rightInner, rightFront, rightBack, shadeRight, newR, -180), crossfade(leftFront, newL)]
-          : [flipPage(leftInner, leftFront, leftBack, shadeLeft, newL, 180), crossfade(rightFront, newR)];
-
-      Promise.all(tasks).then(() => {
-        isAnimating = false;
-        updateChrome(newL, newR);
-      });
-    }
-
-    thumbsWrap.addEventListener('click', (e) => {
-      const t = e.target.closest('img');
-      if (!t) return;
-      const n = Number(t.dataset.n);
-      const idx = spreads.findIndex(([l, r]) => n === l || n === r);
-      goTo(idx);
-    });
     prevBtn.addEventListener('click', () => goTo(current - 1));
     nextBtn.addEventListener('click', () => goTo(current + 1));
+    thumbs.forEach((t, j) => t.addEventListener('click', () => goTo(j)));
+
     document.addEventListener('keydown', (e) => {
+      if (e.target instanceof Element && e.target.closest('input, textarea, select')) return;
       if (e.key === 'ArrowRight') goTo(current + 1);
       if (e.key === 'ArrowLeft') goTo(current - 1);
     });
 
-    updateChrome(spreads[0][0], spreads[0][1]);
+    // Drag / swipe — track follows the pointer, snaps on release
+    let startX = 0;
+    let baseX = 0;
+    let dx = 0;
+    let dragging = false;
+
+    viewport.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      dragging = true;
+      startX = e.clientX;
+      baseX = offsetFor(current);
+      dx = 0;
+      track.classList.add('no-anim');
+      viewport.classList.add('is-dragging');
+      try { viewport.setPointerCapture(e.pointerId); } catch (_) { /* pointer already gone */ }
+    });
+
+    viewport.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      dx = e.clientX - startX;
+      // resist at the ends
+      const atEdge = (current === 0 && dx > 0) || (current === total - 1 && dx < 0);
+      setX(baseX + (atEdge ? dx * 0.3 : dx));
+    });
+
+    const endDrag = (e) => {
+      if (!dragging) return;
+      dragging = false;
+      viewport.classList.remove('is-dragging');
+      const threshold = Math.min(80, viewport.clientWidth * 0.12);
+      if (Math.abs(dx) < 6) {
+        // plain click: a click on a peeking neighbour moves to it
+        const hit = document.elementFromPoint(e.clientX, e.clientY);
+        const slide = hit && hit.closest('.slide');
+        if (slide) {
+          goTo(Number(slide.dataset.index));
+          return;
+        }
+      }
+      if (dx < -threshold) goTo(current + 1);
+      else if (dx > threshold) goTo(current - 1);
+      else goTo(current);
+    };
+
+    viewport.addEventListener('pointerup', endDrag);
+    viewport.addEventListener('pointercancel', endDrag);
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => goTo(current, { animate: false }), 80);
+    });
+
+    goTo(0, { animate: false });
+    // Fonts/layout can shift widths after first paint — re-center once settled
+    window.addEventListener('load', () => goTo(current, { animate: false }));
   }
 
   if (typeof gsap === 'undefined' || prefersReducedMotion) {
@@ -176,28 +156,32 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.fromTo(
       heroTargets,
       { opacity: 0, y: 24 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        ease: 'power3.out',
-        stagger: 0.12,
-      }
+      { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.12 }
     );
   }
 
-  // Hero deco shapes: scale/rotate pop-in, slightly after the hero text
+  // Handwritten arrows/underlines draw themselves in after the headline lands
+  gsap.utils.toArray('.draw path').forEach((path, i) => {
+    const len = Math.ceil(path.getTotalLength());
+    gsap.fromTo(
+      path,
+      { strokeDasharray: len, strokeDashoffset: len },
+      { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut', delay: 0.7 + i * 0.2 }
+    );
+  });
+
+  // Hero deco shapes: pop-in
   const heroDeco = gsap.utils.toArray('.hero .deco-parallax');
   if (heroDeco.length) {
     gsap.fromTo(
       heroDeco,
-      { opacity: 0, scale: 0.7, rotate: -12 },
-      { opacity: 1, scale: 1, rotate: 0, duration: 0.9, ease: 'back.out(1.6)', stagger: 0.15, delay: 0.2 }
+      { opacity: 0, scale: 0.7 },
+      { opacity: 1, scale: 1, duration: 0.9, ease: 'back.out(1.6)', stagger: 0.15, delay: 0.2 }
     );
   }
 
-  // Scroll reveals for standalone elements (not hero, not a frame-card wrapper — those get their own pop-in below)
-  gsap.utils.toArray('.reveal:not(.hero-reveal):not(.frame-card-wrap)').forEach((el) => {
+  // Scroll reveals for standalone elements
+  gsap.utils.toArray('.reveal:not(.hero-reveal)').forEach((el) => {
     gsap.fromTo(
       el,
       { opacity: 0, y: 28 },
@@ -206,11 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
         y: 0,
         duration: 0.6,
         ease: 'power3.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse',
-        },
+        scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' },
       }
     );
   });
@@ -221,41 +201,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!items.length) return;
     gsap.fromTo(
       items,
-      { opacity: 0, y: 36, scale: 0.96 },
+      { opacity: 0, y: 36 },
       {
         opacity: 1,
         y: 0,
-        scale: 1,
         duration: 0.65,
         ease: 'power3.out',
         stagger: 0.1,
-        scrollTrigger: {
-          trigger: group,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse',
-        },
-      }
-    );
-  });
-
-  // Frame-card wrappers: pop in on the wrapper only, never the tilted card itself —
-  // the tilt is a CSS custom property (--tilt) on .frame-card; if GSAP wrote to that
-  // element's transform directly it would silently overwrite the rotation.
-  gsap.utils.toArray('.frame-card-wrap.reveal').forEach((el) => {
-    gsap.fromTo(
-      el,
-      { opacity: 0, y: 40, scale: 0.92 },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.7,
-        ease: 'back.out(1.4)',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 88%',
-          toggleActions: 'play none none reverse',
-        },
+        scrollTrigger: { trigger: group, start: 'top 85%', toggleActions: 'play none none reverse' },
       }
     );
   });
@@ -267,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
       y: () => window.innerHeight * speed,
       ease: 'none',
       scrollTrigger: {
-        trigger: el.closest('.panel') || el.parentElement,
+        trigger: el.parentElement,
         start: 'top bottom',
         end: 'bottom top',
         scrub: 0.6,

@@ -1,5 +1,7 @@
 # David Becerra Portfolio — Design System (MASTER)
 
+> **Current version: v3 (Illoca pass, 2026-09-29) — see the last section. It supersedes the color, typography and card rules in the v1/v2 sections below, which are kept as history.**
+
 Generated with `ui-ux-pro-max`, adjusted against explicit user color/motion decisions (2026-09-28 session). This file is the source of truth — read it before touching any page.
 
 ## Brief
@@ -87,7 +89,7 @@ Contrast check: navy `#14213D` on cream `#FDF2DE` ≈ 12:1 (body text safe). Pri
 | `work.html` | Full experience as case studies: Rochambeau, Ethos Valor (Farmatodo), Alpha Group (Banco de la República), Hidrarco, Javeriana, + WhatsApp bot (marked **paused/prototype**, not finished), + Hydraulic Design Archive (coming soon) |
 | `about.html` | Bio + experience narrative only. Skills/certs deliberately deferred — not on this page yet |
 | `contact.html` | Email, GitHub, LinkedIn, CV PDF download |
-| `beyond.html` | Placeholder only — "coming soon", photo-album/book feature is a separate future build (needs its own architecture: storage, upload/edit UI) |
+| `beyond.html` | Photo gallery — one-photo horizontal slider, 24 frames from `photos/` (see v3). Upload/edit from the browser is still out of scope (would need storage + auth) |
 
 ## Anti-patterns to avoid (from tool + Illoca/Heron read)
 
@@ -105,3 +107,45 @@ First build read as flat — a single cream page with no rhythm. Sebastian point
 - **`.deco-parallax` / `.deco-shape`**: inline SVG isometric cubes and folded-card shapes (blue + cream, stroke-outlined so they still read against a same-tone background), continuous CSS-keyframe idle float, plus GSAP ScrollTrigger scrub parallax on the wrapper. Two independent transforms on two different elements (wrapper vs. SVG) — deliberately not combined on one element, to avoid transform conflicts.
 - **GSAP/transform gotcha (real bug caught this session):** several elements set their resting look via CSS custom-property-driven `transform` (`.card`, `.frame-card`, both use `rotate(var(--tilt))`). GSAP's `x/y/scale/rotate` shorthand writes directly to that same element's inline `transform`, which silently deletes the CSS rotation the moment the tween runs. Fix: **GSAP-animated reveals never target the visually-tilted element directly** — they target a plain wrapper (`.card-wrap`, `.frame-card-wrap`) with no transform of its own; the tilt lives one level down and survives untouched. Apply this pattern to any future tilted/rotated component before wiring it to GSAP.
 - Typography got bigger/bolder (hero H1 up to `clamp(3rem, 7.5vw, 6rem)`, was `5rem` max) and `--radius` went from 4px to 10px to match the softer floating-card language.
+
+## v3 — Illoca pass (2026-09-29)
+
+Sebastian sent a full Illoca hero screenshot as the target look. v2's navy/cream alternation and tilted floating cards were replaced with Illoca's actual language: a drafting sheet.
+
+**Tokens** (`style.css :root`):
+
+```css
+--cobalt: #1F4FD1;        /* page frame, CTAs, links, accents */
+--cobalt-dark: #173C9E;   /* CTA hover */
+--coral: #F15534;         /* ONLY the small tile inside the nav CTA + focus ring */
+--paper: #EDE3CB;         /* sheet background (graph paper) */
+--paper-surface: #F4EDDC; /* cards */
+--paper-line: #D6C9A8;    /* borders, dashed rules */
+--paper-shadow: #C9BA95;  /* hard offset card shadow */
+--ink: #2B2B2B;           /* headlines — dark grey, not black */
+--ink-soft: #5A5648;      /* body */
+--on-cobalt: #F4EDDC;
+```
+
+Light-only by design (`color-scheme: light`): the paper sheet is the identity, a dark variant would erase it.
+
+**Typography:** Archivo 400–600 for headlines (hero weight 500, tracking −0.045em); Space Grotesk for body; **IBM Plex Mono** for nav, eyebrows, dates, tags and buttons; **Architects Daughter** for handwritten annotations and card indexes.
+
+**Structure:**
+- `body` is cobalt with `--frame` padding (20px, 8px on phones). The `.sheet` inside is the graph paper: 12px minor grid plus 60px major grid via 4 linear-gradients, with an SVG-noise grain overlay. `overflow-x: clip`, not `hidden`, so the sticky nav keeps working.
+- The footer sits outside the sheet, directly on the cobalt frame. A `.band` that is the sheet's last child runs flush into it.
+- **Nav:** a centered floating pill (`.nav-inner`) with the I-beam logo mark, mono links and a cobalt CTA with a coral tile. Corner annotations outside it: `.sheet-coords` (Boston lat/long, mono) and `.sheet-mail` (handwritten email). Both are hidden under 1180px.
+- **Hero:** centered `.hero-title` with each line in a `.line` span. Above 1100px the lines are `nowrap`, so the inline-block shrinks to the text and the `.annot-left`/`.annot-right` handwritten annotations sit right against it. Their SVG strokes have class `draw`, and GSAP animates `stroke-dashoffset` to draw them in.
+- **Duotone photo** (`.hero-figure`) is Illoca's illustration slot. The inline SVG filter `#duotone-cobalt` (in `index.html`) runs a grayscale matrix, then a 3-stop table: navy → cobalt → paper. Swap the photo by changing the `src`, since the filter doesn't touch the file.
+- **Cards** (`.card`, `.frame-card`, `.timeline-item`, `.contact-links`, `.slide`): flat, 2px radius, 1px `--paper-line` border, `4px 4px 0 var(--paper-shadow)` hard shadow, hover nudges −2px with a 6px shadow. A handwritten `.card-index` ("01", "Note —") sits at the top. There is no tilt anymore, so the v2 wrapper rule is moot, but the `.card-wrap` wrappers are kept as GSAP stagger targets.
+- **Deco shapes:** isometric cube and fold as cobalt **outlines** (`stroke: currentColor`, `.fill-soft` for a 14% tint). Fewer per page, hidden under 900px.
+
+**Beyond slider** (replaces the v2 two-page flip book, which stuttered because it swapped `src` mid-flip and drove `rotateY` from JS every frame):
+- The `.slider-track` flex row is moved by a single CSS `transition: transform .65s cubic-bezier(.22,1,.36,1)` on `translate3d`, which is compositor-only.
+- `offsetFor(i)` centers slide i. Neighbors peek at `opacity .4; scale .94`.
+- Pointer-events drag with `setPointerCapture`: the track follows the finger with the transition off, then snaps with a threshold of `min(80px, 12% width)` and resists at the ends. A plain click on a peeking slide goes to it.
+- Arrows, ←/→ keys and the thumbnail strip (auto-centers the active thumb) all work. Lazy images are promoted to eager for i−1..i+2.
+- Slides are static markup, generated from `photos/manifest.json` (real `width`/`height` attributes, so there's no layout shift).
+- **Gotcha found in v3:** `<img width height>` attributes beat CSS `aspect-ratio` unless `height: auto` is set. It is now in the global reset.
+
+**Cache busting:** `style.css?v=N` / `script.js?v=N` in all 5 pages. Bump N on every deploy, because GitHub Pages and browsers otherwise serve the old files for a while.

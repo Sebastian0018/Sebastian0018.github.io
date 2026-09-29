@@ -23,157 +23,191 @@
     <meta name="twitter:description" content="Civil Engineer pivoting into Construction Technology &amp; BIM. Real construction-management experience, self-taught in Python and AI.">
     <meta name="twitter:image" content="https://sebastian0018.github.io/og-image.png">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=4">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Architects+Daughter&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <nav class="site-nav">
+<div class="sheet">
+    <p class="sheet-coords" aria-hidden="true">X 42.36°N<br>Y 71.06°W</p>
+    <a class="sheet-mail" href="mailto:davidsebastianbecerra123@gmail.com">davidsebastianbecerra123@gmail.com</a>
+
+    <nav class="site-nav" aria-label="Main">
         <div class="nav-inner">
-            <a href="index.html" class="nav-logo">David <span>Becerra</span></a>
+            <a href="index.html" class="nav-logo" aria-label="David Becerra — home">
+                <svg class="logo-mark" viewBox="0 0 34 34" aria-hidden="true">
+                    <rect x="0.5" y="0.5" width="33" height="33" fill="#1F4FD1" stroke="#2B2B2B"/>
+                    <path d="M9 9.5h16M9 24.5h16M17 9.5v15" stroke="#F4EDDC" stroke-width="3.2" fill="none"/>
+                </svg>
+                David Becerra
+            </a>
             <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
                 <span></span>
             </button>
             <ul class="nav-links">
-                <li><a href="index.html" aria-current="page">Home</a></li>
                 <li><a href="work.html">Work</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="beyond.html">Beyond</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
+            <a href="contact.html" class="nav-cta">
+                <span class="cta-tile" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 14V9h4V5h4V2h4" fill="none" stroke="#FBF8F1" stroke-width="1.6"/></svg>
+                </span>
+                Get in touch
+            </a>
         </div>
     </nav>
 
-    <!-- Hero — dark panel -->
-    <header class="hero panel panel-dark">
-        <p class="corner-tag tl reveal hero-reveal">DB · Civil Eng → ConTech</p>
-        <p class="corner-tag tr reveal hero-reveal">Boston, MA<br>42.36°N 71.06°W</p>
+    <!-- Duotone filter: turns any photo into cobalt + paper, Illoca-illustration style -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <filter id="duotone-cobalt" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values="0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0 0 0 1 0"/>
+            <feComponentTransfer>
+                <feFuncR type="table" tableValues="0.04 0.12 0.94"/>
+                <feFuncG type="table" tableValues="0.12 0.31 0.89"/>
+                <feFuncB type="table" tableValues="0.36 0.82 0.79"/>
+            </feComponentTransfer>
+        </filter>
+    </svg>
 
-        <div class="deco-parallax" data-parallax="0.25" style="top: 8%; right: 6%;">
-            <svg class="deco-shape" width="130" height="130" viewBox="0 0 120 120" fill="none" aria-hidden="true">
-                <polygon points="60,6 112,36 60,66 8,36" fill="#FDF2DE" stroke="#8FA8EE" stroke-width="2"/>
-                <polygon points="8,36 60,66 60,120 8,90" fill="#8FA8EE" fill-opacity="0.9"/>
-                <polygon points="112,36 60,66 60,120 112,90" fill="#8FA8EE" fill-opacity="0.55"/>
-            </svg>
-        </div>
-        <div class="deco-parallax" data-parallax="0.12" style="bottom: 6%; right: 20%;">
-            <svg class="deco-shape float-delay" width="70" height="70" viewBox="0 0 110 110" fill="none" aria-hidden="true">
-                <polygon points="55,10 100,40 55,100 55,55" fill="#8FA8EE" fill-opacity="0.8"/>
-                <polygon points="55,10 10,40 55,100 55,55" fill="#FDF2DE" stroke="#8FA8EE" stroke-width="2"/>
-            </svg>
-        </div>
-
+    <header class="hero">
         <div class="container">
             <p class="hero-label reveal hero-reveal">Civil Engineer → Construction Technology &amp; BIM</p>
-            <h1 class="reveal hero-reveal">David Becerra</h1>
-            <p class="hero-tagline reveal hero-reveal">I build things — from concrete foundations to Python-powered tools for the construction industry.</p>
+            <br>
+            <h1 class="hero-title reveal hero-reveal">
+                <span class="annot annot-left" aria-hidden="true">Civil engineer
+                    <svg class="draw" width="120" height="10" viewBox="0 0 120 10"><path d="M2 6 C 35 2, 80 8, 118 3"/></svg>
+                </span>
+                <span class="line">Built on job sites.</span><br><span class="line">Now building software.</span>
+                <span class="annot annot-right" aria-hidden="true">
+                    <svg class="draw" width="34" height="14" viewBox="0 0 34 14"><path d="M1 8 C 10 4, 20 10, 31 6 M25 2 L31 6 L26 11"/></svg>
+                    <span>Not just code</span>
+                </span>
+            </h1>
+            <p class="hero-tagline reveal hero-reveal">I'm David Becerra — five years managing construction sites, now building Python tools for the industry I know from the ground up.</p>
             <div class="hero-cta reveal hero-reveal">
-                <a href="work.html" class="btn btn-primary">View Work</a>
-                <a href="contact.html" class="btn btn-secondary">Get in Touch</a>
+                <a href="work.html" class="btn btn-primary">View work →</a>
+                <a href="contact.html" class="btn btn-secondary">Get in touch</a>
             </div>
 
-            <div class="hero-frame-wrap reveal hero-reveal">
-                <div class="frame-card tilt-left">
-                    <span class="stat-num">5+</span>
-                    <span class="stat-label">Years managing construction sites — Colombia &amp; Boston</span>
+            <div class="hero-media reveal hero-reveal">
+                <figure class="hero-figure">
+                    <img src="photos/photo-14.jpg" width="1800" height="1193" alt="Boston skyline with the Zakim Bridge, tinted in blue and cream" fetchpriority="high">
+                    <figcaption>Fig. 00 — Boston, MA · 35mm</figcaption>
+                </figure>
+                <div class="stat-strip">
+                    <div><span class="stat-num">5+</span><span class="stat-label">years on construction sites</span></div>
+                    <div><span class="stat-num">3</span><span class="stat-label">cities, concurrent store buildouts</span></div>
+                    <div><span class="stat-num">10</span><span class="stat-label">person crew on a bank vault remodel</span></div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Summary — light panel -->
-    <section class="section panel">
-        <p class="corner-tag tl reveal">Fig. 01 — The Pivot</p>
+    <section class="section">
+        <div class="deco-parallax" data-parallax="0.18" style="top: 12%; right: 3%;">
+            <svg class="deco-shape" width="110" height="110" viewBox="0 0 120 120" aria-hidden="true">
+                <polygon class="fill-soft" points="60,6 112,36 60,66 8,36"/>
+                <polygon points="8,36 60,66 60,118 8,88"/>
+                <polygon points="112,36 60,66 60,118 112,88"/>
+            </svg>
+        </div>
         <div class="container section-split">
             <div>
-                <p class="section-eyebrow reveal">The pivot</p>
-                <h2 class="section-title reveal">Five years on job sites, now building the software layer on top of them.</h2>
+                <p class="section-eyebrow reveal">Fig. 01 — The pivot</p>
+                <h2 class="section-title reveal">Five years on job sites, now building the layer on top of them.</h2>
                 <p class="section-lede reveal">I'm a Civil Engineer with hands-on experience managing construction projects — from pharmacy store buildouts to bank renovations. After relocating to Boston in 2022, I made a deliberate decision: learn to build the software layer on top of the industry I already know from the ground up. Construction has a tooling problem — most project management software is built by people who've never been on a job site. I have. That's my edge.</p>
-                <a href="about.html" class="card-link">Read the full story →</a>
+                <a href="about.html" class="card-link reveal">Read the full story →</a>
             </div>
             <div class="frame-card-wrap reveal">
-                <div class="frame-card tilt-right">
+                <div class="frame-card">
+                    <span class="card-index">Note —</span>
                     <blockquote>"Most construction software is built by people who've never been on a job site. I have."</blockquote>
+                    <p class="note">
+                        <svg width="28" height="12" viewBox="0 0 28 12" aria-hidden="true"><path d="M27 6 C 18 3, 10 9, 2 6 M7 2 L2 6 L7 10"/></svg>
+                        The edge
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Featured work — dark panel -->
-    <section class="section panel panel-dark">
-        <p class="corner-tag br">Fig. 02 — Selected Work</p>
-        <div class="deco-parallax" data-parallax="0.18" style="top: 10%; left: 4%;">
-            <svg class="deco-shape" width="90" height="90" viewBox="0 0 120 120" fill="none" aria-hidden="true">
-                <polygon points="60,6 112,36 60,66 8,36" fill="#10182C" stroke="#8FA8EE" stroke-width="2"/>
-                <polygon points="8,36 60,66 60,120 8,90" fill="#8FA8EE" fill-opacity="0.7"/>
-                <polygon points="112,36 60,66 60,120 112,90" fill="#8FA8EE" fill-opacity="0.4"/>
-            </svg>
-        </div>
+    <hr class="rule">
 
+    <section class="section">
         <div class="container">
-            <p class="section-eyebrow reveal">Selected work</p>
+            <p class="section-eyebrow reveal">Fig. 02 — Selected work</p>
             <h2 class="section-title reveal">Field experience and early tools.</h2>
 
             <div class="card-grid" data-reveal-group>
-                <div class="card-wrap reveal-item"><div class="card">
+                <div class="card-wrap reveal-item"><article class="card">
+                    <span class="card-index">01</span>
                     <div class="tag-row">
                         <span class="tag">Construction Management</span>
                     </div>
                     <h3>Banco de la República Remodel</h3>
                     <p>Construction resident supervising a 10-person team across critical bank zones, including the secure vault — design review, cost estimates, and progress documentation.</p>
                     <a href="work.html" class="card-link">See full work history →</a>
-                </div></div>
+                </article></div>
 
-                <div class="card-wrap reveal-item"><div class="card">
+                <div class="card-wrap reveal-item"><article class="card">
+                    <span class="card-index">02</span>
                     <div class="tag-row">
                         <span class="tag status-paused">Paused / Prototype</span>
                     </div>
                     <h3>WhatsApp Pre-Reservation Bot</h3>
                     <p>A Python-powered chatbot for restaurant operations — menu queries, dietary filtering, pre-reservation capture. Built to solve pain points identified working front-of-house at a $10M/year Boston restaurant. Not finished — paused mid-build.</p>
                     <a href="work.html" class="card-link">See full work history →</a>
-                </div></div>
+                </article></div>
             </div>
         </div>
     </section>
 
-    <!-- CTA — light panel -->
-    <section class="section panel">
-        <p class="corner-tag tl reveal">Fig. 03 — Contact</p>
+    <section class="section band">
+        <div class="deco-parallax" data-parallax="0.12" style="bottom: 10%; right: 6%;">
+            <svg class="deco-shape float-delay" width="90" height="90" viewBox="0 0 110 110" aria-hidden="true">
+                <polygon points="55,10 100,40 55,100 55,55"/>
+                <polygon class="fill-soft" points="55,10 10,40 55,100 55,55"/>
+            </svg>
+        </div>
         <div class="container">
-            <p class="section-eyebrow reveal">Let's talk</p>
+            <p class="section-eyebrow reveal">Fig. 03 — Let's talk</p>
             <h2 class="section-title reveal">Open to ConTech, PropTech, and construction software roles.</h2>
             <p class="section-lede reveal">Junior developer, technical PM, or implementation specialist — I bring the job-site context most software teams are missing.</p>
-            <a href="contact.html" class="btn btn-primary reveal">Get in Touch</a>
+            <a href="contact.html" class="btn btn-primary reveal">Get in touch →</a>
         </div>
     </section>
 
-    <footer class="site-footer">
-        <div class="container">
-            <p class="footer-mark">David <span>Becerra</span></p>
-            <div class="footer-grid">
-                <nav class="footer-nav" aria-label="Footer navigation">
-                    <a href="index.html">Home</a>
-                    <a href="work.html">Work</a>
-                    <a href="about.html">About</a>
-                    <a href="beyond.html">Beyond</a>
-                    <a href="contact.html">Contact</a>
-                </nav>
-                <div class="footer-social">
-                    <a href="https://github.com/Sebastian0018" target="_blank" rel="noopener">GitHub</a>
-                    <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener">LinkedIn</a>
-                    <a href="mailto:davidsebastianbecerra123@gmail.com">Email</a>
-                </div>
-            </div>
-            <div class="footer-inner">
-                <p>David Sebastian Becerra Davila · Boston, MA · 2026</p>
+</div><!-- /.sheet -->
+
+<footer class="site-footer">
+    <div class="container">
+        <p class="footer-mark">David Becerra <span>Civil Eng → ConTech</span></p>
+        <div class="footer-grid">
+            <nav class="footer-nav" aria-label="Footer navigation">
+                <a href="index.html">Home</a>
+                <a href="work.html">Work</a>
+                <a href="about.html">About</a>
+                <a href="beyond.html">Beyond</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <div class="footer-social">
+                <a href="https://github.com/Sebastian0018" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="mailto:davidsebastianbecerra123@gmail.com">Email</a>
             </div>
         </div>
-    </footer>
+        <div class="footer-inner">
+            <p>David Sebastian Becerra Davila · Boston, MA · 2026</p>
+        </div>
+    </div>
+</footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>
