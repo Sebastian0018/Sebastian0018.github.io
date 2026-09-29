@@ -3,254 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>David Becerra | Civil Engineer & ConTech</title>
+    <title>David Becerra | Civil Engineer &amp; Construction Technology</title>
+    <meta name="description" content="Civil Engineer pivoting into Construction Technology &amp; BIM. Real construction-management experience, self-taught in Python and AI.">
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sebastian0018.github.io/">
+    <meta property="og:title" content="David Becerra | Civil Engineer &amp; Construction Technology">
+    <meta property="og:description" content="Civil Engineer pivoting into Construction Technology &amp; BIM. Real construction-management experience, self-taught in Python and AI.">
+    <meta property="og:image" content="https://sebastian0018.github.io/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="David Becerra | Civil Engineer &amp; Construction Technology">
+    <meta name="twitter:description" content="Civil Engineer pivoting into Construction Technology &amp; BIM. Real construction-management experience, self-taught in Python and AI.">
+    <meta name="twitter:image" content="https://sebastian0018.github.io/og-image.png">
+
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Nav -->
-    <nav>
+    <nav class="site-nav">
         <div class="nav-inner">
-            <span class="nav-logo">DB</span>
-            <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#contact">Contact</a></li>
+            <a href="index.html" class="nav-logo">David <span>Becerra</span></a>
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html" aria-current="page">Home</a></li>
+                <li><a href="work.html">Work</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="beyond.html">Beyond</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section id="hero">
+    <!-- Hero — dark panel -->
+    <header class="hero panel panel-dark">
+        <p class="corner-tag tl reveal hero-reveal">DB · Civil Eng → ConTech</p>
+        <p class="corner-tag tr reveal hero-reveal">Boston, MA<br>42.36°N 71.06°W</p>
+
+        <div class="deco-parallax" data-parallax="0.25" style="top: 8%; right: 6%;">
+            <svg class="deco-shape" width="130" height="130" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                <polygon points="60,6 112,36 60,66 8,36" fill="#FDF2DE" stroke="#8FA8EE" stroke-width="2"/>
+                <polygon points="8,36 60,66 60,120 8,90" fill="#8FA8EE" fill-opacity="0.9"/>
+                <polygon points="112,36 60,66 60,120 112,90" fill="#8FA8EE" fill-opacity="0.55"/>
+            </svg>
+        </div>
+        <div class="deco-parallax" data-parallax="0.12" style="bottom: 6%; right: 20%;">
+            <svg class="deco-shape float-delay" width="70" height="70" viewBox="0 0 110 110" fill="none" aria-hidden="true">
+                <polygon points="55,10 100,40 55,100 55,55" fill="#8FA8EE" fill-opacity="0.8"/>
+                <polygon points="55,10 10,40 55,100 55,55" fill="#FDF2DE" stroke="#8FA8EE" stroke-width="2"/>
+            </svg>
+        </div>
+
         <div class="container">
-            <p class="label">Civil Engineer → Construction Technology</p>
-            <h1>David Becerra</h1>
-            <p class="tagline">I build things — from concrete foundations to Python-powered tools for the construction industry.</p>
-            <div class="hero-cta">
-                <a href="#projects" class="btn-primary">View Projects</a>
-                <a href="mailto:davidsebastianbecerra123@gmail.com" class="btn-secondary">Get in Touch</a>
+            <p class="hero-label reveal hero-reveal">Civil Engineer → Construction Technology &amp; BIM</p>
+            <h1 class="reveal hero-reveal">David Becerra</h1>
+            <p class="hero-tagline reveal hero-reveal">I build things — from concrete foundations to Python-powered tools for the construction industry.</p>
+            <div class="hero-cta reveal hero-reveal">
+                <a href="work.html" class="btn btn-primary">View Work</a>
+                <a href="contact.html" class="btn btn-secondary">Get in Touch</a>
+            </div>
+
+            <div class="hero-frame-wrap reveal hero-reveal">
+                <div class="frame-card tilt-left">
+                    <span class="stat-num">5+</span>
+                    <span class="stat-label">Years managing construction sites — Colombia &amp; Boston</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Summary — light panel -->
+    <section class="section panel">
+        <p class="corner-tag tl reveal">Fig. 01 — The Pivot</p>
+        <div class="container section-split">
+            <div>
+                <p class="section-eyebrow reveal">The pivot</p>
+                <h2 class="section-title reveal">Five years on job sites, now building the software layer on top of them.</h2>
+                <p class="section-lede reveal">I'm a Civil Engineer with hands-on experience managing construction projects — from pharmacy store buildouts to bank renovations. After relocating to Boston in 2022, I made a deliberate decision: learn to build the software layer on top of the industry I already know from the ground up. Construction has a tooling problem — most project management software is built by people who've never been on a job site. I have. That's my edge.</p>
+                <a href="about.html" class="card-link">Read the full story →</a>
+            </div>
+            <div class="frame-card-wrap reveal">
+                <div class="frame-card tilt-right">
+                    <blockquote>"Most construction software is built by people who've never been on a job site. I have."</blockquote>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- About -->
-    <section id="about">
-        <div class="container">
-            <h2>About</h2>
-            <div class="about-grid">
-                <div class="about-text">
-                    <p>I'm a Civil Engineer with hands-on experience managing construction projects — from pharmacy store buildouts to bank renovations. After relocating to Boston in 2022, I made a deliberate decision: learn to build the software layer on top of the industry I already know from the ground up.</p>
-                    <p>Construction has a tooling problem. Most project management software is built by people who've never been on a job site. I have. That's my edge.</p>
-                    <p>I'm currently learning Python, studying AI applications, and building tools at the intersection of construction operations and technology.</p>
-                </div>
-                <div class="about-stats">
-                    <div class="stat">
-                        <span class="stat-num">5+</span>
-                        <span class="stat-label">Years in construction</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-num">10%</span>
-                        <span class="stat-label">Material cost reduction achieved</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-num">3</span>
-                        <span class="stat-label">Multi-site projects delivered</span>
-                    </div>
-                </div>
-            </div>
+    <!-- Featured work — dark panel -->
+    <section class="section panel panel-dark">
+        <p class="corner-tag br">Fig. 02 — Selected Work</p>
+        <div class="deco-parallax" data-parallax="0.18" style="top: 10%; left: 4%;">
+            <svg class="deco-shape" width="90" height="90" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                <polygon points="60,6 112,36 60,66 8,36" fill="#10182C" stroke="#8FA8EE" stroke-width="2"/>
+                <polygon points="8,36 60,66 60,120 8,90" fill="#8FA8EE" fill-opacity="0.7"/>
+                <polygon points="112,36 60,66 60,120 112,90" fill="#8FA8EE" fill-opacity="0.4"/>
+            </svg>
         </div>
-    </section>
 
-    <!-- Projects -->
-    <section id="projects">
         <div class="container">
-            <h2>Projects</h2>
-            <div class="projects-grid">
+            <p class="section-eyebrow reveal">Selected work</p>
+            <h2 class="section-title reveal">Field experience and early tools.</h2>
 
-                <div class="project-card">
-                    <div class="project-tag in-progress">In Progress</div>
+            <div class="card-grid" data-reveal-group>
+                <div class="card-wrap reveal-item"><div class="card">
+                    <div class="tag-row">
+                        <span class="tag">Construction Management</span>
+                    </div>
+                    <h3>Banco de la República Remodel</h3>
+                    <p>Construction resident supervising a 10-person team across critical bank zones, including the secure vault — design review, cost estimates, and progress documentation.</p>
+                    <a href="work.html" class="card-link">See full work history →</a>
+                </div></div>
+
+                <div class="card-wrap reveal-item"><div class="card">
+                    <div class="tag-row">
+                        <span class="tag status-paused">Paused / Prototype</span>
+                    </div>
                     <h3>WhatsApp Pre-Reservation Bot</h3>
-                    <p>A Python-powered chatbot for restaurant operations — handling menu queries, dietary filtering, and pre-reservation data capture. Built to solve real operational pain points identified working front-of-house at a $10M/year Boston restaurant.</p>
-                    <div class="project-tech">
-                        <span>Python</span>
-                        <span>WhatsApp Business API</span>
-                        <span>Conversational UX</span>
-                    </div>
-                    <a href="https://github.com/Sebastian0018" class="project-link" target="_blank">GitHub →</a>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-tag coming-soon">Coming Soon</div>
-                    <h3>Hydraulic Design Archive</h3>
-                    <p>Engineering deliverables from undergraduate lab work and professional projects — hydrosanitary systems, pipeline design, construction specifications.</p>
-                    <div class="project-tech">
-                        <span>Civil Engineering</span>
-                        <span>Hydraulic Design</span>
-                        <span>AutoCAD</span>
-                    </div>
-                </div>
-
+                    <p>A Python-powered chatbot for restaurant operations — menu queries, dietary filtering, pre-reservation capture. Built to solve pain points identified working front-of-house at a $10M/year Boston restaurant. Not finished — paused mid-build.</p>
+                    <a href="work.html" class="card-link">See full work history →</a>
+                </div></div>
             </div>
         </div>
     </section>
 
-    <!-- Experience -->
-    <section id="experience">
+    <!-- CTA — light panel -->
+    <section class="section panel">
+        <p class="corner-tag tl reveal">Fig. 03 — Contact</p>
         <div class="container">
-            <h2>Experience</h2>
-            <div class="timeline">
-
-                <div class="timeline-item">
-                    <div class="timeline-date">2022 – Present</div>
-                    <div class="timeline-content">
-                        <h3>Server & Operations</h3>
-                        <p class="company">Rochambeau Boston · Boston, MA</p>
-                        <p>Front-line client experience in a $10M/year French brasserie. Managing complex client needs, coordinating across kitchen, reservations, and events teams under high pressure. Identified operational gaps that led to building automation tools.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-date">Feb – Sep 2022</div>
-                    <div class="timeline-content">
-                        <h3>Construction Project Manager</h3>
-                        <p class="company">Ethos Valor & Consciencia · Bogotá, Colombia</p>
-                        <p>Led end-to-end construction of multiple Farmatodo pharmacy stores across Medellín, Santa Marta, and Montería. Managed schedules, budgets, progress reporting, and resource logistics across concurrent projects.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-date">Oct 2021 – Jan 2022</div>
-                    <div class="timeline-content">
-                        <h3>Junior Engineer</h3>
-                        <p class="company">Alpha Group Services · Bogotá, Colombia</p>
-                        <p>Construction resident for Banco de la República remodeling. Supervised a 10-person team across critical areas including the secure vault and client banking zones. Managed design review, cost estimates, and progress documentation.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-date">Jun – Oct 2021</div>
-                    <div class="timeline-content">
-                        <h3>Engineering Assistant</h3>
-                        <p class="company">Hidrarco S.A.S · Bogotá, Colombia</p>
-                        <p>Hydrosanitary and gas design. Achieved 10% reduction in material costs through optimized piping design. Led coordination of new building construction designs and managed remodeling of impacted structures on schedule.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-date">Aug 2020 – Jun 2021</div>
-                    <div class="timeline-content">
-                        <h3>Lab Monitor & Instructor</h3>
-                        <p class="company">Pontificia Universidad Javeriana · Bogotá, Colombia</p>
-                        <p>Hydraulics lab monitor. Delivered training workshops for construction site managers in partnership with Camacol, Colombia's national construction industry association.</p>
-                    </div>
-                </div>
-
-            </div>
+            <p class="section-eyebrow reveal">Let's talk</p>
+            <h2 class="section-title reveal">Open to ConTech, PropTech, and construction software roles.</h2>
+            <p class="section-lede reveal">Junior developer, technical PM, or implementation specialist — I bring the job-site context most software teams are missing.</p>
+            <a href="contact.html" class="btn btn-primary reveal">Get in Touch</a>
         </div>
     </section>
 
-    <!-- Skills -->
-    <section id="skills">
+    <footer class="site-footer">
         <div class="container">
-            <h2>Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-group">
-                    <h4>Technical</h4>
-                    <ul>
-                        <li>Python</li>
-                        <li>Data Analysis</li>
-                        <li>Generative AI & Prompt Engineering</li>
-                        <li>AutoCAD</li>
-                        <li>Hydraulic Design</li>
-                    </ul>
-                </div>
-                <div class="skill-group">
-                    <h4>Construction Domain</h4>
-                    <ul>
-                        <li>Construction Project Management</li>
-                        <li>Pipeline & Hydrosanitary Design</li>
-                        <li>Budget Estimation & Cost Control</li>
-                        <li>Field Supervision</li>
-                        <li>Multi-site Coordination</li>
-                    </ul>
-                </div>
-                <div class="skill-group">
-                    <h4>Soft Skills</h4>
-                    <ul>
-                        <li>Client Communication</li>
-                        <li>Team Leadership</li>
-                        <li>Bilingual: Spanish & English</li>
-                        <li>High-pressure Operations</li>
-                    </ul>
+            <p class="footer-mark">David <span>Becerra</span></p>
+            <div class="footer-grid">
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <a href="index.html">Home</a>
+                    <a href="work.html">Work</a>
+                    <a href="about.html">About</a>
+                    <a href="beyond.html">Beyond</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+                <div class="footer-social">
+                    <a href="https://github.com/Sebastian0018" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="mailto:davidsebastianbecerra123@gmail.com">Email</a>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Certifications -->
-    <section id="certs">
-        <div class="container">
-            <h2>Certifications</h2>
-            <div class="certs-grid">
-                <div class="cert-card">
-                    <p class="cert-issuer">Columbia University</p>
-                    <p class="cert-name">Construction Project Management</p>
-                    <p class="cert-date">2025</p>
-                </div>
-                <div class="cert-card">
-                    <p class="cert-issuer">University of Michigan</p>
-                    <p class="cert-name">Programming for Everybody (Python)</p>
-                    <p class="cert-date">2025</p>
-                </div>
-                <div class="cert-card">
-                    <p class="cert-issuer">IBM / Coursera</p>
-                    <p class="cert-name">Python for Data Science & AI</p>
-                    <p class="cert-date">2025</p>
-                </div>
-                <div class="cert-card">
-                    <p class="cert-issuer">IBM</p>
-                    <p class="cert-name">Generative AI: Prompt Engineering</p>
-                    <p class="cert-date">2025</p>
-                </div>
-                <div class="cert-card">
-                    <p class="cert-issuer">IBM</p>
-                    <p class="cert-name">Generative AI: Introduction & Applications</p>
-                    <p class="cert-date">2025</p>
-                </div>
-                <div class="cert-card">
-                    <p class="cert-issuer">MIT</p>
-                    <p class="cert-name">Management in Engineering</p>
-                    <p class="cert-date">2020</p>
-                </div>
-                <div class="cert-card">
-                    <p class="cert-issuer">Duolingo</p>
-                    <p class="cert-name">English Proficiency Certificate</p>
-                    <p class="cert-date">2024</p>
-                </div>
+            <div class="footer-inner">
+                <p>David Sebastian Becerra Davila · Boston, MA · 2026</p>
             </div>
         </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact">
-        <div class="container">
-            <h2>Get in Touch</h2>
-            <p>I'm open to roles in ConTech, PropTech, and construction software — as a junior developer, technical PM, or implementation specialist.</p>
-            <div class="contact-links">
-                <a href="mailto:davidsebastianbecerra123@gmail.com">davidsebastianbecerra123@gmail.com</a>
-                <a href="https://github.com/Sebastian0018" target="_blank">GitHub: Sebastian0018</a>
-                <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank">LinkedIn</a>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <p>David Sebastian Becerra Davila · Boston, MA · 2026</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
