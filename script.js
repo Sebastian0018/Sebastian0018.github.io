@@ -65,6 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
       thumbsWrap.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
     }
 
+    let pageLoaded = document.readyState === 'complete';
+
     function goTo(i, { animate = true } = {}) {
       current = Math.max(0, Math.min(total - 1, i));
       // a #frame-NN anchor makes the browser scroll this overflow:hidden box
@@ -80,7 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
       counter.textContent = `${pad(current + 1)} / ${pad(total)}`;
       prevBtn.disabled = current === 0;
       nextBtn.disabled = current === total - 1;
-      preload(current);
+      // warm up the neighbours only after the page has loaded, so they don't
+      // compete with the first photo for bandwidth
+      if (pageLoaded) preload(current);
       centerThumb(current, animate);
     }
 
@@ -155,7 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
     goTo(fromHash(), { animate: false });
     window.addEventListener('hashchange', () => goTo(fromHash()));
     // Fonts/layout can shift widths after first paint — re-center once settled
-    window.addEventListener('load', () => goTo(current, { animate: false }));
+    window.addEventListener('load', () => {
+      pageLoaded = true;
+      goTo(current, { animate: false });
+    });
   }
 
   if (typeof gsap === 'undefined' || prefersReducedMotion) {

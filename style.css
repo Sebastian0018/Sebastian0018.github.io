@@ -30,7 +30,7 @@ ul, ol { list-style: none; }
   --graphite: #242424;
   --steel: #5F5F5F;      /* secondary text — 6.4:1 on paper */
   --ash: #B3B3B3;        /* decorative lines only, never text */
-  --orange: #FF5B29;     /* emphasis only, ≥24px text */
+  --orange: #F04A18;     /* emphasis only, ≥24px text */
   --lime: #F5FF80;       /* spotlight wash */
 
   --font-sans: 'Geist', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -940,3 +940,6 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 
 /* tighter band for a single component (stats banner) */
 .section--tight { padding: 56px 0; }
+
+/* dimmed neighbour slides: hide the caption instead of showing unreadable text */
+.slide:not(.is-active) figcaption { visibility: hidden; }
