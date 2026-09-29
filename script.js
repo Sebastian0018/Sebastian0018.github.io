@@ -3,6 +3,16 @@
 // Degrades to plain visible content if GSAP fails to load.
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Email is never written as plain text in the HTML (keeps it away from
+  // address-harvesting bots). Links carry the two halves; we join them here.
+  document.querySelectorAll('[data-mail]').forEach((a) => {
+    a.href = 'mailto:' + a.dataset.mail + '@' + a.dataset.domain;
+  });
+  const mailLink = document.querySelector('[data-mail]');
+  document.querySelectorAll('[data-mail-text]').forEach((el) => {
+    if (mailLink) el.textContent = mailLink.dataset.mail + '@' + mailLink.dataset.domain;
+  });
+
   // Mobile nav panel (drops down under the nav bar)
   const menuBtn = document.querySelector('.menu-btn');
   const menu = document.getElementById('nav-panel');

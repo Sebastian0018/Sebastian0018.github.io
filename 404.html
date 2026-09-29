@@ -29,17 +29,142 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap"></noscript>
-    <link rel="stylesheet" href="/style.css?v=12">
+    <link rel="stylesheet" href="/style.css?v=15">
     <script>
         /* motion hook set before first paint (below-the-fold reveals only);
            failsafe: if the animation library never arrives, show everything */
         if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
             document.documentElement.classList.add('js-motion');
             setTimeout(function () { if (!window.gsap) document.documentElement.classList.remove('js-motion'); }, 4000);
+            /* loading screen: first page of a browser session only */
+            try { if (!sessionStorage.getItem('db-intro')) document.documentElement.classList.add('show-loader'); } catch (e) {}
         }
     </script>
 </head>
 <body class="page-contact">
+
+    <!-- ===== LOADING SCREEN — first visit per browser session =====
+         A line drawing of David's 35mm photo of Boston (Zakim Bridge + TD Garden),
+         drawn progressively as the page loads. Every element has pathLength="1"
+         and data-s = the progress (0–1) at which it starts drawing.
+         Shown only when the <head> script adds .show-loader (JS on, not seen yet
+         this session, no reduced-motion preference). -->
+    <div class="loader" id="loader" aria-hidden="true">
+        <svg class="loader-art" viewBox="0 120 1800 990" preserveAspectRatio="xMidYMax slice">
+            <!-- low glass block, left -->
+            <path pathLength="1" data-s="0.02" d="M0 620 H188 V880"/>
+            <path class="thin" pathLength="1" data-s="0.06" d="M0 660H188 M0 700H188 M0 740H188 M0 780H188 M0 820H188"/>
+            <!-- brick blocks + chimney -->
+            <path pathLength="1" data-s="0.05" d="M110 880 V718 H240 V740 H470 V880"/>
+            <path pathLength="1" data-s="0.08" d="M268 740 V688 H286 V740"/>
+            <!-- State Street tower (curved glass) + small tower -->
+            <path pathLength="1" data-s="0.10" d="M330 745 V420 C 360 405 400 400 425 402 L460 410 V745"/>
+            <path class="thin" pathLength="1" data-s="0.16" d="M338 740 C 352 600 378 480 420 406"/>
+            <path pathLength="1" data-s="0.09" d="M285 745 V528 H330"/>
+            <!-- Verizon tower: shaft, cap, podium, bay, window grid -->
+            <path pathLength="1" data-s="0.16" d="M462 750 V190 L478 175 H810 V620"/>
+            <path pathLength="1" data-s="0.22" d="M462 270 H810"/>
+            <path pathLength="1" data-s="0.20" d="M435 750 V625 H830 V750"/>
+            <path class="thin" pathLength="1" data-s="0.26" d="M568 285 H672 V535 H568 Z"/>
+            <path class="thin" pathLength="1" data-s="0.30" d="M520 270 V620 M620 270 V620 M720 270 V620 M760 270 V620"/>
+            <path class="thin" pathLength="1" data-s="0.32" d="M462 310 H810 M462 350 H810 M462 390 H810 M462 430 H810 M462 470 H810 M462 510 H810 M462 550 H810 M462 590 H810"/>
+            <!-- glass tower, centre -->
+            <path pathLength="1" data-s="0.28" d="M935 700 V332 L946 322 H1100 L1112 300 H1158 V700"/>
+            <path class="thin" pathLength="1" data-s="0.36" d="M985 330 V700 M1035 325 V700 M1085 325 V700 M1130 305 V700"/>
+            <!-- TD Garden: roof arc, facade, bands -->
+            <path pathLength="1" data-s="0.40" d="M588 762 C 700 722 900 716 1022 732"/>
+            <path pathLength="1" data-s="0.44" d="M600 758 V900 M1020 732 V900"/>
+            <path class="thin" pathLength="1" data-s="0.48" d="M600 792 H1020 M620 832 H1000 M640 740 V790 M700 728 V790 M760 722 V790 M820 720 V790 M880 720 V790 M940 722 V790"/>
+            <!-- residential towers, right -->
+            <path pathLength="1" data-s="0.42" d="M1405 805 V420 L1480 400 V365 H1570 V805"/>
+            <path pathLength="1" data-s="0.46" d="M1450 365 V300 H1660 L1690 288 V765"/>
+            <path pathLength="1" data-s="0.50" d="M1700 765 V596 H1770 V805"/>
+            <path class="thin" pathLength="1" data-s="0.54" d="M1570 330 H1690 M1570 370 H1690 M1570 410 H1690 M1570 450 H1690 M1570 490 H1690 M1570 530 H1690 M1570 570 H1690 M1570 610 H1690 M1570 650 H1690 M1570 690 H1690 M1570 730 H1690"/>
+            <!-- Zakim Bridge pylon (orange = the civil-engineering highlight) -->
+            <path class="hl" pathLength="1" data-s="0.52" d="M1300 250 L1318 262 L1332 560 L1422 802 M1300 250 L1284 262 L1272 560 L1188 832 M1272 560 H1332"/>
+            <path class="hl-thin" pathLength="1" data-s="0.58" d="M1294 620 L1226 832 M1312 620 L1386 802"/>
+            <!-- stay cables fanning from the pylon -->
+            <path class="thin" pathLength="1" data-s="0.60" d="M1320 300 L1800 612 M1322 330 L1780 662 M1324 360 L1722 702 M1326 390 L1662 742 M1328 420 L1602 772 M1329 450 L1542 792"/>
+            <path class="thin" pathLength="1" data-s="0.63" d="M1284 300 L1040 702 M1282 330 L1080 742 M1280 360 L1120 782 M1278 390 L1160 812"/>
+            <path pathLength="1" data-s="0.64" d="M1040 812 C 1300 792 1600 762 1800 742"/>
+            <!-- park trees, trunks, lamp post, ground -->
+            <path pathLength="1" data-s="0.70" d="M0 900 C 30 840 90 830 130 860 C 170 820 250 820 290 860 C 330 830 420 830 470 870 C 520 810 620 800 700 850 C 760 810 860 810 920 850 C 980 830 1040 850 1090 870 C 1140 820 1230 810 1290 850 C 1350 820 1440 800 1520 840 C 1580 800 1690 790 1800 830"/>
+            <path class="thin" pathLength="1" data-s="0.76" d="M40 1010 C 120 950 230 960 300 1000 C 380 950 520 960 600 1010 M1080 1000 C 1160 940 1300 950 1380 1000 C 1460 950 1600 960 1680 1010"/>
+            <path class="thin" pathLength="1" data-s="0.80" d="M300 1000 V1070 M560 1008 V1080 M900 990 V1075 M1400 1000 V1070 M1640 1006 V1072"/>
+            <path class="thin" pathLength="1" data-s="0.78" d="M92 1072 V860 M70 850 H116"/>
+            <path pathLength="1" data-s="0.82" d="M0 1085 C 300 1070 700 1080 1000 1075 S 1500 1070 1800 1080"/>
+            <!-- the film camera's date stamp -->
+            <text class="loader-stamp" x="1430" y="1060">7  9 '26</text>
+        </svg>
+
+        <div class="loader-title"><strong>David Becerra</strong><span>Civil Engineer · Boston, MA</span></div>
+
+        <div class="loader-bar">
+            <div class="loader-meta">
+                <span>Boston, MA — drawn from a 35mm photo by D. Becerra</span>
+                <span class="loader-pct">0%</span>
+            </div>
+            <div class="loader-track"><div class="loader-fill"></div></div>
+        </div>
+    </div>
+    <script>
+    (function () {
+        var root = document.documentElement;
+        if (!root.classList.contains('show-loader')) return;
+        var box = document.getElementById('loader');
+        // tall (portrait) screens: show the whole skyline as a panorama instead of cropping
+        if (window.innerWidth < window.innerHeight) box.querySelector('.loader-art').setAttribute('preserveAspectRatio', 'xMidYMax meet');
+        var parts = [].slice.call(box.querySelectorAll('[data-s]'));
+        var stamp = box.querySelector('.loader-stamp');
+        var fill = box.querySelector('.loader-fill');
+        var pct = box.querySelector('.loader-pct');
+        var MIN = 1800, MAX = 5000, SPAN = 0.26;       // ms: shortest / longest intro
+        var t0 = performance.now(), shown = 0, finished = false;
+
+        // real progress: page parsed + fonts + images that aren't lazy
+        function realProgress() {
+            var imgs = [].filter.call(document.images, function (i) { return i.loading !== 'lazy'; });
+            var total = imgs.length + 2, ready = 0;
+            if (document.readyState === 'complete') ready++;
+            if (!document.fonts || document.fonts.status === 'loaded') ready++;
+            imgs.forEach(function (i) { if (i.complete) ready++; });
+            return ready / total;
+        }
+        function draw(p) {
+            parts.forEach(function (el) {
+                var v = Math.max(0, Math.min(1, (p - el.getAttribute('data-s')) / SPAN));
+                el.style.strokeDashoffset = 1 - v;
+            });
+            stamp.style.opacity = Math.max(0, (p - 0.88) / 0.12);
+            fill.style.transform = 'scaleX(' + p + ')';
+            pct.textContent = Math.round(p * 100) + '%';
+        }
+        function finish() {
+            if (finished) return;
+            finished = true;
+            draw(1);
+            try { sessionStorage.setItem('db-intro', '1'); } catch (e) {}
+            box.classList.add('is-done');
+            setTimeout(function () {
+                root.classList.remove('show-loader');
+                box.remove();
+                setTimeout(function () { root.classList.add('hero-done'); }, 1500);
+            }, 550);
+        }
+        function frame(now) {
+            var elapsed = now - t0;
+            // never faster than the drawing needs, never longer than MAX
+            var target = elapsed > MAX ? 1 : Math.min(realProgress(), elapsed / MIN);
+            shown += (target - shown) * 0.08;
+            if (target === 1 && shown > 0.996) shown = 1;
+            draw(shown);
+            if (shown < 1) requestAnimationFrame(frame); else setTimeout(finish, 250);
+        }
+        requestAnimationFrame(frame);
+        setTimeout(finish, MAX + 1500);                  // hard failsafe
+        box.addEventListener('click', finish);           // tap to skip
+    })();
+    </script>
 
     <a class="skip" href="#main">Skip to content</a>
 
@@ -124,7 +249,7 @@
                     <ul>
                         <li><a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener">LinkedIn</a></li>
                         <li><a href="https://github.com/Sebastian0018" target="_blank" rel="noopener">GitHub</a></li>
-                        <li><a href="mailto:davidsebastianbecerra123@gmail.com">Email</a></li>
+                        <li><a href="/contact.html" data-mail="davidsebastianbecerra123" data-domain="gmail.com">Email</a></li>
                         <li><a href="/CV_David_Becerra_updated.pdf" target="_blank" rel="noopener">Resume (PDF)</a></li>
                     </ul>
                 </div>
@@ -138,6 +263,6 @@
 
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script defer src="/script.js?v=10"></script>
+    <script defer src="/script.js?v=11"></script>
 </body>
 </html>
