@@ -1,22 +1,29 @@
 // David Becerra — Portfolio
-// Mobile nav toggle, Beyond photo slider, GSAP scroll reveals/parallax.
+// Full-screen menu, Beyond photo slider, GSAP reveals + skyline entrance.
 // Degrades to plain visible content if GSAP fails to load.
 
 document.addEventListener('DOMContentLoaded', () => {
-  const toggle = document.querySelector('.nav-toggle');
-  const links = document.querySelector('.nav-links');
+  // Full-screen menu (red field under the top bar)
+  const menuBtn = document.querySelector('.menu-btn');
+  const menu = document.getElementById('site-menu');
 
-  if (toggle && links) {
-    toggle.addEventListener('click', () => {
-      const isOpen = links.classList.toggle('is-open');
-      toggle.setAttribute('aria-expanded', String(isOpen));
-    });
+  if (menuBtn && menu) {
+    const setMenu = (open) => {
+      menu.classList.toggle('is-open', open);
+      menu.inert = !open;
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      document.body.classList.toggle('menu-open', open);
+      if (open) menu.querySelector('a').focus();
+    };
 
-    links.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => {
-        links.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
-      });
+    menuBtn.addEventListener('click', () => setMenu(!menu.classList.contains('is-open')));
+    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.classList.contains('is-open')) {
+        setMenu(false);
+        menuBtn.focus();
+      }
     });
   }
 
@@ -170,14 +177,17 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   });
 
-  // Hero deco shapes: pop-in
-  const heroDeco = gsap.utils.toArray('.hero .deco-parallax');
-  if (heroDeco.length) {
-    gsap.fromTo(
-      heroDeco,
-      { opacity: 0, scale: 0.7 },
-      { opacity: 1, scale: 1, duration: 0.9, ease: 'back.out(1.6)', stagger: 0.15, delay: 0.2 }
-    );
+  // Skyline: buildings rise from the ground line, one after another
+  const buildings = gsap.utils.toArray('.skyline .bldg');
+  if (buildings.length) {
+    gsap.from(buildings, {
+      scaleY: 0,
+      transformOrigin: '50% 100%',
+      duration: 0.9,
+      ease: 'power3.out',
+      stagger: 0.08,
+      delay: 0.3,
+    });
   }
 
   // Scroll reveals for standalone elements
@@ -211,20 +221,5 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollTrigger: { trigger: group, start: 'top 85%', toggleActions: 'play none none reverse' },
       }
     );
-  });
-
-  // Scroll parallax on decorative shapes — each moves at its own speed via data-parallax
-  gsap.utils.toArray('.deco-parallax').forEach((el) => {
-    const speed = parseFloat(el.dataset.parallax || '0.2');
-    gsap.to(el, {
-      y: () => window.innerHeight * speed,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: el.parentElement,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 0.6,
-      },
-    });
   });
 });

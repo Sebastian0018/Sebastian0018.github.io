@@ -1,6 +1,6 @@
 # David Becerra Portfolio — Design System (MASTER)
 
-> **Current version: v3 (Illoca pass, 2026-09-29) — see the last section. It supersedes the color, typography and card rules in the v1/v2 sections below, which are kept as history.**
+> **Current version: v4 ("Sketch on concrete", 2026-09-29) — see the last section. It supersedes everything above it (v1–v3 are kept as history).**
 
 Generated with `ui-ux-pro-max`, adjusted against explicit user color/motion decisions (2026-09-28 session). This file is the source of truth — read it before touching any page.
 
@@ -149,3 +149,34 @@ Light-only by design (`color-scheme: light`): the paper sheet is the identity, a
 - **Gotcha found in v3:** `<img width height>` attributes beat CSS `aspect-ratio` unless `height: auto` is set. It is now in the global reset.
 
 **Cache busting:** `style.css?v=N` / `script.js?v=N` in all 5 pages. Bump N on every deploy, because GitHub Pages and browsers otherwise serve the old files for a while.
+
+## v4 — "Sketch on concrete" (2026-09-29, same day)
+
+Sebastian felt v3 copied Illoca too closely. v4 drops every Illoca signature (cobalt frame, blue grid paper, pill nav, duotone photo, Plex Mono / Architects Daughter) and mixes three references:
+
+1. **The1 style reference, used for structure.** Flat concrete canvas `#D9D9D9` with near-black ink `#1F1F1F`. Building-scale condensed display type (line-height 0.8, negative tracking). Dark pill buttons are the only button style, and each one sits after a short question ("See the projects? [View work →]"). Hairline 1px dividers, a 48px circle menu button, and a full-screen red menu with a giant cropped "D". Four paint colors are used as full-bleed identity blocks, never as text colors.
+2. **The hand-drawn wireframe, used for the details.** `.sketch-box` wobbly borders come from uneven elliptical `border-radius`. Handwritten labels (`.label`, Patrick Hand) sit above fields. Orange `--sketch` notes have hand-drawn arrows, and `.todo` checkboxes appear as "Talking points". Contact is laid out as a one-column wireframe form.
+3. **The skyline sketch, used for the Home hero.** A hand-drawn **Boston skyline written entirely as inline SVG**, with no spider. It includes the Custom House Tower, a building under construction with a swinging yellow crane, the Prudential and Hancock towers, the Zakim Bridge, trees, a plane, birds, "Hola / Welcome" bubbles, and colored underground pipes labeled "water + gas networks" as a nod to the hydrosanitary work. The shared `#sketchy` filter (feTurbulence + feDisplacementMap, defined once per page right after `<body>`) wobbles every stroke. Buildings rise on load via GSAP.
+
+**Tokens:** `--concrete #D9D9D9`, `--iron #1F1F1F`, `--green #027B49`, `--pink #F19EC8`, `--red #FA4D43`, `--yellow #FBB833`, `--sketch #C9401A`.
+
+**Fonts:** Barlow Condensed 500 for display, Barlow 400/500 for body, Patrick Hand for the sketch layer.
+
+**Page colors (wayfinding):** a `body.page-*` class sets `--page`.
+
+| Page | Color |
+|---|---|
+| Home | yellow block + red CTA |
+| Work | green |
+| About | yellow |
+| Beyond | pink |
+| Contact | red |
+
+Each sub-page hero is a full-bleed `.hero-block` in its page color, with the page label, "0N / 05" and wall-scale type. Green is too dark for small ink text, so `.block--green` switches text to `#F4F4F4`.
+
+**Everything is drawn in code.** No decorative image files remain. Card illustrations (vault door, phone chat, water tank + pipes) are small inline SVGs using `.sk-art`, with `.fill-paint` picking up the card's `--c`. Every block in the HTML and CSS has a numbered `/* 0N. … */` or `<!-- ===== … ===== -->` header, so any part can be found and edited.
+
+**Gotchas found in v4:**
+- A CSS class that sets `fill: none` beats an SVG `fill=""` attribute. Stroke classes now only drop the fill on elements without one (`.sk-line:not([fill])`).
+- `.wrap` combined with a component that sets `padding: X 0` loses its side gutters. Use `padding-top` / `padding-bottom` instead.
+- The Claude browser pane pauses `requestAnimationFrame` while it is hidden, so GSAP screenshots come out half-animated. Use headless Edge (`--force-prefers-reduced-motion --screenshot`) for visual checks. Its window can't go narrower than about 500px, so check phone widths with DOM measurements instead.

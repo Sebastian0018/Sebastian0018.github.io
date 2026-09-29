@@ -23,107 +23,128 @@
     <meta name="twitter:description" content="Get in touch with David Becerra — open to ConTech, PropTech, and construction software roles in Boston.">
     <meta name="twitter:image" content="https://sebastian0018.github.io/og-image.png">
 
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=7">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Architects+Daughter&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500&family=Barlow:wght@400;500&family=Patrick+Hand&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="page-contact">
 
-<div class="sheet">
-    <p class="sheet-coords" aria-hidden="true">X 42.36°N<br>Y 71.06°W</p>
-    <a class="sheet-mail" href="mailto:davidsebastianbecerra123@gmail.com">davidsebastianbecerra123@gmail.com</a>
+    <a class="skip" href="#main">Skip to content</a>
 
-    <nav class="site-nav" aria-label="Main">
-        <div class="nav-inner">
-            <a href="index.html" class="nav-logo" aria-label="David Becerra — home">
-                <svg class="logo-mark" viewBox="0 0 34 34" aria-hidden="true">
-                    <rect x="0.5" y="0.5" width="33" height="33" fill="#1F4FD1" stroke="#2B2B2B"/>
-                    <path d="M9 9.5h16M9 24.5h16M17 9.5v15" stroke="#F4EDDC" stroke-width="3.2" fill="none"/>
-                </svg>
-                David Becerra
-            </a>
-            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-                <span></span>
+    <!-- Shared SVG defs: "sketchy" filter wobbles any stroke so it looks pen-drawn -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <filter id="sketchy" x="-5%" y="-5%" width="110%" height="110%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7" result="noise"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- ===== TOP BAR ===== -->
+    <header class="topbar">
+        <a href="index.html" class="wordmark">David Becerra</a>
+        <div class="topbar-right">
+            <p class="ask"><span>Open to ConTech roles?</span> <a href="contact.html" class="pill">Get in touch</a></p>
+            <button class="circle-btn menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+                <span class="menu-lines" aria-hidden="true"></span>
             </button>
-            <ul class="nav-links">
-                <li><a href="work.html">Work</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="beyond.html">Beyond</a></li>
-                <li><a href="contact.html" aria-current="page">Contact</a></li>
-            </ul>
-            <a href="contact.html" class="nav-cta">
-                <span class="cta-tile" aria-hidden="true">
-                    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 14V9h4V5h4V2h4" fill="none" stroke="#FBF8F1" stroke-width="1.6"/></svg>
-                </span>
-                Get in touch
-            </a>
-        </div>
-    </nav>
-
-    <header class="hero">
-        <div class="deco-parallax" data-parallax="0.22" style="top: 18%; right: 7%;">
-            <svg class="deco-shape" width="110" height="110" viewBox="0 0 120 120" aria-hidden="true">
-                <polygon class="fill-soft" points="60,6 112,36 60,66 8,36"/>
-                <polygon points="8,36 60,66 60,118 8,88"/>
-                <polygon points="112,36 60,66 60,118 112,88"/>
-            </svg>
-        </div>
-        <div class="deco-parallax" data-parallax="0.1" style="bottom: 12%; left: 7%;">
-            <svg class="deco-shape float-delay" width="70" height="70" viewBox="0 0 110 110" aria-hidden="true">
-                <polygon points="55,10 100,40 55,100 55,55"/>
-                <polygon class="fill-soft" points="55,10 10,40 55,100 55,55"/>
-            </svg>
-        </div>
-
-        <div class="container">
-            <p class="hero-label reveal hero-reveal">Contact</p>
-            <br>
-            <h1 class="hero-title reveal hero-reveal">
-                <span class="line">Let's build</span><br><span class="line">something.</span>
-                <span class="annot annot-right" aria-hidden="true">
-                    <svg class="draw" width="34" height="14" viewBox="0 0 34 14"><path d="M1 8 C 10 4, 20 10, 31 6 M25 2 L31 6 L26 11"/></svg>
-                    <span>Open to work</span>
-                </span>
-            </h1>
-            <p class="hero-tagline reveal hero-reveal">Open to roles in ConTech, PropTech, and construction software — as a junior developer, technical PM, or implementation specialist.</p>
-
-            <div class="contact-links reveal hero-reveal">
-                <a href="mailto:davidsebastianbecerra123@gmail.com"><span class="mono">Email</span>davidsebastianbecerra123@gmail.com</a>
-                <a href="https://github.com/Sebastian0018" target="_blank" rel="noopener"><span class="mono">GitHub</span>Sebastian0018</a>
-                <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener"><span class="mono">LinkedIn</span>David Sebastian Becerra Davila</a>
-                <a href="CV_David_Becerra_updated.pdf" target="_blank" rel="noopener"><span class="mono">CV</span>Download (PDF) ↓</a>
-            </div>
         </div>
     </header>
 
-</div><!-- /.sheet -->
+    <!-- ===== FULL-SCREEN MENU (red field, giant cropped initial) ===== -->
+    <nav class="menu" id="site-menu" aria-label="Main" inert>
+        <span class="menu-mark" aria-hidden="true">D</span>
+        <ol class="menu-links">
+            <li><a href="index.html"><span class="dot" style="--c: var(--concrete)"></span>Home</a></li>
+            <li><a href="work.html"><span class="dot" style="--c: var(--green)"></span>Work</a></li>
+            <li><a href="about.html"><span class="dot" style="--c: var(--yellow)"></span>About</a></li>
+            <li><a href="beyond.html"><span class="dot" style="--c: var(--pink)"></span>Beyond</a></li>
+            <li><a href="contact.html" aria-current="page"><span class="dot" style="--c: var(--iron)"></span>Contact</a></li>
+        </ol>
+        <p class="menu-foot">davidsebastianbecerra123@gmail.com · Boston, MA</p>
+    </nav>
 
-<footer class="site-footer">
-    <div class="container">
-        <p class="footer-mark">David Becerra <span>Civil Eng → ConTech</span></p>
-        <div class="footer-grid">
-            <nav class="footer-nav" aria-label="Footer navigation">
-                <a href="index.html">Home</a>
-                <a href="work.html">Work</a>
-                <a href="about.html">About</a>
-                <a href="beyond.html">Beyond</a>
-                <a href="contact.html">Contact</a>
-            </nav>
-            <div class="footer-social">
-                <a href="https://github.com/Sebastian0018" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener">LinkedIn</a>
-                <a href="mailto:davidsebastianbecerra123@gmail.com">Email</a>
+    <main id="main">
+
+        <!-- ===== HERO — red paint block ===== -->
+        <section class="hero-block">
+            <div class="wrap">
+                <div class="hero-block-top reveal hero-reveal">
+                    <span class="label">Contact</span>
+                    <span class="page-count">05 / 05</span>
+                </div>
+                <h1 class="display reveal hero-reveal">Let's build something.</h1>
             </div>
-        </div>
-        <div class="footer-inner">
-            <p>David Sebastian Becerra Davila · Boston, MA · 2026</p>
-        </div>
-    </div>
-</footer>
+        </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="script.js?v=5"></script>
+        <!-- ===== CONTACT — drawn like a wireframe form ===== -->
+        <section class="section">
+            <div class="wrap split">
+                <div class="form" data-reveal-group>
+                    <div class="field reveal-item">
+                        <span class="label">Email</span>
+                        <a class="sketch-box" href="mailto:davidsebastianbecerra123@gmail.com" style="padding: 14px 18px;">davidsebastianbecerra123@gmail.com <span aria-hidden="true">✉</span></a>
+                    </div>
+                    <div class="field reveal-item">
+                        <span class="label">GitHub</span>
+                        <a class="sketch-box" href="https://github.com/Sebastian0018" target="_blank" rel="noopener" style="padding: 14px 18px;">Sebastian0018 <span aria-hidden="true">↗</span></a>
+                    </div>
+                    <div class="field reveal-item">
+                        <span class="label">LinkedIn</span>
+                        <a class="sketch-box" href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener" style="padding: 14px 18px;">David Sebastian Becerra Davila <span aria-hidden="true">↗</span></a>
+                    </div>
+                    <div class="field reveal-item">
+                        <span class="label">Resume</span>
+                        <a class="sketch-box dashed" href="CV_David_Becerra_updated.pdf" target="_blank" rel="noopener" style="padding: 14px 18px;">Download CV (PDF) <span aria-hidden="true">↓</span></a>
+                    </div>
+                </div>
+
+                <div class="contact-side reveal">
+                    <p class="lede">Open to roles in ConTech, PropTech, and construction software — as a junior developer, technical PM, or implementation specialist.</p>
+                    <div>
+                        <span class="note" style="margin-bottom: 8px;">Talking points</span>
+                        <ul class="todo">
+                            <li>Construction technology</li>
+                            <li>PropTech</li>
+                            <li>Construction software</li>
+                        </ul>
+                    </div>
+                    <p class="note">
+                        <svg class="draw" width="40" height="22" viewBox="0 0 40 22" aria-hidden="true"><path d="M38 18 C 26 20, 12 14, 4 4 M4 13 L4 4 L13 5"/></svg>
+                        Bilingual — Spanish &amp; English
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="wrap">
+            <div class="footer-grid">
+                <nav aria-label="Footer navigation">
+                    <a href="index.html">Home</a>
+                    <a href="work.html">Work</a>
+                    <a href="about.html">About</a>
+                    <a href="beyond.html">Beyond</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+                <div>
+                    <a href="https://github.com/Sebastian0018" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://linkedin.com/in/david-sebastian-becerra-davila-7060911b9" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="mailto:davidsebastianbecerra123@gmail.com">Email</a>
+                </div>
+            </div>
+            <p class="footer-mark" aria-hidden="true">David Becerra</p>
+            <p class="fine">David Sebastian Becerra Davila · Civil Engineer → Construction Technology · Boston, MA · 2026</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="script.js?v=6"></script>
 </body>
 </html>
