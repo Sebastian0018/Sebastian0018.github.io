@@ -1,11 +1,11 @@
 // David Becerra — Portfolio
-// Full-screen menu, Beyond photo slider, GSAP reveals + skyline entrance.
+// Mobile nav panel, photo slider, GSAP reveals + line-drawing of the elevation.
 // Degrades to plain visible content if GSAP fails to load.
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Full-screen menu (red field under the top bar)
+  // Mobile nav panel (drops down under the nav bar)
   const menuBtn = document.querySelector('.menu-btn');
-  const menu = document.getElementById('site-menu');
+  const menu = document.getElementById('nav-panel');
 
   if (menuBtn && menu) {
     const setMenu = (open) => {
@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
       menu.inert = !open;
       menuBtn.setAttribute('aria-expanded', String(open));
       menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      document.body.classList.toggle('menu-open', open);
       if (open) menu.querySelector('a').focus();
     };
 
@@ -68,6 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function goTo(i, { animate = true } = {}) {
       current = Math.max(0, Math.min(total - 1, i));
+      // a #frame-NN anchor makes the browser scroll this overflow:hidden box
+      // natively — undo that so only our transform positions the track
+      viewport.scrollLeft = 0;
       track.classList.toggle('no-anim', !animate);
       setX(offsetFor(current));
       slides.forEach((s, j) => {
@@ -145,7 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
       resizeTimer = setTimeout(() => goTo(current, { animate: false }), 80);
     });
 
-    goTo(0, { animate: false });
+    // Deep links from the Home photo strip: beyond.html#frame-07
+    const fromHash = () => {
+      const idx = slides.findIndex((s) => '#' + s.id === location.hash);
+      return idx >= 0 ? idx : 0;
+    };
+    goTo(fromHash(), { animate: false });
+    window.addEventListener('hashchange', () => goTo(fromHash()));
     // Fonts/layout can shift widths after first paint — re-center once settled
     window.addEventListener('load', () => goTo(current, { animate: false }));
   }
@@ -167,27 +175,24 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   }
 
-  // Handwritten arrows/underlines draw themselves in after the headline lands
-  gsap.utils.toArray('.draw path').forEach((path, i) => {
-    const len = Math.ceil(path.getTotalLength());
-    gsap.fromTo(
-      path,
-      { strokeDasharray: len, strokeDashoffset: len },
-      { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut', delay: 0.7 + i * 0.2 }
-    );
-  });
 
-  // Skyline: buildings rise from the ground line, one after another
-  const buildings = gsap.utils.toArray('.skyline .bldg');
-  if (buildings.length) {
-    gsap.from(buildings, {
-      scaleY: 0,
-      transformOrigin: '50% 100%',
-      duration: 0.9,
-      ease: 'power3.out',
-      stagger: 0.08,
-      delay: 0.3,
+  // Elevation drawing: linework draws itself like a pen plotter, then hatching,
+  // utilities and callouts fade in. Dashed utility lines are faded, not drawn,
+  // so their dash pattern stays intact.
+  const elev = document.querySelector('.elev');
+  if (elev) {
+    const strokes = gsap.utils.toArray(elev.querySelectorAll('.ln, .thin, .hl'))
+      .filter((el) => !el.closest('.callout') && typeof el.getTotalLength === 'function');
+    strokes.forEach((el) => {
+      const len = Math.ceil(el.getTotalLength()) + 2;
+      el.style.strokeDasharray = len;
+      el.style.strokeDashoffset = len;
     });
+    const extras = elev.querySelectorAll('.hatch, .dash, .callout, text, .solid');
+    gsap.set(extras, { opacity: 0 });
+    const tl = gsap.timeline({ scrollTrigger: { trigger: elev, start: 'top 85%', once: true } });
+    tl.to(strokes, { strokeDashoffset: 0, duration: 1.4, ease: 'power1.inOut', stagger: 0.025 })
+      .to(extras, { opacity: 1, duration: 0.6, stagger: 0.01 }, '-=0.5');
   }
 
   // Scroll reveals for standalone elements

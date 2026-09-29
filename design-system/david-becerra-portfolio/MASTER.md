@@ -1,6 +1,8 @@
 # David Becerra Portfolio — Design System (MASTER)
 
-> **Current version: v4 ("Sketch on concrete", 2026-09-29) — see the last section. It supersedes everything above it (v1–v3 are kept as history).**
+> **Current version: v5 ("Blueprint", 2026-09-29) — see the last section. It supersedes everything above it (v1–v4 are kept as history).**
+>
+> **Content rule (applies to every version):** every claim must match `CV_David_Becerra_updated.pdf`: titles, dates, numbers. No "5+ years". Python is shown as *learning (beginner)*, never as a skill. The site says openly that it was built with AI (Claude Code).
 
 Generated with `ui-ux-pro-max`, adjusted against explicit user color/motion decisions (2026-09-28 session). This file is the source of truth — read it before touching any page.
 
@@ -180,3 +182,49 @@ Each sub-page hero is a full-bleed `.hero-block` in its page color, with the pag
 - A CSS class that sets `fill: none` beats an SVG `fill=""` attribute. Stroke classes now only drop the fill on elements without one (`.sk-line:not([fill])`).
 - `.wrap` combined with a component that sets `padding: X 0` loses its side gutters. Use `padding-top` / `padding-bottom` instead.
 - The Claude browser pane pauses `requestAnimationFrame` while it is hidden, so GSAP screenshots come out half-animated. Use headless Edge (`--force-prefers-reduced-motion --screenshot`) for visual checks. Its window can't go narrower than about 500px, so check phone widths with DOM measurements instead.
+
+## v5 — "Blueprint" (2026-09-29, same day)
+
+David felt v4 read as childish (handwriting, wobbly boxes, speech bubbles, a plane, pastel paint blocks). He asked for a professional look for a civil engineer who likes photography, with a Timescale-style reference: engineering blueprint on warm graph paper.
+
+**Palette (strict):**
+- `--paper #FAFAFA` with a dot grid (`.dotgrid`, 1px dots every 20px).
+- `--ink #000` does all the structure.
+- `--steel #5F5F5F` for secondary text (6.4:1 contrast).
+- `--orange #FF5B29` is **voice only**: key headline words, stat numerals, the "in progress" element of the drawing. Never button fills, never body text, never smaller than 24px.
+- `--lime #F5FF80` is **spotlight only**: the announcement bar and the "Open to work" chip.
+- No other colors. The four v4 paint colors are gone.
+
+**Type:** Geist 400/500/600 for voice. Geist Mono 400/500/700 for numbers, labels, dates, tags, drawing text and title blocks.
+
+**Components:**
+- Cards (`.card`): 12px radius, 1px black border, `5px 5px 0 #000` hard shadow. Hover lifts to 7px on linked cards.
+- Buttons: pill `.btn-primary` (black) and `.btn-outline`.
+- Tags: mono uppercase pills.
+- Nav: flat 64px bar with a hairline, links, and a black "Resume" pill. On mobile it becomes a dropdown `.nav-panel`; v4's full-screen red menu is gone.
+- Announcement bar in lime.
+- Spec-sheet key/value cards (`.spec`).
+- Stats banner (mono orange numerals).
+- Feature cards with 1.5px line icons.
+- Experience `.row`s separated by hairlines.
+- Dark CTA panel.
+- Footer states that the site was built with AI.
+
+**Hero drawing:** the Boston skyline is redrawn as a real line **elevation sheet**:
+- Hatched glazing and an earth hatch at grade (±0.00 level marker).
+- Dashed water and gas utilities with W/G letters.
+- Numbered callouts, a legend and a title block (PROJECT / DRAWN BY / SHEET A-101 / SCALE N.T.S. / DATE).
+- The building under construction and the tower crane are the only orange element, labeled "In progress", as a quiet metaphor for learning software.
+- GSAP draws the linework like a pen plotter (`strokeDashoffset`), then fades in the hatching, utilities and callouts.
+- Under 760px the SVG keeps a 760px width and scrolls sideways inside `.sheet-scroll`, so the 11px drawing text stays legible.
+
+**Photography:** Home has a "Structures I stop for" strip with four frames. The captions are engineering-accurate: suspension bridge, cable-stayed bridge, thin-shell dome, brick rowhouses. The frames deep-link to `beyond.html#frame-NN`, and the slider opens on that frame. The nav label is "Photography" (the file is still `beyond.html`).
+
+**Brand assets:** the favicon (I-beam mark with an orange corner), `favicon-16/32.png`, `apple-touch-icon.png` and `og-image.png` (1200×630 drawing-sheet card) are regenerated in v5. The PNGs are rendered with headless Edge and resized with Pillow.
+
+**Head:** generated from one template for all pages. It has honest per-page descriptions, `theme-color`, a canonical link, and `Person` JSON-LD on Home.
+
+**Gotchas found in v5:**
+- An element cloned with `<use>` did not get the `.elev .ln` styles (the selector didn't match inside the clone), so it rendered with the default black fill. Draw repeated parts explicitly.
+- A `#frame-NN` anchor makes the browser natively scroll the slider's `overflow: hidden` viewport. `goTo()` resets `viewport.scrollLeft = 0`.
+- The phone title-block borders needed simple column rules (odd cells after the first get the left border).
