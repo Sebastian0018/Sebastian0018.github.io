@@ -12,39 +12,17 @@
     <link rel="stylesheet" href="../../style.css">
     <!--
         PROTOTYPE — "Maps" tab as a cartography book (not linked from the live site).
-        Three ways to turn the page, switched with ?v=a|b|c:
-          a  Atlas spread   — open book, thumb tabs on the right edge, the leaf flips
-          b  Light table    — folder tabs on top, the new plate is laid over the
-                              previous one, a slider compares the two
-          c  Stacked pages  — pages slide over each other as you scroll
+        An open atlas: text on the left page, the map plate on the right, page
+        tabs on the book's edge. Picking a tab turns the leaf. On each plate a
+        divider lays another plate over the same ground to compare them.
         Site chrome, tokens and type come from ../../style.css (v5 "Blueprint").
-        Plates are registered to one canvas by align_maps.py, so they overlay exactly.
+        Content lives in plates.js; images are built by build_plates.py.
+        See README.md in this folder.
     -->
     <style>
-        /* ===== 01. Prototype switcher ===== */
-        .proto-bar {
-            display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
-            font-family: var(--font-mono); font-size: 12px; letter-spacing: .05em; text-transform: uppercase;
-            margin-bottom: 28px;
-        }
-        .proto-bar span { color: var(--steel); margin-right: 4px; }
-        .proto-bar a {
-            text-decoration: none; padding: 6px 12px;
-            border: 1px solid var(--ink); border-radius: var(--radius-pill);
-        }
-        .proto-bar a[aria-current] { background: var(--ink); color: var(--paper); }
+        .maps-section { padding: 64px 0 104px; border-bottom: 1px solid var(--ink); }
 
-        .maps-section { padding: 56px 0 96px; border-bottom: 1px solid var(--ink); }
-
-        /* ===== 02. Shared pieces ===== */
-        .plate-img { display: block; width: 100%; height: auto; aspect-ratio: 1900 / 2040; background: #1A1A1A; }
-        .plate-cap {
-            display: flex; justify-content: space-between; gap: 12px;
-            font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
-            color: var(--steel); margin-top: 10px;
-        }
-        .plate-cap b { color: var(--ink); font-weight: 500; }
-
+        /* ===== 01. Text blocks ===== */
         .txt-no { font-family: var(--font-mono); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
         .txt-no::before { content: ""; width: 8px; height: 8px; background: var(--orange); }
         .txt-title { font-size: clamp(1.7rem, 2.6vw, 2.4rem); font-weight: 600; line-height: 1.08; letter-spacing: -.03em; margin-bottom: 14px; }
@@ -61,14 +39,52 @@
         .kv > div:last-child { border-bottom: 0; }
         .kv dt { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--steel); padding-top: 2px; }
         .tbc { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; border: 1px dashed var(--ink); border-radius: var(--radius-pill); padding: 1px 7px; margin-left: 6px; white-space: nowrap; }
-        .fact { border: 1px solid var(--ink); border-radius: 8px; padding: 14px 16px; margin-top: 22px; font-size: .95rem; line-height: 1.5; background: var(--paper); }
+        .fact { border: 1px solid var(--ink); border-radius: 8px; padding: 14px 16px; margin-top: 24px; font-size: .95rem; line-height: 1.5; }
         .fact .k { display: block; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
 
-        /* book tab (shared look; each variant places it) */
+        /* ===== 02. The open book ===== */
+        .book { position: relative; margin-right: 168px; }
+        .spread {
+            display: grid; grid-template-columns: 1fr 1fr;
+            background: var(--paper); border: 1px solid var(--ink); border-radius: 6px;
+            /* hard-edged page block: three more leaves under the open one */
+            box-shadow: 3px 3px 0 var(--paper), 4px 4px 0 var(--ink), 7px 7px 0 var(--paper), 8px 8px 0 var(--ink), 11px 11px 0 var(--paper), 12px 12px 0 var(--ink);
+            position: relative;
+        }
+        .spread::after { /* the gutter */
+            content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 56px; transform: translateX(-50%);
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,.07) 46%, rgba(0,0,0,.16) 50%, rgba(0,0,0,.07) 54%, transparent);
+            pointer-events: none; z-index: 5;
+        }
+        .page-l { padding: 40px 44px 48px 40px; position: relative; }
+        .page-r { position: relative; perspective: 2400px; }
+        .txt { display: none; }
+        .txt.is-on { display: block; animation: txt-in .5s ease both; }
+        @keyframes txt-in { from { opacity: 0; transform: translateY(6px); } }
+        .folio { position: absolute; bottom: 16px; font-family: var(--font-mono); font-size: 11px; color: var(--steel); }
+        .page-l .folio { left: 40px; }
+        .leaf .folio { right: 32px; }
+
+        /* a leaf is one right-hand page; only the open one takes part in layout */
+        .leaf {
+            position: absolute; inset: 0; padding: 32px 32px 48px 40px;
+            background: var(--paper); border-radius: 0 6px 6px 0;
+            transform-origin: left center; backface-visibility: hidden;
+            visibility: hidden;
+        }
+        .leaf.is-on { visibility: visible; position: relative; z-index: 1; }
+        .leaf.is-under { visibility: visible; z-index: 0; }
+        .leaf.flip-out, .leaf.flip-in { visibility: visible; z-index: 3; box-shadow: 12px 0 30px -12px rgba(0,0,0,.45); will-change: transform; }
+        .leaf.flip-out { animation: leaf-turn .95s cubic-bezier(.45,.05,.3,1) both; }
+        .leaf.flip-in { animation: leaf-turn .95s cubic-bezier(.45,.05,.3,1) reverse both; }
+        @keyframes leaf-turn { from { transform: rotateY(0); } to { transform: rotateY(-112deg); } }
+
+        /* ===== 03. Page tabs on the book's edge ===== */
+        .tabs { position: absolute; left: 100%; top: 36px; display: flex; flex-direction: column; gap: 6px; margin-left: 12px; }
         .btab {
-            display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10px;
-            background: var(--paper); border: 1px solid var(--ink);
-            font: inherit; text-align: left; cursor: pointer; text-decoration: none; color: var(--ink);
+            display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10px; width: 168px;
+            background: var(--paper); border: 1px solid var(--ink); border-left: none; border-radius: 0 10px 10px 0;
+            font: inherit; text-align: left; cursor: pointer; color: var(--ink);
             padding: 11px 14px 11px 12px;
             transition: transform .2s ease, background .2s ease;
         }
@@ -76,124 +92,72 @@
         .btab .lbl { display: grid; line-height: 1.15; }
         .btab .lbl b { font-weight: 600; font-size: 14px; white-space: nowrap; }
         .btab .lbl small { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--steel); white-space: nowrap; }
-        .btab[aria-selected="true"], .btab.is-current { background: var(--ink); color: var(--paper); }
-        .btab[aria-selected="true"] .lbl small, .btab.is-current .lbl small { color: #BDBDBD; }
+        .btab[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+        .btab[aria-selected="true"] .lbl small { color: #BDBDBD; }
+        .btab:not(:disabled):hover { transform: translateX(4px); }
         .btab:disabled { cursor: default; border-style: dashed; color: var(--steel); }
         .btab:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
 
-        /* ===== 03. Variant A — atlas spread ===== */
-        .va { position: relative; margin-right: 168px; }
-        .va .spread {
-            display: grid; grid-template-columns: 1fr 1fr;
-            background: var(--paper); border: 1px solid var(--ink); border-radius: 6px;
-            /* hard-edged page block: three more leaves under the open one */
-            box-shadow: 3px 3px 0 var(--paper), 4px 4px 0 var(--ink), 7px 7px 0 var(--paper), 8px 8px 0 var(--ink), 11px 11px 0 var(--paper), 12px 12px 0 var(--ink);
-            position: relative;
+        /* ===== 04. The plate and its overlay =====
+           .top is this leaf's map; .under is the plate it is compared with.
+           --reveal is how much of .top is laid down, from the left edge.
+           Only clip-path and left change, so the compositor does the work. */
+        .stage {
+            --reveal: 100%;
+            position: relative; overflow: hidden;
+            aspect-ratio: 1900 / 2040; background: #1A1A1A; border: 1px solid var(--ink);
+            touch-action: pan-y; cursor: ew-resize; user-select: none;
         }
-        .va .spread::after { /* the gutter */
-            content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 56px; transform: translateX(-50%);
-            background: linear-gradient(90deg, transparent, rgba(0,0,0,.07) 46%, rgba(0,0,0,.16) 50%, rgba(0,0,0,.07) 54%, transparent);
-            pointer-events: none; z-index: 5;
+        .stage img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; -webkit-user-drag: none; }
+        .stage .top { clip-path: inset(0 calc(100% - var(--reveal)) 0 0); }
+        .stage .line { position: absolute; top: 0; bottom: 0; left: var(--reveal); width: 2px; margin-left: -1px; background: var(--paper); box-shadow: 0 0 0 1px rgba(0,0,0,.55); pointer-events: none; }
+        .stage .knob {
+            position: absolute; top: 50%; left: clamp(22px, var(--reveal), calc(100% - 22px));
+            width: 36px; height: 36px; margin: -18px 0 0 -18px;
+            display: grid; place-items: center;
+            background: var(--paper); border: 1px solid var(--ink); border-radius: 50%; box-shadow: 2px 2px 0 var(--ink);
+            font-size: 15px; pointer-events: none;
         }
-        .va .page-l { padding: 40px 44px 40px 40px; position: relative; }
-        .va .page-r { position: relative; perspective: 2400px; min-height: 100%; }
-        .va .txt { display: none; }
-        .va .txt.is-on { display: block; animation: va-fade .5s ease both; }
-        @keyframes va-fade { from { opacity: 0; transform: translateY(6px); } }
-        .va .leaf {
-            position: absolute; inset: 0; padding: 32px 32px 28px 40px;
-            background: var(--paper); border-radius: 0 6px 6px 0;
-            transform-origin: left center; backface-visibility: hidden;
-            visibility: hidden;
+        .stage.is-easing .top { transition: clip-path .8s cubic-bezier(.22,1,.36,1); }
+        .stage.is-easing .line, .stage.is-easing .knob { transition: left .8s cubic-bezier(.22,1,.36,1); }
+        .stage .who {
+            position: absolute; top: 12px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
+            background: var(--paper); border: 1px solid var(--ink); border-radius: var(--radius-pill); padding: 3px 9px;
+            pointer-events: none; transition: opacity .2s ease;
         }
-        .va .leaf.is-on { visibility: visible; position: relative; z-index: 1; }
-        .va .leaf.is-under { visibility: visible; z-index: 0; }
-        .va .leaf.flip-out { visibility: visible; z-index: 3; animation: va-out .95s cubic-bezier(.45,.05,.3,1) both; box-shadow: 12px 0 30px -12px rgba(0,0,0,.45); }
-        .va .leaf.flip-in { z-index: 3; animation: va-out .95s cubic-bezier(.45,.05,.3,1) reverse both; box-shadow: 12px 0 30px -12px rgba(0,0,0,.45); }
-        @keyframes va-out { 0% { transform: rotateY(0); } 100% { transform: rotateY(-112deg); } }
-        .va .folio { position: absolute; bottom: 14px; font-family: var(--font-mono); font-size: 11px; color: var(--steel); }
-        .va .page-l .folio { left: 40px; }
-        .va .leaf .folio { right: 32px; }
-        .va .tabs { position: absolute; left: 100%; top: 36px; display: flex; flex-direction: column; gap: 6px; margin-left: 12px; }
-        .va .btab { width: 168px; border-left: none; border-radius: 0 10px 10px 0; }
-        .va .btab:not(:disabled):hover { transform: translateX(4px); }
+        .stage .who.l { left: 12px; } .stage .who.r { right: 12px; }
+        .stage[data-side="top"] .who.r, .stage[data-side="under"] .who.l { opacity: 0; }
 
-        /* ===== 04. Variant B — light table ===== */
-        .vb .tabs { display: flex; gap: 6px; padding-left: 18px; position: relative; z-index: 2; margin-bottom: -1px; }
-        .vb .btab { border-radius: 10px 10px 0 0; padding-bottom: 12px; }
-        .vb .btab[aria-selected="true"] { background: var(--paper); color: var(--ink); border-bottom-color: var(--paper); box-shadow: inset 0 3px 0 var(--ink); }
-        .vb .btab[aria-selected="true"] .lbl small { color: var(--steel); }
-        .vb .btab:not(:disabled):not([aria-selected="true"]) { background: #ECECEA; }
-        .vb .btab:not(:disabled):hover { transform: translateY(-2px); }
-        .vb .sheet {
-            display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 44px;
-            background: var(--paper); border: 1px solid var(--ink); border-radius: 0 12px 12px 12px; box-shadow: var(--shadow);
-            padding: 32px;
-        }
-        .vb .stage { position: relative; border: 1px solid var(--ink); background: #1A1A1A; overflow: hidden; --reveal: 100%; touch-action: pan-y; }
-        .vb .stage img { display: block; width: 100%; height: auto; aspect-ratio: 1900 / 2040; }
-        .vb .stage .top { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--reveal)) 0 0); transition: clip-path .9s cubic-bezier(.22,1,.36,1); }
-        .vb .stage .edge { position: absolute; top: 0; bottom: 0; left: var(--reveal); width: 2px; margin-left: -1px; background: var(--paper); box-shadow: 0 0 0 1px rgba(0,0,0,.5); transition: left .9s cubic-bezier(.22,1,.36,1); pointer-events: none; }
-        .vb .stage .edge::after { content: "↔"; position: absolute; top: 50%; left: 50%; width: 34px; height: 34px; margin: -17px; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--ink); border-radius: 50%; font-size: 15px; }
-        .vb .stage.is-dragging .top, .vb .stage.is-dragging .edge { transition: none; }
-        .vb .chip { position: absolute; top: 12px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; background: var(--paper); border: 1px solid var(--ink); border-radius: var(--radius-pill); padding: 3px 9px; }
-        .vb .chip.l { left: 12px; } .vb .chip.r { right: 12px; }
-        .vb .compare { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; margin-top: 14px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; }
-        .vb .compare input { width: 100%; accent-color: #000; }
-        .vb .txt { display: none; }
-        .vb .txt.is-on { display: block; animation: va-fade .5s ease both; }
+        .cmp { margin-top: 12px; }
+        .cmp input[type=range] { display: block; width: 100%; margin: 0; accent-color: #000; cursor: ew-resize; }
+        .cmp-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: 10px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; }
+        .cmp-row .this b { font-weight: 500; }
+        .cmp-row .this span { color: var(--steel); }
+        .cmp-with { display: flex; align-items: center; gap: 6px; color: var(--steel); }
+        .cmp-chip { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--ink); border-radius: var(--radius-pill); padding: 4px 10px; cursor: pointer; }
+        .cmp-chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+        .cmp-chip:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
 
-        /* ===== 05. Variant C — stacked pages ===== */
-        .vc { display: grid; grid-template-columns: minmax(0, 1fr) 168px; align-items: start; }
-        .vc .pages { padding-bottom: 40px; }
-        .vc .cpage {
-            --i: 0;
-            position: sticky; top: calc(var(--nav-h) + 20px + var(--i) * 14px);
-            display: grid; grid-template-columns: minmax(0, .88fr) minmax(0, 1fr); gap: 36px;
-            background: var(--paper); border: 1px solid var(--ink); border-radius: 6px 0 6px 6px;
-            box-shadow: 0 -14px 30px -18px rgba(0,0,0,.35), 5px 5px 0 var(--ink);
-            padding: 28px 32px 28px 28px; margin-bottom: 64px;
-        }
-        .vc .cpage:last-child { margin-bottom: 0; }
-        .vc .tabs { position: sticky; top: calc(var(--nav-h) + 56px); display: flex; flex-direction: column; gap: 6px; margin-left: -1px; }
-        .vc .btab { border-left: none; border-radius: 0 10px 10px 0; }
-        .vc .btab:not(:disabled):hover { transform: translateX(4px); }
-        .vc .txt-title { font-size: clamp(1.5rem, 2.2vw, 2rem); }
-        .vc .txt-label { margin-top: 18px; }
-        .vc .insights li { padding: 6px 0; font-size: .9rem; }
-        .vc .kv > div { padding: 5px 0; font-size: .88rem; }
-        .vc .fact { margin-top: 14px; padding: 11px 14px; font-size: .9rem; }
-
-        /* ===== 06. Phone ===== */
+        /* ===== 05. Phone: one column, tabs across the top ===== */
         @media (max-width: 860px) {
-            .va { margin-right: 0; }
-            .va .spread { grid-template-columns: 1fr; box-shadow: var(--shadow); }
-            .va .spread::after { display: none; }
-            .va .page-r { order: -1; border-bottom: 1px solid var(--ink); }
-            .va .leaf { padding: 16px 16px 34px; }
-            .va .page-l { padding: 24px 20px 44px; }
-            .va .page-l .folio { left: 20px; }
-            .va .tabs, .vc .tabs { position: static; flex-direction: row; margin: 0 0 -1px 12px; }
-            .va .btab, .vc .btab { width: auto; border: 1px solid var(--ink); border-radius: 10px 10px 0 0; padding: 8px 10px; }
+            .book { margin-right: 0; display: flex; flex-direction: column; }
+            .tabs { order: -1; position: static; flex-direction: row; margin: 0 0 -1px 12px; }
+            .btab { width: auto; border: 1px solid var(--ink); border-radius: 10px 10px 0 0; padding: 8px 10px; }
+            .btab:not(:disabled):hover { transform: none; }
             .btab .lbl small { display: none; }
-            .btab:disabled { display: none; }   /* no room for the placeholder tab on a phone */
-            .va .btab:hover, .vc .btab:hover { transform: none; }
-            .va { display: flex; flex-direction: column; }
-            .va .tabs { order: -1; }
-            .vb .sheet { grid-template-columns: 1fr; gap: 24px; padding: 16px; border-radius: 0 8px 8px 8px; }
-            .vb .tabs { padding-left: 12px; }
-            .vb .btab { padding: 8px 10px 10px; }
-            .vc { grid-template-columns: 1fr; }
-            .vc .tabs { order: -1; position: sticky; top: var(--nav-h); z-index: 20; background: var(--paper); padding-top: 8px; margin: 0; border-bottom: 1px solid var(--ink); }
-            .vc .cpage { position: relative; top: auto; grid-template-columns: 1fr; gap: 20px; padding: 16px; margin-bottom: 28px; border-radius: 6px; }
+            .btab:disabled { display: none; }
+            .spread { grid-template-columns: 1fr; box-shadow: var(--shadow); }
+            .spread::after { display: none; }
+            .page-r { order: -1; border-bottom: 1px solid var(--ink); }
+            .leaf { padding: 16px 16px 40px; border-radius: 6px 6px 0 0; }
+            .leaf .folio { right: 16px; }
+            .page-l { padding: 24px 20px 48px; }
+            .page-l .folio { left: 20px; }
             .kv > div { grid-template-columns: 104px 1fr; }
         }
-        @media (max-height: 800px) and (min-width: 861px) {
-            .vc .cpage { position: relative; top: auto; }   /* too short to stack: plain pages */
-        }
         @media (prefers-reduced-motion: reduce) {
-            .va .leaf.flip-out, .va .leaf.flip-in, .va .txt.is-on, .vb .txt.is-on { animation: none; }
-            .vb .stage .top, .vb .stage .edge, .btab { transition: none; }
+            .leaf.flip-out, .leaf.flip-in, .txt.is-on { animation: none; }
+            .stage.is-easing .top, .stage.is-easing .line, .stage.is-easing .knob, .btab { transition: none; }
         }
     </style>
 </head>
@@ -231,255 +195,167 @@
             <div class="wrap">
                 <div class="page-head-top">
                     <p class="eyebrow">Maps</p>
-                    <span class="sheet-no">SHEET 04 / 06</span>
+                    <span class="sheet-no">SHEET 05 / 06</span>
                 </div>
                 <h1 class="display">New England's rivers, <span class="accent">drawn in Python.</span></h1>
                 <p class="lede">A small atlas I'm building while I learn Python: one region, redrawn plate by plate from open hydrology data.</p>
             </div>
         </section>
 
-        <!-- ===== THE BOOK ===== -->
+        <!-- ===== THE BOOK (built from plates.js) ===== -->
         <section class="maps-section">
             <div class="wrap">
-                <nav class="proto-bar" aria-label="Prototype variants">
-                    <span>Prototype ·</span>
-                    <a href="?v=a" data-v="a">A · Atlas spread</a>
-                    <a href="?v=b" data-v="b">B · Light table</a>
-                    <a href="?v=c" data-v="c">C · Stacked pages</a>
-                </nav>
-                <div id="book"></div>
+                <div class="book" id="book">
+                    <div class="spread">
+                        <div class="page-l" id="page-l"><span class="folio"></span></div>
+                        <div class="page-r" id="page-r"></div>
+                    </div>
+                    <div class="tabs" id="tabs" role="tablist" aria-label="Plates"></div>
+                </div>
+                <noscript><p class="lede">This page needs JavaScript to turn the pages of the atlas.</p></noscript>
             </div>
         </section>
     </main>
 
+<script src="plates.js"></script>
 <script>
 (() => {
     'use strict';
-
-    /* ===== A. Content — one entry per plate. Adding a map = one image + one entry.
-       DRAFT copy: items marked tbc need David's numbers or confirmation. ===== */
-    const PLATES = [
-        {
-            id: 'basins', no: 'I', tab: 'River basins', sub: '14 basins',
-            img: 'img/basins.webp',
-            alt: 'Map of New England with every river coloured by the basin it belongs to',
-            title: 'River basins',
-            summary: 'Every river in New England, coloured by the basin it drains into. HydroBASINS splits the region into 14 units at Pfafstetter level 5. Each colour is one of them, and thicker lines are bigger rivers.',
-            insights: [
-                ['The Connecticut is the spine.', 'Its basin (green) runs the full height of the region, from the Canadian border to Long Island Sound, across four states.'],
-                ['Not all of it reaches the New England coast.', 'Western Vermont (pink) drains north through Lake Champlain to the St. Lawrence, and northern Maine (peach) leaves through the St. John into Canada.'],
-                ['Water ignores state lines.', 'The thin black borders cut straight through almost every colour on the map.'],
-                ['Two systems drain Maine\'s interior.', 'The Penobscot (mint) and the Kennebec–Androscoggin (purple), which reach the sea through one shared outlet.'],
-            ],
-            data: [
-                ['Basins', '14, Pfafstetter level 5'],
-                ['Area', '6 states'],
-                ['Longest river', 'Connecticut, about 650 km'],
-                ['Data', 'HydroBASINS v1c · HydroRIVERS v1.0 · US Census Bureau'],
-                ['Built with', 'Python · matplotlib'],
-            ],
-            fact: 'The Connecticut River is the border between Vermont and New Hampshire, but the line follows the Vermont bank. The river itself belongs to New Hampshire.',
-        },
-        {
-            id: 'order', no: 'II', tab: 'Stream order', sub: 'Trunks & creeks',
-            img: 'img/order.webp',
-            alt: 'Map of New England with rivers drawn brighter and thicker the higher their stream order',
-            title: 'Rivers by stream order',
-            summary: 'The same rivers with the basins taken away. Colour and line weight now follow stream order: the higher a river sits in the network, the brighter and thicker it is drawn.',
-            insights: [
-                ['A handful of trunks carry the region.', 'The Connecticut, Merrimack, Kennebec, Androscoggin and Penobscot stand out as the bright lines.'],
-                ['Most of the network is small.', 'Dark-blue headwater streams far outnumber the bright ones.'],
-                ['The big rivers run north to south.', 'They follow the valleys down to the Atlantic and Long Island Sound.'],
-                ['Lay it over Plate I.', 'Each bright trunk here is the backbone of one coloured basin there.'],
-            ],
-            data: [
-                ['Attribute', 'Stream order', 'which field'],
-                ['Area', '6 states'],
-                ['River segments', '—', 'from script'],
-                ['Data', 'HydroRIVERS v1.0 · US Census Bureau'],
-                ['Built with', 'Python · matplotlib'],
-            ],
-            fact: 'The bright line along Vermont\'s western edge is not a river. It is Lake Champlain: the dataset draws a flow line through lakes, and this one carries water north to Canada.',
-        },
-    ];
-    const TOTAL = PLATES.length;
-
-    /* ===== B. Small builders ===== */
+    const PLATES = window.PLATES;
+    const $ = (id) => document.getElementById(id);
     const h = (tag, attrs = {}, html = '') => {
         const e = document.createElement(tag);
         for (const k in attrs) e.setAttribute(k, attrs[k]);
         e.innerHTML = html;
         return e;
     };
-    const textHTML = (p, { withData = true } = {}) => `
-        <p class="txt-no">Plate ${p.no}</p>
-        <h2 class="txt-title">${p.title}</h2>
-        <p class="txt-sum">${p.summary}</p>
-        <h3 class="txt-label">What it shows</h3>
-        <ol class="insights">${p.insights.map(([b, t], i) => `<li><span class="n">0${i + 1}</span><span><b>${b}</b> ${t}</span></li>`).join('')}</ol>
-        ${withData ? dataHTML(p) : ''}
-        ${factHTML(p)}`;
+    const src = (p) => `img/${p.id}.webp`;
+    const srcset = (p) => `img/${p.id}-950.webp 950w, img/${p.id}.webp 1900w`;
+    const SIZES = '(max-width: 860px) 92vw, 540px';
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+
+    /* ===== A. Build pages from the data ===== */
+    const start = Math.max(0, PLATES.findIndex((p) => p.id === location.hash.slice(1)));
+    const pageL = $('page-l'), pageR = $('page-r'), tabs = $('tabs'), folioL = pageL.querySelector('.folio');
+
     const dataHTML = (p) => `
         <h3 class="txt-label">Key data</h3>
         <dl class="kv">${p.data.map(([k, v, tbc]) => `<div><dt>${k}</dt><dd>${v}${tbc ? `<span class="tbc">tbc · ${tbc}</span>` : ''}</dd></div>`).join('')}</dl>`;
-    const factHTML = (p) => `<aside class="fact"><span class="k">Curious fact</span>${p.fact}</aside>`;
-    const tabHTML = (p) => `<span class="num">${p.no}</span><span class="lbl"><b>${p.tab}</b><small>${p.sub}</small></span>`;
-    const soonTab = () => h('button', { class: 'btab', disabled: '', type: 'button' }, `<span class="num">+</span><span class="lbl"><b>Next plate</b><small>In progress</small></span>`);
-    const capHTML = (p) => `<span><b>Plate ${p.no}</b> — ${p.title}</span><span>New England</span>`;
 
-    const slugOf = (i) => PLATES[i].id;
-    const startIndex = () => Math.max(0, PLATES.findIndex((p) => p.id === location.hash.slice(1)));
-    const setHash = (i) => history.replaceState(null, '', `${location.pathname}${location.search}#${slugOf(i)}`);
+    PLATES.forEach((p, i) => {
+        // left page: what the plate says
+        pageL.insertBefore(h('article', { class: 'txt', id: `panel-${p.id}`, role: 'tabpanel', 'aria-labelledby': `tab-${p.id}` }, `
+            <p class="txt-no">Plate ${p.no}</p>
+            <h2 class="txt-title">${p.title}</h2>
+            <p class="txt-sum">${p.summary}</p>
+            <h3 class="txt-label">What it shows</h3>
+            <ol class="insights">${p.insights.map(([b, t], k) => `<li><span class="n">0${k + 1}</span><span><b>${b}</b> ${t}</span></li>`).join('')}</ol>
+            <aside class="fact"><span class="k">Curious fact</span>${p.fact}</aside>`), folioL);
 
-    function tablist(onPick) {
-        const nav = h('div', { class: 'tabs', role: 'tablist', 'aria-label': 'Plates' });
-        PLATES.forEach((p, i) => {
-            const b = h('button', { class: 'btab', role: 'tab', type: 'button', id: `tab-${p.id}`, 'aria-controls': `panel-${p.id}` }, tabHTML(p));
-            b.addEventListener('click', () => onPick(i));
-            nav.appendChild(b);
-        });
-        nav.appendChild(soonTab());
-        nav.addEventListener('keydown', (e) => {
-            const tabs = [...nav.querySelectorAll('[role=tab]')];
-            const cur = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
-            const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
-            if (!step) return;
-            e.preventDefault();
-            const next = Math.max(0, Math.min(tabs.length - 1, cur + step));
-            onPick(next);
-            tabs[next].focus();
-        });
-        return nav;
-    }
-    const markTabs = (root, i) => root.querySelectorAll('[role=tab]').forEach((t, k) => {
-        t.setAttribute('aria-selected', String(k === i));
-        t.tabIndex = k === i ? 0 : -1;
+        // right page: the plate, its overlay controls and the data sheet
+        const others = PLATES.filter((o) => o !== p);
+        pageR.appendChild(h('div', { class: 'leaf', 'data-i': i }, `
+            <div class="stage" data-side="top">
+                <img class="under" alt="" width="1900" height="2040" decoding="async">
+                <img class="top" src="${src(p)}" srcset="${srcset(p)}" sizes="${SIZES}" alt="${p.alt}" width="1900" height="2040"
+                     decoding="async" ${i === start ? 'fetchpriority="high"' : 'loading="lazy"'}>
+                <span class="line" aria-hidden="true"></span><span class="knob" aria-hidden="true">↔</span>
+                <span class="who l">Plate ${p.no}</span><span class="who r"></span>
+            </div>
+            ${others.length ? `
+            <div class="cmp">
+                <input type="range" min="0" max="100" value="100" step="1" aria-label="How much of Plate ${p.no} covers the plate under it">
+                <div class="cmp-row">
+                    <span class="this"><b>Plate ${p.no}</b> <span>— ${p.title}</span></span>
+                    <span class="cmp-with">Compare with ${others.map((o) => `<button class="cmp-chip" type="button" data-id="${o.id}" aria-pressed="false">Plate ${o.no}</button>`).join('')}</span>
+                </div>
+            </div>` : ''}
+            ${dataHTML(p)}
+            <span class="folio">${2 * i + 2}</span>`));
+
+        tabs.appendChild(h('button', { class: 'btab', role: 'tab', type: 'button', id: `tab-${p.id}`, 'aria-controls': `panel-${p.id}` },
+            `<span class="num">${p.no}</span><span class="lbl"><b>${p.tab}</b><small>${p.sub}</small></span>`));
+    });
+    tabs.appendChild(h('button', { class: 'btab', type: 'button', disabled: '' }, `<span class="num">+</span><span class="lbl"><b>Next plate</b><small>In progress</small></span>`));
+
+    const txts = [...pageL.querySelectorAll('.txt')], leaves = [...pageR.querySelectorAll('.leaf')], tabEls = [...tabs.querySelectorAll('[role=tab]')];
+
+    /* ===== B. Overlay: lay one plate over another and compare ===== */
+    const overlays = leaves.map((leaf, i) => {
+        const stage = leaf.querySelector('.stage'), under = stage.querySelector('.under'), whoR = stage.querySelector('.who.r');
+        const range = leaf.querySelector('input[type=range]'), chips = [...leaf.querySelectorAll('.cmp-chip')];
+        let target = null, raf = 0, pending = 100;
+
+        const paint = () => {
+            raf = 0;
+            stage.style.setProperty('--reveal', `${pending}%`);
+            stage.dataset.side = pending > 97 ? 'top' : pending < 3 ? 'under' : 'both';
+            if (range) range.value = pending;
+        };
+        const set = (v, ease = false) => {
+            pending = Math.max(0, Math.min(100, v));
+            stage.classList.toggle('is-easing', ease && !reduced.matches);
+            if (!raf) raf = requestAnimationFrame(paint);   // at most one write per frame
+        };
+        const setTarget = (id) => {
+            const o = PLATES.find((x) => x.id === id);
+            if (!o) return;
+            target = o;
+            if (under.getAttribute('src') !== src(o)) { under.sizes = SIZES; under.srcset = srcset(o); under.src = src(o); }
+            whoR.textContent = `Plate ${o.no}`;
+            chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.id === id)));
+        };
+        if (!range) return { open() {}, reset() {} };
+
+        range.addEventListener('input', () => set(+range.value));
+        chips.forEach((c) => c.addEventListener('click', () => {
+            const same = target && target.id === c.dataset.id;
+            setTarget(c.dataset.id);
+            // show half of each; pressing the active chip again lays the plate back down
+            under.decode().catch(() => {}).then(() => set(same && pending < 97 ? 100 : 50, true));
+        }));
+        const fromPointer = (e) => { const r = stage.getBoundingClientRect(); set(((e.clientX - r.left) / r.width) * 100); };
+        stage.addEventListener('pointerdown', (e) => { if (e.button) return; stage.setPointerCapture(e.pointerId); fromPointer(e); });
+        stage.addEventListener('pointermove', (e) => { if (stage.hasPointerCapture(e.pointerId)) fromPointer(e); });
+
+        return {
+            // the under image is only fetched when its leaf is opened
+            open() { if (!target) setTarget((PLATES[i - 1] || PLATES[i + 1]).id); },
+            reset() { set(100); },
+        };
     });
 
-    /* ===== C. Variant A — atlas spread ===== */
-    function variantA(root) {
-        root.className = 'va';
-        const spread = h('div', { class: 'spread' });
-        const left = h('div', { class: 'page-l' });
-        const right = h('div', { class: 'page-r' });
-        PLATES.forEach((p, i) => {
-            left.appendChild(h('article', { class: 'txt', id: `panel-${p.id}`, role: 'tabpanel', 'aria-labelledby': `tab-${p.id}` }, textHTML(p, { withData: false })));
-            right.appendChild(h('figure', { class: 'leaf' }, `
-                <img class="plate-img" src="${p.img}" alt="${p.alt}" width="1900" height="2040">
-                <figcaption class="plate-cap">${capHTML(p)}</figcaption>
-                ${dataHTML(p)}
-                <span class="folio">${2 * i + 2}</span>`));
-        });
-        left.appendChild(h('span', { class: 'folio' }, ''));
-        spread.append(left, right);
-        let cur = -1, timer;
-        const txts = left.querySelectorAll('.txt'), leaves = right.querySelectorAll('.leaf'), folio = left.querySelector('.folio');
-        function go(i, animate = true) {
-            if (i === cur) return;
-            const prev = cur; cur = i;
-            clearTimeout(timer);
-            leaves.forEach((l) => l.classList.remove('flip-out', 'flip-in', 'is-under', 'is-on'));
-            leaves[i].classList.add('is-on');
-            if (animate && prev >= 0) {
-                // forward: the old leaf turns away and uncovers the new one; back: the new leaf turns in
-                if (i > prev) leaves[prev].classList.add('flip-out');
-                else { leaves[prev].classList.add('is-under'); leaves[i].classList.add('flip-in'); }
-                timer = setTimeout(() => leaves.forEach((l) => l.classList.remove('flip-out', 'flip-in', 'is-under')), 1000);
-            }
-            txts.forEach((t, k) => t.classList.toggle('is-on', k === i));
-            folio.textContent = String(2 * i + 1);
-            markTabs(root, i);
-            setHash(i);
+    /* ===== C. Turning the leaf ===== */
+    let cur = -1, timer;
+    function go(i, animate = true) {
+        if (i === cur || !PLATES[i]) return;
+        const prev = cur; cur = i;
+        clearTimeout(timer);
+        leaves.forEach((l) => l.classList.remove('flip-out', 'flip-in', 'is-under', 'is-on'));
+        leaves[i].classList.add('is-on');
+        overlays[i].reset(); overlays[i].open();
+        if (animate && prev >= 0 && !reduced.matches) {
+            // forward: the old leaf turns away and uncovers the new one; back: the new leaf turns in over the old
+            if (i > prev) leaves[prev].classList.add('flip-out');
+            else { leaves[prev].classList.add('is-under'); leaves[i].classList.add('flip-in'); }
+            timer = setTimeout(() => leaves.forEach((l) => l.classList.remove('flip-out', 'flip-in', 'is-under')), 1000);
         }
-        root.append(spread, tablist(go));
-        go(startIndex(), false);
+        txts.forEach((t, k) => t.classList.toggle('is-on', k === i));
+        folioL.textContent = String(2 * i + 1);
+        tabEls.forEach((t, k) => { t.setAttribute('aria-selected', String(k === i)); t.tabIndex = k === i ? 0 : -1; });
+        if (prev >= 0) history.replaceState(null, '', `${location.pathname}${location.search}#${PLATES[i].id}`);
     }
+    tabEls.forEach((t, i) => t.addEventListener('click', () => go(i)));
+    tabs.addEventListener('keydown', (e) => {
+        const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+        if (!step) return;
+        e.preventDefault();
+        const next = Math.max(0, Math.min(PLATES.length - 1, cur + step));
+        go(next); tabEls[next].focus();
+    });
+    addEventListener('hashchange', () => go(PLATES.findIndex((p) => p.id === location.hash.slice(1))));
 
-    /* ===== D. Variant B — light table ===== */
-    function variantB(root) {
-        root.className = 'vb';
-        const sheet = h('div', { class: 'sheet' });
-        const col = h('div', {}, `
-            <div class="stage">
-                <img class="under" alt="" width="1900" height="2040">
-                <img class="top" alt="" width="1900" height="2040">
-                <span class="edge" aria-hidden="true"></span>
-                <span class="chip l"></span><span class="chip r"></span>
-            </div>
-            <div class="compare">
-                <label for="cmp">Compare</label>
-                <input id="cmp" type="range" min="0" max="100" value="100" aria-label="How much of the selected plate covers the previous one">
-                <span class="mono cmp-val">100%</span>
-            </div>
-            <p class="plate-cap"></p>`);
-        const text = h('div', {});
-        PLATES.forEach((p) => text.appendChild(h('article', { class: 'txt', id: `panel-${p.id}`, role: 'tabpanel', 'aria-labelledby': `tab-${p.id}` }, textHTML(p))));
-        sheet.append(col, text);
-        const stage = col.querySelector('.stage'), top = col.querySelector('.top'), under = col.querySelector('.under');
-        const range = col.querySelector('input'), val = col.querySelector('.cmp-val'), cap = col.querySelector('.plate-cap');
-        const [chipL, chipR] = col.querySelectorAll('.chip');
-        let cur = -1;
-        const setReveal = (v) => { stage.style.setProperty('--reveal', `${v}%`); range.value = v; val.textContent = `${Math.round(v)}%`; chipR.style.visibility = v > 96 ? 'hidden' : 'visible'; };
-        function go(i, animate = true) {
-            if (i === cur) return;
-            const prev = cur < 0 ? (i + 1) % TOTAL : cur; cur = i;
-            under.src = PLATES[prev].img; top.src = PLATES[i].img; top.alt = PLATES[i].alt;
-            chipL.textContent = `Plate ${PLATES[i].no}`; chipR.textContent = `Plate ${PLATES[prev].no}`;
-            cap.innerHTML = capHTML(PLATES[i]);
-            if (animate) {            // lay the new plate over the previous one, left to right
-                stage.classList.add('is-dragging'); setReveal(0);
-                void stage.offsetWidth;
-                stage.classList.remove('is-dragging');
-            }
-            setReveal(100);
-            text.querySelectorAll('.txt').forEach((t, k) => t.classList.toggle('is-on', k === i));
-            markTabs(root, i);
-            setHash(i);
-        }
-        range.addEventListener('input', () => { stage.classList.add('is-dragging'); setReveal(+range.value); });
-        range.addEventListener('change', () => stage.classList.remove('is-dragging'));
-        // dragging on the map itself; the slider and tabs are the non-drag alternative
-        const fromPointer = (e) => { const r = stage.getBoundingClientRect(); setReveal(Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100))); };
-        stage.addEventListener('pointerdown', (e) => { stage.setPointerCapture(e.pointerId); stage.classList.add('is-dragging'); fromPointer(e); });
-        stage.addEventListener('pointermove', (e) => { if (stage.hasPointerCapture(e.pointerId)) fromPointer(e); });
-        stage.addEventListener('pointerup', () => stage.classList.remove('is-dragging'));
-        root.append(tablist(go), sheet);
-        go(startIndex(), false);
-        window.__setReveal = setReveal;   // for mockup screenshots
-    }
-
-    /* ===== E. Variant C — stacked pages ===== */
-    function variantC(root) {
-        root.className = 'vc';
-        const pages = h('div', { class: 'pages' });
-        const tabs = h('nav', { class: 'tabs', 'aria-label': 'Plates' });
-        PLATES.forEach((p, i) => {
-            pages.appendChild(h('article', { class: 'cpage', id: p.id, style: `--i:${i}` }, `
-                <figure>
-                    <img class="plate-img" src="${p.img}" alt="${p.alt}" width="1900" height="2040">
-                    <figcaption class="plate-cap">${capHTML(p)}</figcaption>
-                </figure>
-                <div>${textHTML(p)}</div>`));
-            tabs.appendChild(h('a', { class: 'btab', href: `#${p.id}` }, tabHTML(p)));
-        });
-        tabs.appendChild(soonTab());
-        root.append(pages, tabs);
-        const links = [...tabs.querySelectorAll('a')], cps = [...pages.children];
-        const mark = () => {
-            // current page = the last one whose top has reached the reading line
-            const line = innerHeight * 0.45;
-            let cur = 0;
-            cps.forEach((c, i) => { if (c.getBoundingClientRect().top < line) cur = i; });
-            links.forEach((l, i) => { l.classList.toggle('is-current', i === cur); if (i === cur) l.setAttribute('aria-current', 'true'); else l.removeAttribute('aria-current'); });
-        };
-        addEventListener('scroll', mark, { passive: true });
-        mark();
-    }
-
-    /* ===== F. Boot ===== */
-    const v = (new URLSearchParams(location.search).get('v') || 'a').toLowerCase();
-    document.querySelectorAll('.proto-bar a').forEach((a) => { if (a.dataset.v === v) a.setAttribute('aria-current', 'true'); });
-    ({ a: variantA, b: variantB, c: variantC }[v] || variantA)(document.getElementById('book'));
+    go(start, false);
 })();
 </script>
 </body>

@@ -228,3 +228,9 @@ David felt v4 read as childish (handwriting, wobbly boxes, speech bubbles, a pla
 - An element cloned with `<use>` did not get the `.elev .ln` styles (the selector didn't match inside the clone), so it rendered with the default black fill. Draw repeated parts explicitly.
 - A `#frame-NN` anchor makes the browser natively scroll the slider's `overflow: hidden` viewport. `goTo()` resets `viewport.scrollLeft = 0`.
 - The phone title-block borders needed simple column rules (odd cells after the first get the left border).
+
+## In progress: Maps tab (prototype, 2026-11)
+
+A sixth page, "Maps", is being prototyped in `prototypes/maps/`: David's Python maps of New England's rivers shown as an open atlas with page tabs, a leaf that turns, and an overlay that lays one plate over another. It is not linked from the live site. Decisions, export rules for the maps, open items and the checklist for moving it into the site are in `prototypes/maps/README.md`. Read that file before working on it.
+
+Dark map plates are the one place where a large dark surface and other colours appear. They are the content, like the photographs; the page around them keeps the v5 palette.
