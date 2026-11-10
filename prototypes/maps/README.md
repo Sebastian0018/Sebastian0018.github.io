@@ -19,18 +19,30 @@ python -m http.server 8000
 
 Run the server from the repository root, then open
 <http://localhost:8000/prototypes/maps/>. `#basins` and `#order` open a plate
-directly.
+directly. Add `?demo=14` to fill the book with stand-in plates and see how the
+index behaves when the atlas grows.
 
 ## What was decided
 
 - One new nav item, "Maps", after Photography. The rest of the site stays as it is.
-- The page is an open atlas: text on the left page, the map plate on the right,
-  page tabs on the book's edge. Picking a tab turns the leaf.
-- Every plate covers the same ground, so each one has an overlay: a divider
-  lays another plate over it to compare the two. Drag on the map, use the
-  slider, or press "Compare with".
-- Text per plate: a short summary, three or four insights, key data, and one
-  curious fact.
+- The page is an open atlas: text on the left page, the map on the right,
+  page tabs on the book's edge.
+- Every plate covers the same ground, so the right page always shows two of
+  them with a thin divider between: the open plate on the left of the line,
+  another plate under it on the right. The page loads with the divider in the
+  middle.
+- Opening another plate does not flip a page. The open plate is laid down
+  fully, becomes the sheet underneath, and the new one is drawn over it from
+  the left. An earlier version turned a 3D leaf; David asked for something
+  quieter and more fluid.
+- The divider is deliberately minimal: a 1 px line with a small grip.
+- Less text in view. The left page shows the title, the summary and the
+  curious fact. "What it shows" and "Key data" open on request.
+- David expects more than 12 maps. The index is a rail of tabs with
+  thumbnails that scrolls inside the book's height, plus a "Contents" dialog
+  with every plate.
+- The top bar has a proposed restyle (`.nav--v2`, section 01 of the CSS). It
+  is only applied on this page so far.
 - The earlier "Atlas of Boston" prototype was dropped and deleted.
 
 ## Files
@@ -39,24 +51,33 @@ directly.
 |---|---|
 | `index.html` | The page: site chrome, the book's CSS, and the script that builds the book from the data |
 | `plates.js` | The content, one entry per plate. Field notes are at the top of the file |
-| `build_plates.py` | Turns map exports into `img/<id>.webp` (1900 px) and `img/<id>-950.webp` (phones) |
+| `build_plates.py` | Turns map exports into `img/<id>.webp` (1900 px), `img/<id>-950.webp` (half size) and `img/<id>-thumb.webp` (index thumbnail) |
 | `img/` | The built plates |
 
 ## How the page works
 
-- `index.html` reads `window.PLATES` and builds, per plate, a text panel (left
-  page), a leaf (right page) and a tab.
-- A leaf holds a `.stage` with two stacked images. `.top` is the plate itself,
-  `.under` is the plate it is compared with. The CSS variable `--reveal` (0 to
-  100%) sets how much of `.top` is laid down, through `clip-path`. Only
-  `clip-path` and `left` change, and writes are batched to one per frame.
-- The under image is fetched only when its leaf is opened. Images use `srcset`,
-  so phones and normal laptop screens load the half-size files.
-- Turning a leaf is a CSS animation (`rotateY` around the spine). State is set
-  immediately and never waits for the animation to end.
-- Keyboard: arrow keys on the tabs turn pages, arrow keys on the slider move
-  the divider. `prefers-reduced-motion` turns the animations off.
-- Below 860 px the book becomes one column and the tabs move to the top.
+- `index.html` reads `window.PLATES` and builds the index tabs, the contents
+  dialog and the "over" menu. The left page is re-rendered for the open plate.
+- The right page has one `.stage`. Each plate is a single `<img>`, created the
+  first time it is needed and decoded before it is shown. Two of them are
+  visible: `.is-top` (the open plate) and `.is-under`.
+- The CSS variable `--reveal` (0 to 100%) sets how far `.is-top` is laid down,
+  through `clip-path`. The script owns that number and writes it at most once
+  per frame. `follow()` eases towards the pointer while dragging; `sweep()` is
+  the timed move used when a plate is laid down. Nothing waits on
+  `transitionend`.
+- `go(i)` opens a plate, `setUnder(j)` changes only the sheet underneath. A
+  counter (`seq`) cancels a move when a newer one starts.
+- The stage loads the half-size image unless it really has more than 1000
+  device pixels across.
+- Ways to move the divider: drag, click or tap anywhere on the map, or focus
+  the map with Tab and use the arrow keys (a hidden range input). Arrow keys
+  on the index tabs change plate. `prefers-reduced-motion` turns the motion off.
+- Nav: the underline glides to the hovered link and rests under the current
+  page; the bar gets slimmer after 80 px of scroll, slides away while
+  scrolling down and returns when scrolling up or when it has focus.
+- Below 900 px the book becomes one column and the index becomes a
+  horizontal strip above it.
 
 ## Adding a plate
 
@@ -68,7 +89,9 @@ directly.
    ```
 3. Add an entry to `plates.js`. The `id` must match the image name.
 
-The tab column, the "Compare with" chips and the page numbers update on their own.
+The index, the contents dialog, the "over" menu and the page numbers update on
+their own. The thumbnail is cropped to the land, so it also comes out of
+`build_plates.py`.
 
 ## Exporting maps so they overlay
 
@@ -149,13 +172,15 @@ Confirmed by David:
 - The Connecticut is about 650 km long; the Vermont–New Hampshire border follows
   the Vermont bank; the bright line on Vermont's western edge is Lake Champlain.
 
+- The plates in `img/` were rebuilt by David from exports on the shared canvas
+  (both 1900 x 2040, land within 2 px, titles at the same coordinates). The
+  thumbnails were made from those plates.
+
 Still open:
 
 - "River segments" on plate II is empty and marked `tbc`. Fill it from the
   script (the number of rows in the clipped rivers layer) or delete the row.
 - The copy in `plates.js` is a first draft in English. David has not edited it.
-- The plates in `img/` come from the WebP copies uploaded in chat, not the
-  original PNGs. Rebuild them from the originals after the re-export.
 
 ## Moving it to the live site
 
@@ -164,7 +189,12 @@ that it still does before merging.
 
 1. Create `maps.html` at the repository root. Take the `<head>`, loading
    screen, nav, footer and script tags from `work.html`, then bring in the page
-   header and the book from the prototype. Change the `../../` paths.
+   header and the book from the prototype. Change the `../../` paths. Leave out
+   the `?demo=` block.
+1. Decide on the nav restyle. If it stays, move the `.nav--v2` rules into
+   section 05 of `style.css` as the normal `.nav` rules, add the
+   `<span class="nav-glide">` to the nav of every page, and move the nav part
+   of the script (section A) into `script.js` next to the existing menu code.
 2. Move the book's CSS into `style.css` as a new numbered section and the
    script into its own file (for example `maps.js`). Move `plates.js` and
    `img/` next to it (for example `maps/plates.js`, `maps/img/`).

@@ -2,8 +2,9 @@
 
     python build_plates.py img basins=path/to/basins.png order=path/to/order.png
 
-For each `name=path` it writes img/<name>.webp (1900 px wide) and
-img/<name>-950.webp (half size, for phones).
+For each `name=path` it writes img/<name>.webp (1900 px wide),
+img/<name>-950.webp (half size, for phones and normal laptop screens) and
+img/<name>-thumb.webp (240 px, cropped to the land, for the index tabs).
 
 Plates only overlay cleanly if the land sits at the same place and scale in
 every image:
@@ -23,6 +24,7 @@ from PIL import Image, ImageChops
 CANVAS = (1900, 2040)                      # the page assumes this aspect ratio
 LAND_X, LAND_Y, LAND_H = 430, 110, 1730    # registration target: top-left corner and height of the land
 BG_TOLERANCE = 7
+THUMB_W, THUMB_PAD = 240, 40               # index thumbnail: width, and margin kept around the land
 
 
 def land_box(im):
@@ -75,7 +77,12 @@ def main(out_dir, *pairs):
         plate.save(f'{out_dir}/{name}.webp', 'WEBP', quality=86, method=6)
         half = plate.resize((plate.width // 2, plate.height // 2), Image.LANCZOS)
         half.save(f'{out_dir}/{name}-950.webp', 'WEBP', quality=84, method=6)
-        print(f'  {name}: {note} -> {plate.width}x{plate.height} (+ half size), land box {land_box(plate)[0]}')
+        x0, y0, x1, y1 = land_box(plate)[0]
+        crop = plate.crop((max(0, x0 - THUMB_PAD), max(0, y0 - THUMB_PAD),
+                           min(plate.width, x1 + THUMB_PAD), min(plate.height, y1 + THUMB_PAD)))
+        thumb = crop.resize((THUMB_W, round(crop.height * THUMB_W / crop.width)), Image.LANCZOS)
+        thumb.save(f'{out_dir}/{name}-thumb.webp', 'WEBP', quality=82, method=6)
+        print(f'  {name}: {note} -> {plate.width}x{plate.height} (+ half size, thumb {thumb.width}x{thumb.height}), land box {(x0, y0, x1, y1)}')
 
 
 if __name__ == '__main__':
