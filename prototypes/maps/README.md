@@ -210,6 +210,86 @@ that it still does before merging.
    reduced motion, and keyboard use.
 8. Add a section for the Maps page to `MASTER.md`.
 
+## Next: scroll effects, not built yet
+
+David likes how <https://www.town.com/> scrolls and wants some of it here. He
+approved the current book design first. Nothing in this section is built.
+
+**His choices**
+
+- Effects wanted: text that fills in as you scroll, section titles that stick,
+  and parallax inside images. He did not pick the footer that is revealed from
+  behind the page.
+- Scope: try them on the Maps prototype first. The rest of the site comes
+  later, if he likes the result.
+
+**What town.com does** (read from the live page on 2026-11-10, in Chromium at
+1440 px)
+
+- The scroll is the browser's own. There is no Lenis and no GSAP, `html` has
+  `scroll-behavior: auto`, and nothing snaps vertically. The feel comes from
+  CSS, not from taking over the wheel. The site is built with Next.js.
+- Parallax: an inner layer scaled to 1.1 inside a frame, moved with
+  `animation-timeline: view()` and this keyframe:
+  `@keyframes brand-parallax-drift { from { transform: translateY(var(--parallax-from, 0%)); } to { transform: translateY(var(--parallax-to, 0%)); } }`.
+  The range is `cover` on most images and `exit` on the hero portrait.
+- Text fill: one paragraph block has a named view timeline. A keyframe takes a
+  custom property from 0 to 1 over the range `cover 15%` to `exit 0%`, and the
+  text goes from grey to black. How the property is turned into colour was not
+  inspected.
+- Sticky: the header sticks at the top. Inside each story section, the heading
+  or side column is `position: sticky` at 120 px, so it stays while the rest of
+  the section scrolls past.
+- The footer is `position: sticky; bottom: 0` behind the page, which gives the
+  reveal David did not ask for.
+
+**Notes for building it here**
+
+- Use the same approach: CSS scroll-driven animations and `position: sticky`,
+  no scroll library. That also fits the site's rule of no build step.
+- Scroll-driven animations do not run in every browser. Put them inside
+  `@supports (animation-timeline: view())` and make the resting state the
+  finished one, so a browser without support shows black text and still images.
+  Check current browser support before relying on it.
+- Keep them off under `prefers-reduced-motion: reduce`, like the rest of the site.
+- Do not put parallax on the map stage. The two plates have to stay registered
+  for the comparison to work.
+- The Maps page is short: a header and the book. There is little to stick or
+  fill. A short introduction between the header and the book would give the
+  text fill a place, and it could say what the atlas is. Ask David before
+  adding copy.
+- For the text fill, a registered number property and `color-mix()` are
+  enough. The grey is only a starting state; the text must end at `--ink`:
+
+```css
+@property --fill { syntax: "<number>"; inherits: true; initial-value: 1; }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .fill-on-scroll {
+      color: color-mix(in srgb, var(--ink) calc(var(--fill) * 100%), var(--ash));
+      animation: fill-text linear both;
+      animation-timeline: view();
+      animation-range: cover 15% cover 55%;
+    }
+  }
+}
+@keyframes fill-text { from { --fill: 0; } to { --fill: 1; } }
+```
+
+  This fills the whole block at once. Filling word by word needs one span per
+  word, each with a slightly later range.
+
+## Later: a mascot
+
+David also likes town.com's mascot and wants one for this site. He will open a
+separate folder for it. It is not designed yet and not part of this prototype.
+
+For reference, town.com's mascot "Bud" is a drawn dog. On the page as loaded it
+is a still WebP image, not an animation. It sits beside the hero headline, and
+other characters of the same family appear in later sections. A fixed bar at
+the bottom of the screen carries a prompt box labelled "Ask Bud anything".
+
 ## Continuing with Claude Code on the computer
 
 Open the repository folder in Claude Code and give it the map project too:
@@ -230,7 +310,6 @@ A first message that carries the context:
 
 > Read `prototypes/maps/README.md` and
 > `design-system/david-becerra-portfolio/MASTER.md`. We are continuing the Maps
-> tab. First look at my map scripts in the hydro-maps folder and apply the
-> shared-canvas export recipe from the README, so that every plate is exactly
-> 1900 x 2040 px with the title at the same coordinates. Then rebuild the
-> plates with `build_plates.py` and show me the page.
+> tab. Start the local server and show me the page as it is. Then propose how
+> to add the three scroll effects from the "Next: scroll effects" section to
+> the Maps prototype, and ask me before changing anything.
