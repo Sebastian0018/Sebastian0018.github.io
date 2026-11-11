@@ -228,3 +228,18 @@ David felt v4 read as childish (handwriting, wobbly boxes, speech bubbles, a pla
 - An element cloned with `<use>` did not get the `.elev .ln` styles (the selector didn't match inside the clone), so it rendered with the default black fill. Draw repeated parts explicitly.
 - A `#frame-NN` anchor makes the browser natively scroll the slider's `overflow: hidden` viewport. `goTo()` resets `viewport.scrollLeft = 0`.
 - The phone title-block borders needed simple column rules (odd cells after the first get the left border).
+
+## v5.1 — Feuxui review (2026-11-11)
+
+David checked the site against Felipe Vargas Paolini's "30 tips de diseño" (<https://feuxui.com/aprende/30-tips-de-diseno/>). Twenty tips already passed or did not apply. Six changes were mocked up one by one, approved, then applied together. v5.1 changes v5 as follows:
+
+- **One orange protagonist per screen** (tips 06, 02, 28). Orange text only on the coloured words of a page's first headline. On Home the hero headline is all black and the orange crane in the skyline drawing is the one accent on the first screen. Stat numerals, the "pivot" headline and the closing headlines on dark panels are black. Small brand marks stay orange: logo corner, the square before labels, the nav underline, hover states.
+- **Lime is gone.** The palette is paper, black, steel and orange. Status chips ("Open to work", "Live") are `.tag--solid`: a black pill with paper text.
+- **No announcement bar** (tips 10, 12). "Get in touch" lives in the nav button on every page. On Home a `.hero-status` line under the buttons says what the bar used to say.
+- **Home hero has no spec card.** Headline (three-line block, `max-width: 12.5ch`), intro, two buttons, status line, then the skyline sheet.
+- **Cards keep an even row, content on top** (tip 08). `.feature .tags` follows the text; spare height collects at the bottom of shorter cards.
+- **Photo slider on the left edge** (tips 03, 07). `offsetFor(i)` in `script.js` puts the open photo on the same left edge as the heading and thumbnails; the next photo peeks on the right.
+- **Paragraph line height 1.55** (tip 29) for `.body-copy`. Headlines stay at 1.04–1.08.
+- **Vault icon** (tip 24): the stray line outside the box was removed and the icon centred.
+
+**Gotcha found in v5.1:** GSAP ScrollTrigger measures positions on load. Anything that changes the layout afterwards (here: the review mockups hid the spec card inside a frame) leaves the skyline waiting for a scroll position that no longer exists, so it stays blank. Call `ScrollTrigger.refresh()` after a late layout change.

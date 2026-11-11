@@ -54,11 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const pad = (n) => String(n).padStart(2, '0');
     let current = 0;
 
-    // Offset that centers slide i inside the viewport
-    const offsetFor = (i) => {
-      const s = slides[i];
-      return -(s.offsetLeft - (viewport.clientWidth - s.offsetWidth) / 2);
-    };
+    // Offset that puts slide i on the viewport's left edge, the same edge
+    // the page heading and the thumbnails use; the next slide peeks on the right
+    const offsetFor = (i) => -slides[i].offsetLeft;
 
     const setX = (x) => { track.style.transform = `translate3d(${x}px, 0, 0)`; };
 

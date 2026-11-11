@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap"></noscript>
-    <link rel="stylesheet" href="style.css?v=16">
+    <link rel="stylesheet" href="style.css?v=17">
     <script>
         /* motion hook set before first paint (below-the-fold reveals only);
            failsafe: if the animation library never arrives, show everything */
@@ -86,9 +86,6 @@
 
     <a class="skip" href="#main">Skip to content</a>
 
-    <!-- ===== ANNOUNCEMENT BAR ===== -->
-    <aside class="announce" aria-label="Availability"><span class="announce-long">Open to project coordination, implementation and construction-tech roles in Boston</span><span class="announce-short">Open to work in Boston</span> — <a href="contact.html">get in touch</a></aside>
-
     <!-- ===== NAVIGATION ===== -->
     <header class="nav">
         <div class="wrap nav-inner">
@@ -128,25 +125,14 @@
                 <div class="hero-grid">
                     <div>
                         <p class="eyebrow reveal hero-reveal" style="--i:0">Civil Engineer · Boston, MA</p>
-                        <h1 class="display reveal hero-reveal" style="--i:1">Built on job sites. <span class="accent">Learning to build software.</span></h1>
+                        <h1 class="display reveal hero-reveal" style="--i:1">Built on job sites. Learning to build software.</h1>
                         <p class="lede reveal hero-reveal" style="--i:2">I'm David Becerra — a civil engineer with construction project management and hydrosanitary design experience in Colombia. Now in Boston, I'm learning Python and AI tools to work on the software side of the industry.</p>
                         <div class="btn-row reveal hero-reveal" style="--i:3">
                             <a href="contact.html" class="btn btn-primary">Get in touch →</a>
                             <a href="work.html" class="btn btn-outline">View work</a>
                         </div>
+                        <p class="hero-status reveal hero-reveal" style="--i:4"><span class="tag tag--solid">Open to work</span><span>Project coordination · implementation · construction tech · Boston</span></p>
                     </div>
-
-                    <!-- spec sheet readout -->
-                    <aside class="card spec reveal hero-reveal" style="--i:4" aria-label="At a glance">
-                        <div class="spec-head"><span>Spec · D. Becerra</span><span>Rev 05</span></div>
-                        <dl>
-                            <div><dt>Discipline</dt><dd>Civil Engineer — BEng, Pontificia Universidad Javeriana (2021)</dd></div>
-                            <div><dt>Field</dt><dd>Construction PM &amp; design, Colombia, 2021–2022</dd></div>
-                            <div><dt>Now</dt><dd>Hospitality, Rochambeau Boston (Lyons Group), 2023–present</dd></div>
-                            <div><dt>Learning</dt><dd>Python (beginner) · building with AI tools</dd></div>
-                            <div><dt>Status</dt><dd><span class="tag tag--lime">Open to work</span></dd></div>
-                        </dl>
-                    </aside>
                 </div>
 
                 <!-- ===== DRAWING SHEET — Boston street elevation, all inline SVG =====
@@ -305,7 +291,7 @@
             <div class="wrap split">
                 <div>
                     <p class="eyebrow reveal">The pivot</p>
-                    <h2 class="h2 reveal">I know how the work happens on site. <span class="accent">Now I'm learning the software side.</span></h2>
+                    <h2 class="h2 reveal">I know how the work happens on site. Now I'm learning the software side.</h2>
                     <div class="body-copy reveal">
                         <p>In Colombia I ran the day-to-day of construction work: schedules, budgets, subcontractors, crews and a lot of progress reports. After moving to Boston in 2022, I decided I wanted to work on the tools behind that kind of work, not just use them.</p>
                         <p>I'm a beginner on that side. I'm learning Python from scratch and practicing with AI tools; this website is one of my first projects, made with Claude Code.</p>
@@ -333,7 +319,7 @@
                 <div class="features" data-reveal-group>
                     <article class="card card-pad feature reveal-item">
                         <div class="feature-top">
-                            <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="8" width="34" height="32" rx="2"/><circle cx="22" cy="24" r="10"/><circle cx="22" cy="24" r="2.5"/><path d="M22 14v5M22 29v5M12 24h5M27 24h5M43 16v16"/></svg>
+                            <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="8" width="34" height="32" rx="2"/><circle cx="24" cy="24" r="10"/><circle cx="24" cy="24" r="2.5"/><path d="M24 14v5M24 29v5M14 24h5M29 24h5"/></svg>
                             <span class="tag">2021–22</span>
                         </div>
                         <h3 class="h3">Banco de la República remodel</h3>
@@ -413,7 +399,7 @@
             <div class="wrap split">
                 <div>
                     <p class="eyebrow reveal">Next step</p>
-                    <h2 class="h2 reveal">Someone who knows the site, <span class="accent">and is learning to build the tools.</span></h2>
+                    <h2 class="h2 reveal">Someone who knows the site, and is learning to build the tools.</h2>
                 </div>
                 <div class="reveal" style="align-self: end;">
                     <p class="lede" style="margin-bottom: 28px;">Open to project coordinator, implementation specialist and construction-tech roles in Boston. Bilingual — Spanish &amp; English.</p>
@@ -471,6 +457,6 @@
 
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script defer src="script.js?v=11"></script>
+    <script defer src="script.js?v=12"></script>
 </body>
 </html>
