@@ -1030,3 +1030,214 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 @keyframes loader-in   { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @keyframes loader-fill { from { transform: scaleX(0); } to { transform: scaleX(0.92); } }
 @keyframes loader-fill-end { from { transform: scaleX(0.92); } to { transform: scaleX(1); } }
+
+/* ------------------------------------------------------------
+   20. Maps page — scroll chapters and the atlas (book, plates, index)
+   Content: maps/plates.js · script: maps.js · see maps/README.md
+   ------------------------------------------------------------ */
+.maps-section { padding: 64px 0 104px; border-bottom: 1px solid var(--ink); }
+
+/* ----- 20.2 The open book ----- */
+.book { position: relative; margin-right: 150px; }
+.spread {
+    display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    background: var(--paper); border: 1px solid var(--ink); border-radius: 6px;
+    /* hard-edged page block: three more leaves under the open one */
+    box-shadow: 3px 3px 0 var(--paper), 4px 4px 0 var(--ink), 7px 7px 0 var(--paper), 8px 8px 0 var(--ink), 11px 11px 0 var(--paper), 12px 12px 0 var(--ink);
+    position: relative;
+}
+.spread::after { /* the gutter */
+    content: ""; position: absolute; top: 0; bottom: 0; left: 40%; width: 56px; transform: translateX(-50%);
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,.06) 46%, rgba(0,0,0,.15) 50%, rgba(0,0,0,.06) 54%, transparent);
+    pointer-events: none;
+}
+.page-l { padding: 40px 40px 52px 40px; position: relative; }
+.page-r { padding: 32px 32px 52px 40px; position: relative; }
+.folio { position: absolute; bottom: 18px; font-family: var(--font-mono); font-size: 11px; color: var(--steel); }
+.page-l .folio { left: 40px; } .page-r .folio { right: 32px; }
+
+/* ----- 20.3 Left page: one thing loud, the rest on request ----- */
+.txt.is-in { animation: txt-in .55s cubic-bezier(.22,1,.36,1) both; }
+@keyframes txt-in { from { opacity: 0; transform: translateY(8px); } }
+.txt-no { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; margin-bottom: 16px; color: var(--steel); }
+.txt-no::before { content: ""; width: 8px; height: 8px; background: var(--orange); }
+.txt-no b { color: var(--ink); font-weight: 500; }
+.txt-title { font-size: clamp(2rem, 3.1vw, 2.75rem); font-weight: 600; line-height: 1.02; letter-spacing: -.035em; margin-bottom: 18px; text-wrap: balance; }
+.txt-sum { color: var(--ink); font-size: 1.04rem; line-height: 1.58; }
+.fact { border-left: 3px solid var(--ink); padding: 2px 0 2px 16px; margin: 26px 0 28px; font-size: .97rem; line-height: 1.5; color: var(--graphite); }
+.fact .k { display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--steel); margin-bottom: 6px; }
+
+.more { border-top: 1px solid var(--ink); }
+.more:last-of-type { border-bottom: 1px solid var(--ink); }
+.more summary {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    list-style: none; cursor: pointer; padding: 13px 0;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .07em; text-transform: uppercase;
+}
+.more summary::-webkit-details-marker { display: none; }
+.more summary .count { color: var(--steel); margin-left: 8px; }
+.more summary::after { content: "+"; font-size: 17px; line-height: 1; transition: transform .25s ease; }
+.more[open] summary::after { transform: rotate(45deg); }
+.more summary:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.more > :not(summary) { animation: txt-in .35s ease both; padding-bottom: 12px; }
+.insights li { display: grid; grid-template-columns: 26px 1fr; gap: 4px; padding: 8px 0; border-top: 1px dashed var(--ash); font-size: .92rem; line-height: 1.48; color: var(--steel); }
+.insights .n { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink); padding-top: 3px; }
+.insights b { color: var(--ink); font-weight: 600; }
+.kv > div { display: grid; grid-template-columns: 104px 1fr; gap: 10px; padding: 7px 0; border-top: 1px dashed var(--ash); font-size: .9rem; line-height: 1.4; }
+.kv dt { font-family: var(--font-mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--steel); padding-top: 2px; }
+.tbc { font-family: var(--font-mono); font-size: 10px; letter-spacing: .05em; text-transform: uppercase; border: 1px dashed var(--ink); border-radius: var(--radius-pill); padding: 1px 7px; margin-left: 6px; white-space: nowrap; }
+
+/* ----- 20.4 Right page: two plates and a thin divider -----
+   Each plate is one <img>, created the first time it is needed.
+   .is-top is laid over .is-under from the left; --reveal (0–100%)
+   says how far. The script writes it at most once per frame. */
+.stage {
+    --reveal: 100%;
+    position: relative; overflow: hidden;
+    aspect-ratio: 1900 / 2040; background: #1A1A1A;
+    touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none;
+}
+.stage img { position: absolute; inset: 0; width: 100%; height: 100%; display: none; -webkit-user-drag: none; }
+.stage img.is-under, .stage img.is-leaving { display: block; z-index: 1; }
+.stage img.is-under.is-fading { animation: under-in .35s ease both; z-index: 2; }
+@keyframes under-in { from { opacity: 0; } }
+.stage img.is-top { display: block; z-index: 3; clip-path: inset(0 calc(100% - var(--reveal)) 0 0); }
+.divider { position: absolute; z-index: 4; top: 0; bottom: 0; left: var(--reveal); width: 1px; margin-left: -.5px; background: rgba(250,250,250,.9); pointer-events: none; transition: opacity .3s ease; }
+.divider::after { /* the grip: small at rest, a little larger while in use */
+    content: ""; position: absolute; top: 50%; left: 50%; width: 5px; height: 34px; margin: -17px 0 0 -2.5px;
+    background: var(--paper); border-radius: 3px; box-shadow: 0 0 0 1px rgba(0,0,0,.35);
+    transition: transform .25s cubic-bezier(.22,1,.36,1);
+}
+.stage:hover .divider::after, .stage.is-held .divider::after, .stage:focus-within .divider::after { transform: scale(1.5, 1.25); }
+.stage[data-side="top"] .divider, .stage[data-side="under"] .divider { opacity: .45; }
+.stage .sr-range { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; width: 100%; height: 22px; margin: 0; opacity: 0; cursor: ew-resize; }
+.stage:has(.sr-range:focus-visible) { outline: 2px solid var(--orange); outline-offset: 3px; }
+
+/* who is on each side of the divider */
+.pair { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; font-size: 13.5px; }
+.pair .num { font-family: var(--font-mono); font-size: 11px; color: var(--steel); margin-right: 8px; }
+.pair-a { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pair-b { display: flex; align-items: center; gap: 8px; color: var(--steel); min-width: 0; }
+.pair-b span { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.pair-b select {
+    appearance: none; -webkit-appearance: none; min-width: 0; max-width: 220px;
+    font: inherit; font-weight: 600; color: var(--ink); text-overflow: ellipsis;
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E") no-repeat right 2px center;
+    border: 0; border-bottom: 1px solid var(--ink); border-radius: 0; padding: 3px 18px 3px 0; cursor: pointer;
+}
+.pair-b select:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+
+/* ----- 20.5 Index: page tabs with a thumbnail, on the book's edge ----- */
+.rail { position: absolute; left: 100%; top: 0; bottom: 0; width: 138px; margin-left: 12px; display: flex; flex-direction: column; padding-top: 24px; }
+.rail-index {
+    display: flex; justify-content: space-between; align-items: center; flex: none;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+    background: none; border: 0; border-bottom: 1px solid var(--ink); padding: 0 2px 9px 12px; margin-bottom: 10px; cursor: pointer; color: var(--ink);
+}
+.rail-index span { color: var(--steel); }
+.rail-index:hover { color: var(--steel); }
+.rail-index:focus-visible, .rtab:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.rail-list {
+    display: flex; flex-direction: column; gap: 5px; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+    scrollbar-width: none; padding-bottom: 28px;
+    -webkit-mask-image: linear-gradient(#000 calc(100% - 36px), transparent); mask-image: linear-gradient(#000 calc(100% - 36px), transparent);
+}
+.rail-list::-webkit-scrollbar { display: none; }
+.rtab {
+    flex: none; display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: center; gap: 9px;
+    background: var(--paper); border: 1px solid var(--ink); border-left: 0; border-radius: 0 8px 8px 0;
+    font: inherit; text-align: left; color: var(--ink); cursor: pointer; padding: 5px 8px 5px 6px;
+    transition: transform .25s cubic-bezier(.22,1,.36,1), background-color .2s ease, color .2s ease;
+}
+.rtab:hover { transform: translateX(4px); }
+.rtab img { width: 34px; height: 44px; object-fit: cover; background: #1A1A1A; border-radius: 2px; display: block; }
+.rtab .t { display: grid; gap: 1px; min-width: 0; line-height: 1.15; }
+.rtab .num { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; color: var(--steel); }
+.rtab b { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rtab[aria-selected="true"] { background: var(--ink); color: var(--paper); transform: translateX(4px); }
+.rtab[aria-selected="true"] .num { color: #BDBDBD; }
+.rtab.is-under { box-shadow: inset 3px 0 0 var(--ink); }
+.rtab.is-under .num::after { content: " · under"; }
+
+/* full contents, for when the rail is not enough */
+.toc { border: 1px solid var(--ink); border-radius: var(--radius-card); box-shadow: var(--shadow); background: var(--paper); color: var(--ink); padding: 0; width: min(920px, calc(100vw - 32px)); max-height: min(760px, calc(100dvh - 48px)); margin: auto; }
+.toc::backdrop { background: rgba(0,0,0,.5); }
+.toc[open] { display: flex; flex-direction: column; animation: txt-in .3s ease both; }
+.toc-head { display: flex; align-items: baseline; gap: 14px; padding: 18px 22px; border-bottom: 1px solid var(--ink); flex: none; }
+.toc-head h2 { font-size: 1.35rem; font-weight: 600; letter-spacing: -.02em; }
+.toc-head span { font-family: var(--font-mono); font-size: 12px; color: var(--steel); text-transform: uppercase; letter-spacing: .06em; }
+.toc-head button { margin-left: auto; font: inherit; font-size: 14px; background: none; border: 1px solid var(--ink); border-radius: var(--radius-pill); padding: 5px 14px; cursor: pointer; }
+.toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; padding: 22px; overflow-y: auto; }
+.toc-grid button { display: grid; gap: 8px; width: 100%; font: inherit; text-align: left; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; }
+.toc-grid img { width: 100%; height: auto; aspect-ratio: 240 / 315; object-fit: cover; background: #1A1A1A; border: 1px solid var(--ink); border-radius: 4px; transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease; }
+.toc-grid button:hover img, .toc-grid button:focus-visible img { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+.toc-grid button:focus-visible { outline: none; }
+.toc-grid .num { font-family: var(--font-mono); font-size: 11px; color: var(--steel); letter-spacing: .06em; }
+.toc-grid b { display: block; font-size: 14px; font-weight: 600; line-height: 1.25; }
+.toc-grid [aria-current="true"] img { box-shadow: 4px 4px 0 var(--orange); }
+
+/* ----- 20.6 Chapters above the book: three scroll effects, CSS only -----
+   (a) .fill   text goes from grey to ink, word by word. The script
+               (section G) wraps each word in <span class="w" style="--i:N">;
+               one animation moves --fill from 0 to 1 on the paragraph.
+   (b) .ch-stick  the chapter title stays under the nav while its
+               chapter scrolls past (plain position: sticky).
+   (c) .plx    the picture is taller than its frame and drifts while
+               the frame crosses the screen. Never put this on .stage:
+               the two plates there must stay aligned.
+   Without support for scroll-driven animations, or with reduced
+   motion, the resting state shows: black text and still pictures. */
+@property --fill { syntax: "<number>"; inherits: true; initial-value: 1; }
+@keyframes fill-text { from { --fill: 0; } to { --fill: 1; } }
+@keyframes plx-drift { from { transform: translateY(-9%); } to { transform: translateY(9%); } }
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .fill { animation: fill-text linear both; animation-timeline: view(); animation-range: cover 16% cover 52%; }
+        .fill .w { color: color-mix(in srgb, var(--ink) calc(clamp(0, var(--fill) * var(--n) - var(--i), 1) * 100%), var(--ash)); }
+        .plx img { animation: plx-drift linear both; animation-timeline: view(); animation-range: cover; will-change: transform; }
+    }
+}
+.chapter { padding: 88px 0; border-bottom: 1px solid var(--ink); }
+.ch-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 2fr); gap: 56px; }
+.ch-stick { position: sticky; top: calc(var(--nav-h) + 40px); align-self: start; }
+.ch-no { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+.ch-no::before { content: ""; width: 8px; height: 8px; background: var(--orange); }
+.ch-title { font-size: clamp(1.6rem, 2.6vw, 2.25rem); font-weight: 600; line-height: 1.05; letter-spacing: -.03em; margin-top: 12px; }
+.ch-body { display: grid; gap: 40px; }
+.ch-big { font-size: clamp(1.55rem, 2.75vw, 2.5rem); font-weight: 500; line-height: 1.22; letter-spacing: -.025em; text-wrap: pretty; }
+.ch-mid { font-size: clamp(1.2rem, 1.9vw, 1.6rem); font-weight: 500; line-height: 1.32; letter-spacing: -.018em; text-wrap: pretty; }
+.ch-body .kv > div { grid-template-columns: 120px 1fr; padding: 8px 0; font-size: .95rem; }
+/* clip, not hidden: hidden would make the frame a scroller and freeze the drift */
+.plx { position: relative; overflow: clip; background: #1A1A1A; border: 1px solid var(--ink); border-radius: 6px; aspect-ratio: 16 / 7; }
+.plx img { position: absolute; left: 0; top: -12%; width: 100%; height: 124%; object-fit: cover; object-position: 50% 6%; }
+.ch-cap { display: flex; justify-content: space-between; gap: 16px; margin-top: 10px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--steel); }
+.atlas-intro { margin-bottom: 44px; }
+
+/* ----- 20.7 Phone: one column, the index becomes a strip ----- */
+@media (max-width: 900px) {
+    .chapter { padding: 56px 0; }
+    .ch-grid { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .ch-stick { position: static; }   /* the nav hides and returns on phones; a second sticky bar would fight it */
+    .ch-title { font-size: 1.5rem; margin-top: 6px; }
+    .ch-body { gap: 28px; }
+    .plx { aspect-ratio: 2 / 1; }     /* no taller: the title baked into the plate would enter the frame */
+    .plx img { object-position: 50% 0; }
+    .atlas-intro { margin-bottom: 28px; }
+    .book { margin-right: 0; display: flex; flex-direction: column; gap: 14px; }
+    .rail { position: static; order: -1; width: auto; margin: 0 calc(var(--gutter) * -1); padding: 0; flex-direction: row; align-items: stretch; }
+    .rail-index { border: 1px solid var(--ink); border-radius: 8px; padding: 0 12px; margin: 0 8px 0 var(--gutter); gap: 6px; }
+    .rail-list { flex-direction: row; overflow-x: auto; overflow-y: hidden; padding: 0 var(--gutter) 0 0; scroll-snap-type: x proximity; -webkit-mask-image: none; mask-image: none; }
+    .rtab { border: 1px solid var(--ink); border-radius: 8px; width: 148px; scroll-snap-align: start; }
+    .rtab:hover, .rtab[aria-selected="true"] { transform: none; }
+    .rtab.is-under { box-shadow: inset 0 -3px 0 var(--ink); }
+    .spread { grid-template-columns: minmax(0, 1fr); box-shadow: var(--shadow); }
+    .spread::after { display: none; }
+    .page-r { order: -1; padding: 16px 16px 44px; border-bottom: 1px solid var(--ink); }
+    .page-l { padding: 26px 20px 52px; }
+    .page-l .folio { left: 20px; } .page-r .folio { right: 16px; }
+    .pair-b select { max-width: 150px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .rtab, .divider::after, .toc-grid img { transition: none; }
+    .txt.is-in, .more > :not(summary), .toc[open], .stage img.is-under.is-fading { animation: none; }
+}

@@ -247,3 +247,11 @@ David checked the site against Felipe Vargas Paolini's "30 tips de diseño" (<ht
 ## Mascot: Runa (2026-11-12)
 
 Runa is the site's cat: a calico with a pink collar and a gold heart charm, drawn by David (source art and a 12-frame pounce sequence are kept outside the repository). She is content, like the photographs, so her colours are not part of the palette. Rules: small, still, in a corner; never in the hero and never the loudest thing on a page. First use: the 404 page, bottom-right corner of the header section (`.corner-mascot`, 80–140 px wide, `mascot/web/runa-still.webp`, decorative so hidden from screen readers).
+
+## Maps page (2026-11-12)
+
+A sixth page, `maps.html`, shows David's Python maps of New England's rivers as an open atlas: a left page with the text, a right page with two map plates and a thin divider that lays one over the other, and an index of page tabs on the book's edge. It sits after Photography in the nav; sheet numbers are now `/ 06`. Everything about it (content fields, how to add a plate, the export rules that make plates overlay, open items) is in `maps/README.md`. Read that file before working on it.
+
+- **Dark plates are content.** The map images are the one place where a large dark surface and many colours appear, like the photographs. The page around them keeps the v5.1 palette.
+- **Scroll effects, CSS only** (no scroll library): chapter text fills from grey to ink word by word (`.fill`), chapter titles stick under the nav on wide screens (`.ch-stick`), and a map detail drifts inside its frame (`.plx`). All of it sits inside `@supports (animation-timeline: view())` and `prefers-reduced-motion: no-preference`; otherwise the text is black and the pictures are still. Never put parallax on `.stage`: the two plates must stay registered.
+- **Gotcha:** the parallax frame needs `overflow: clip`. With `overflow: hidden` the frame becomes the scroller for `view()` and the picture never moves.
