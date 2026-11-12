@@ -243,3 +243,7 @@ David checked the site against Felipe Vargas Paolini's "30 tips de diseño" (<ht
 - **Vault icon** (tip 24): the stray line outside the box was removed and the icon centred.
 
 **Gotcha found in v5.1:** GSAP ScrollTrigger measures positions on load. Anything that changes the layout afterwards (here: the review mockups hid the spec card inside a frame) leaves the skyline waiting for a scroll position that no longer exists, so it stays blank. Call `ScrollTrigger.refresh()` after a late layout change.
+
+## Mascot: Runa (2026-11-12)
+
+Runa is the site's cat: a calico with a pink collar and a gold heart charm, drawn by David (source art and a 12-frame pounce sequence are kept outside the repository). She is content, like the photographs, so her colours are not part of the palette. Rules: small, still, in a corner; never in the hero and never the loudest thing on a page. First use: the 404 page, bottom-right corner of the header section (`.corner-mascot`, 80–140 px wide, `mascot/web/runa-still.webp`, decorative so hidden from screen readers).

@@ -744,6 +744,17 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 .sheet-no { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.06em; color: var(--steel); }
 .page-head .display { max-width: 16ch; margin-bottom: 24px; }
 
+/* 404 only: Runa stands in the bottom-right corner of the section, on the
+   same right edge as the content. Small on purpose: the headline leads. */
+.page-head--404 { position: relative; }
+.corner-mascot {
+  position: absolute;
+  right: max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter)));
+  bottom: 0;
+  width: clamp(80px, 11vw, 140px);   /* 80 px on phones: shorter than the section's bottom padding, so it never touches the buttons */
+  height: auto;
+}
+
 /* ------------------------------------------------------------
    15. Contact
    ------------------------------------------------------------ */
