@@ -402,12 +402,14 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
    08. Drawing sheet — the Boston elevation + title block
    ------------------------------------------------------------ */
 .sheet svg.elev { width: 100%; height: auto; }
+.sheet .sheet-art { display: block; width: 100%; height: auto; }   /* the Home illustration (raster); the SVG rules above and below are unused since 2026-11-12 */
 
 /* on narrow screens the drawing keeps a legible size and scrolls sideways
    inside its card, like panning a drawing sheet */
 .sheet-scroll { overflow-x: auto; scrollbar-width: thin; }
 @media (max-width: 760px) {
   .sheet svg.elev { width: 760px; max-width: none; }
+  .sheet .sheet-art { width: 760px; max-width: none; }
 }
 
 .elev .ln   { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
@@ -751,7 +753,7 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
   position: absolute;
   right: max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter)));
   bottom: 0;
-  width: clamp(80px, 11vw, 140px);   /* 80 px on phones: shorter than the section's bottom padding, so it never touches the buttons */
+  width: clamp(88px, 11vw, 150px);   /* 88 px on phones: shorter than the section's bottom padding, so it never touches the buttons */
   height: auto;
 }
 
@@ -1240,4 +1242,30 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 @media (prefers-reduced-motion: reduce) {
     .rtab, .divider::after, .toc-grid img { transition: none; }
     .txt.is-in, .more > :not(summary), .toc[open], .stage img.is-under.is-fading { animation: none; }
+}
+
+/* ------------------------------------------------------------
+   21. Runa — the site's cat. Small, static, decorative drawings in the margins.
+   Rules: aria-hidden, no pointer events, never over text or a button, no animation.
+   Art: mascot/web/runa/static/full/ (cut from David's character sheet)
+   ------------------------------------------------------------ */
+.runa-wrap { position: absolute; z-index: 2; pointer-events: none; line-height: 0; }
+.runa { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+
+/* Selected work (Home): crouches on the top edge of the third card, looking toward the first */
+.features { position: relative; }
+.runa-wrap--projects { width: clamp(104px, 11vw, 160px); bottom: 100%; left: calc((100% - 56px) / 3 * 2 + 56px + 24px); margin-bottom: -3px; }
+
+/* Contact: sits on the top edge of the details card */
+.runa-host { position: relative; }
+.runa-wrap--contact { width: clamp(84px, 8vw, 108px); bottom: 100%; right: calc(var(--gutter) + 24px); margin-bottom: -3px; }
+
+/* Footer: lies on the hairline above the copyright row, very small */
+.footer-grid { position: relative; }
+.runa-wrap--footer { width: clamp(88px, 8vw, 116px); right: 0; bottom: 0; }
+
+@media (max-width: 680px) {
+  .runa-wrap--projects { left: auto; right: 24px; width: 96px; }
+  .runa-wrap--contact { width: 84px; right: 24px; }
+  .runa-wrap--footer { width: 88px; }
 }

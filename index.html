@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap"></noscript>
-    <link rel="stylesheet" href="style.css?v=19">
+    <link rel="stylesheet" href="style.css?v=20">
     <script>
         /* motion hook set before first paint (below-the-fold reveals only);
            failsafe: if the animation library never arrives, show everything */
@@ -137,140 +137,15 @@
                     </div>
                 </div>
 
-                <!-- ===== DRAWING SHEET — Boston street elevation, all inline SVG =====
-                     viewBox 1200 × 460 · grade line at y = 380.
-                     Each element is its own <g>; edit x / y / width / height to change it.
-                     .ln = main line · .thin = detail · .hl = orange "in progress" · .dash = utilities -->
+                <!-- ===== HOME ILLUSTRATION — "The work: engineering, data and place" =====
+                     A hand-drawn sheet by David (art/). The frame, title, labels and title block are part of
+                     the picture, so the text in it is not selectable. Three sizes, the browser picks one. -->
                 <figure class="card sheet reveal">
-                    <div class="sheet-scroll" tabindex="0" aria-label="Elevation drawing — scrolls sideways on small screens">
-                    <svg class="elev" viewBox="0 0 1200 460" role="img" aria-labelledby="elev-title">
-                        <title id="elev-title">Line elevation of the Boston skyline: Custom House Tower, a building under construction with a tower crane, the Prudential Tower, 200 Clarendon and the Zakim Bridge, with water and gas lines below grade.</title>
-                        <defs>
-                            <pattern id="gl-rows" width="12" height="10" patternUnits="userSpaceOnUse"><path d="M2 5H10" stroke="#000" stroke-width="0.6"/></pattern>
-                            <pattern id="gl-grid" width="16" height="20" patternUnits="userSpaceOnUse"><path d="M0 10H16M8 0V20" stroke="#000" stroke-width="0.5" fill="none"/></pattern>
-                            <pattern id="earth" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V7" stroke="#000" stroke-width="0.6"/></pattern>
-                        </defs>
-
-                        <!-- sheet header text -->
-                        <text x="20" y="30">ELEVATION — BOSTON, MA</text>
-                        <text x="1180" y="30" text-anchor="end">N.T.S.</text>
-
-                        <!-- glazing hatches (fade in after the linework) -->
-                        <g class="hatch">
-                            <rect x="70" y="290" width="62" height="90" fill="url(#gl-rows)"/>
-                            <rect x="168" y="168" width="54" height="152" fill="url(#gl-rows)"/>
-                            <rect x="262" y="270" width="68" height="110" fill="url(#gl-grid)"/>
-                            <rect x="350" y="316" width="120" height="64" fill="url(#gl-grid)"/>
-                            <rect x="612" y="140" width="86" height="240" fill="url(#gl-grid)"/>
-                            <polygon points="722,380 722,122 754,106 786,114 786,380" fill="url(#gl-rows)"/>
-                            <rect x="808" y="248" width="92" height="132" fill="url(#gl-grid)"/>
-                            <rect x="910" y="300" width="50" height="80" fill="url(#gl-rows)"/>
-                            <rect x="20" y="380" width="1160" height="14" fill="url(#earth)"/>
-                        </g>
-
-                        <!-- low block -->
-                        <g><rect class="ln" x="70" y="290" width="62" height="90"/></g>
-
-                        <!-- 1 · Custom House Tower -->
-                        <g>
-                            <rect class="ln" x="140" y="320" width="110" height="60"/>
-                            <rect class="ln" x="168" y="168" width="54" height="152"/>
-                            <rect class="ln" x="163" y="148" width="64" height="20"/>
-                            <circle class="ln" cx="195" cy="158" r="6"/>
-                            <path class="thin" d="M195 158V154M195 158H199"/>
-                            <path class="ln" d="M166 148L195 104L224 148"/>
-                            <path class="ln" d="M195 104V86"/>
-                        </g>
-
-                        <!-- mid-rise -->
-                        <g><rect class="ln" x="262" y="270" width="68" height="110"/></g>
-
-                        <!-- 2 · Building under construction + tower crane (orange = in progress) -->
-                        <g>
-                            <path class="hl" d="M350 380V220M390 380V220M430 380V220M470 380V220M350 220H470M350 252H470M350 284H470M350 316H470M350 348H470"/>
-                            <path class="thin" d="M350 252L390 220M390 284L430 252M430 316L470 284"/>
-                        </g>
-                        <g>
-                            <path class="hl" d="M445 380V110M455 380V110"/>
-                            <path class="hl" d="M445 380L455 362L445 344L455 326L445 308L455 290L445 272L455 254L445 236L455 218L445 200L455 182L445 164L455 146L445 128L455 110"/>
-                            <path class="hl" d="M332 110H608M340 98H608"/>
-                            <path class="hl" d="M360 110L370 98L380 110L390 98L400 110L410 98L420 110L430 98L440 110M460 110L470 98L480 110L490 98L500 110L510 98L520 110L530 98L540 110L550 98L560 110L570 98L580 110L590 98L600 110"/>
-                            <path class="hl" d="M450 110V74M450 74L342 98M450 74L604 98"/>
-                            <rect class="hl" x="332" y="110" width="26" height="14"/>
-                            <rect class="hl" x="438" y="110" width="24" height="14"/>
-                            <path class="hl" d="M576 110V198"/>
-                            <rect class="hl" x="552" y="198" width="48" height="6"/>
-                        </g>
-
-                        <!-- 3 · Prudential Tower -->
-                        <g>
-                            <rect class="ln" x="612" y="140" width="86" height="240"/>
-                            <rect class="ln" x="622" y="126" width="66" height="14"/>
-                            <path class="ln" d="M655 126V64M647 88H663"/>
-                        </g>
-
-                        <!-- 4 · 200 Clarendon (Hancock) -->
-                        <g>
-                            <polygon class="ln" points="722,380 722,122 754,106 786,114 786,380"/>
-                            <path class="thin" d="M754 106V380"/>
-                        </g>
-
-                        <!-- blocks -->
-                        <g><rect class="ln" x="808" y="248" width="92" height="132"/></g>
-                        <g><rect class="ln" x="910" y="300" width="50" height="80"/></g>
-
-                        <!-- 5 · Zakim Bridge — inverted-Y towers, fanned stays, deck -->
-                        <g>
-                            <path class="ln" d="M1022 380L1040 232L1058 380M1040 232V176M1031 318H1049"/>
-                            <path class="thin" d="M1040 186L975 338M1040 196L992 338M1040 206L1009 338M1040 216L1024 338M1040 186L1105 338M1040 196L1088 338M1040 206L1071 338M1040 216L1056 338"/>
-                        </g>
-                        <g>
-                            <path class="ln" d="M1134 380L1152 232L1170 380M1152 232V176M1143 318H1161"/>
-                            <path class="thin" d="M1152 186L1117 338M1152 196L1126 338M1152 206L1135 338M1152 216L1143 338M1152 186L1200 310M1152 196L1200 318M1152 206L1200 327M1152 216L1170 338"/>
-                        </g>
-                        <path class="ln" d="M966 338H1200M966 346H1200M968 346V380"/>
-
-                        <!-- grade line + level marker -->
-                        <path class="ln" d="M20 380H1180"/>
-                        <path class="ln" d="M36 380L30 370H42Z"/>
-                        <text x="18" y="362">±0.00</text>
-
-                        <!-- utilities below grade -->
-                        <path class="dash" d="M20 414H1180"/>
-                        <path class="dash" d="M20 438H1180"/>
-                        <g>
-                            <rect class="solid" x="292" y="406" width="16" height="16"/><text x="296" y="418" fill="#000">W</text>
-                            <rect class="solid" x="692" y="406" width="16" height="16"/><text x="696" y="418" fill="#000">W</text>
-                            <rect class="solid" x="492" y="430" width="16" height="16"/><text x="497" y="442" fill="#000">G</text>
-                            <rect class="solid" x="892" y="430" width="16" height="16"/><text x="897" y="442" fill="#000">G</text>
-                        </g>
-
-                        <!-- callouts -->
-                        <g class="callout">
-                            <path class="thin" d="M138 107L180 128"/><circle cx="130" cy="102" r="10"/><text x="130" y="106">1</text>
-                            <path class="thin" d="M308 206L350 236"/><circle cx="300" cy="200" r="10"/><text x="300" y="204">2</text>
-                            <path class="thin" d="M692 76L662 98"/><circle cx="700" cy="70" r="10"/><text x="700" y="74">3</text>
-                            <path class="thin" d="M812 96L786 116"/><circle cx="820" cy="90" r="10"/><text x="820" y="94">4</text>
-                            <path class="thin" d="M1078 157L1045 182"/><circle cx="1086" cy="150" r="10"/><text x="1086" y="154">5</text>
-                        </g>
-                    </svg>
-                    </div>
-
-                    <ol class="legend" aria-label="Legend">
-                        <li><b>1</b>Custom House Tower</li>
-                        <li><b>2</b>Under construction</li>
-                        <li><b>3</b>Prudential Tower</li>
-                        <li><b>4</b>200 Clarendon</li>
-                        <li><b>5</b>Zakim Bridge</li>
-                        <li><b class="hl-key"></b>In progress</li>
-                        <li>W / G — water, gas</li>
-                    </ol>
-                    <div class="titleblock">
-                        <div><span>Project</span><strong>Boston skyline — street elevation</strong></div>
-                        <div><span>Drawn by</span><strong>D. Becerra</strong></div>
-                        <div><span>Sheet</span><strong>A-101</strong></div>
-                        <div><span>Scale</span><strong>N.T.S.</strong></div>
-                        <div><span>Date</span><strong>2026</strong></div>
+                    <div class="sheet-scroll" tabindex="0" aria-label="Illustration — scrolls sideways on small screens">
+                        <img class="sheet-art" src="art/home-work-sheet-1200.webp"
+                             srcset="art/home-work-sheet-760.webp 760w, art/home-work-sheet-1200.webp 1200w, art/home-work-sheet-1739.webp 1739w"
+                             sizes="(max-width: 760px) 760px, (max-width: 1232px) calc(100vw - 64px), 1136px"
+                             width="1739" height="829" alt="Hand-drawn sheet titled "The work: engineering, data and place". A river runs from mountains to the Boston skyline, where a tower crane stands over a building under construction. Around it are small sketches of a graph, a street map, stacked map layers and two photographs." decoding="async">
                     </div>
                 </figure>
             </div>
@@ -319,6 +194,8 @@
                 </div>
 
                 <div class="features" data-reveal-group>
+                    <!-- Runa, curious: crouches on the third card, looking toward the first. Decorative. -->
+                    <div class="runa-wrap runa-wrap--projects" aria-hidden="true"><img class="runa" src="mascot/web/runa/static/full/runa-curious-full-v1-384.webp" width="384" height="215" alt="" loading="lazy" decoding="async"></div>
                     <article class="card card-pad feature reveal-item">
                         <div class="feature-top">
                             <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="8" width="34" height="32" rx="2"/><circle cx="24" cy="24" r="10"/><circle cx="24" cy="24" r="2.5"/><path d="M24 14v5M24 29v5M14 24h5M29 24h5"/></svg>
@@ -419,6 +296,8 @@
     <footer class="footer">
         <div class="wrap">
             <div class="footer-grid">
+                <!-- Runa, lazy: lies on the footer line. Decorative. -->
+                <div class="runa-wrap runa-wrap--footer" aria-hidden="true"><img class="runa" src="mascot/web/runa/static/full/runa-lazy-full-v1-384.webp" width="384" height="166" alt="" loading="lazy" decoding="async"></div>
                 <div>
                     <a href="index.html" class="logo">
                         <svg viewBox="0 0 28 28" aria-hidden="true">

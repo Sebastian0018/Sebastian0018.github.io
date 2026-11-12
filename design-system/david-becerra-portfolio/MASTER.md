@@ -255,3 +255,14 @@ A sixth page, `maps.html`, shows David's Python maps of New England's rivers as 
 - **Dark plates are content.** The map images are the one place where a large dark surface and many colours appear, like the photographs. The page around them keeps the v5.1 palette.
 - **Scroll effects, CSS only** (no scroll library): chapter text fills from grey to ink word by word (`.fill`), chapter titles stick under the nav on wide screens (`.ch-stick`), and a map detail drifts inside its frame (`.plx`). All of it sits inside `@supports (animation-timeline: view())` and `prefers-reduced-motion: no-preference`; otherwise the text is black and the pictures are still. Never put parallax on `.stage`: the two plates must stay registered.
 - **Gotcha:** the parallax frame needs `overflow: clip`. With `overflow: hidden` the frame becomes the scroller for `view()` and the picture never moves.
+
+## v5.2 — Runa and the new Home illustration (2026-11-12)
+
+**Runa** is the site's cat: a hand-drawn colored-pencil calico with green eyes, a cream chest, a pink collar and a gold heart tag, drawn by David. She is content, like the photographs, so her colours are not part of the palette. The brief David wrote (kept outside the repository) sets the rules, and they apply to every use:
+
+- Small, static and decorative: `aria-hidden`, `alt=""`, `pointer-events: none`, no animation. Never fixed to a corner of the screen, never following the cursor or the scroll, no speech bubbles, never over text or a button. The page must work with her hidden.
+- Version 1 has three spots plus the 404: `curious` on the third project card on Home (Selected work), `approachable` on the Contact details card, `lazy` on the footer line of every page except the 404, and `excited` in the corner of the 404 header. Code: `style.css` section 21; images: `mascot/web/runa/static/full/` (384 px WebP, 24–32 KB each).
+- Not yet: walking, the pounce, click or scroll reactions, "peek" and "look" poses (they do not exist yet), and a Runa favicon (the I-beam mark stays).
+- The art is cut from the character sheet (1536 × 1024), so the 384 px files are a gentle enlargement: fine up to about 170 px wide, not for anything large.
+
+**Home illustration.** The inline-SVG Boston skyline in the hero was replaced by a hand-drawn watercolour-and-pencil sheet, "The work: engineering, data and place" (`art/home-work-sheet-*.webp`, three sizes). It is a picture, so its title, labels and title block cannot be selected and are described in the alt text only. On phones it scrolls sideways inside its card, like the old drawing. The old SVG styles (`.elev`, `.legend`, `.titleblock`) and the drawing animation in `script.js` are unused and can be removed. This ends the v4/v5 rule that all artwork is drawn in code.
