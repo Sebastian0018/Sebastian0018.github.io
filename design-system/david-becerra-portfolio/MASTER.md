@@ -266,3 +266,20 @@ A sixth page, `maps.html`, shows David's Python maps of New England's rivers as 
 - The art is cut from the character sheet (1536 × 1024), so the 384 px files are a gentle enlargement: fine up to about 170 px wide, not for anything large.
 
 **Home illustration.** The inline-SVG Boston skyline in the hero was replaced by a hand-drawn watercolour-and-pencil sheet, "The work: engineering, data and place" (`art/home-work-sheet-*.webp`, three sizes). It is a picture, so its title, labels and title block cannot be selected and are described in the alt text only. On phones it scrolls sideways inside its card, like the old drawing. The old SVG styles (`.elev`, `.legend`, `.titleblock`) and the drawing animation in `script.js` are unused and can be removed. This ends the v4/v5 rule that all artwork is drawn in code.
+
+## v5.3 — Runa, black-and-white web version (2026-11-15)
+
+This replaces the Runa part of v5.2. David redrew Runa for the web: a black-and-white, 1930s-cartoon calico with very large eyes. The only colour on her is the dusty-pink collar (`#D97883`) and the gold heart charm (`#E9A823`). The colored-pencil Runa is retired from the site.
+
+**The rule:** Runa must touch existing geometry (a card border, a rule, a margin). She never gets a box, panel or background of her own, is never fixed to the screen, never follows the cursor or the scroll, has no speech bubbles and no animation in this version. Target balance: 90% portfolio, 10% Runa. At most three on a page.
+
+**Direction A, "Minimal"** (chosen from three mocked-up directions):
+
+- `work.html`: she peeks over the top border of the "Paused prototype" card, right above its status tag (`.runa--peek-card`, 84–100 px wide). The card sits in a `.runa-anchor` wrapper because `.card` clips its own overflow.
+- Every page: she rests on the footer rule (`.runa--footer-rest`, 86–104 px wide). The rule is her floor.
+- Home, Contact and the 404 header no longer have a Runa.
+- Phones (680 px and below): the card peek is hidden, because stacked cards leave no room above a card. The footer rest stays, at 80 px.
+
+**Code:** `style.css` section 21; images in `mascot/web/runa/` (`runa-peek-card.webp`, `runa-footer-rest.webp`, 8–10 KB each). All instances use `alt=""`, `aria-hidden="true"`, `loading="lazy"`, and are absolutely positioned, so the layout is identical if they fail to load.
+
+**Known limit:** the two images are cut out of David's reference sheet, where sample cards and floor lines are drawn through her. She is cut flat at those lines; the card border and the footer rule hide the cut. Purpose-drawn art (paws hanging over the edge) would replace them one-for-one.

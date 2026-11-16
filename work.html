@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;700&display=swap"></noscript>
-    <link rel="stylesheet" href="style.css?v=20">
+    <link rel="stylesheet" href="style.css?v=21">
     <script>
         /* motion hook set before first paint (below-the-fold reveals only);
            failsafe: if the animation library never arrives, show everything */
@@ -227,15 +227,20 @@
                         <div class="tags"><span class="tag">Hydrosanitary</span><span class="tag">AutoCAD</span></div>
                     </article>
 
-                    <article class="card card-pad feature reveal-item">
-                        <div class="feature-top">
-                            <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="13" y="3" width="22" height="42" rx="4"/><path d="M19 12h12v8h-7l-5 4zM29 26H19v8h6l4 3z"/></svg>
-                            <span class="tag">Paused prototype</span>
-                        </div>
-                        <h3 class="h3">WhatsApp pre-reservation bot</h3>
-                        <p>A prototype chatbot for restaurant pre-reservations, menu questions and dietary filtering — started from the front-of-house gaps I saw at work. Built while learning; paused before completion while I rethink the scope.</p>
-                        <div class="tags"><span class="tag">Prototype</span><span class="tag">WhatsApp</span><span class="tag">Learning</span></div>
-                    </article>
+                    <!-- .runa-anchor: a wrapper so Runa can sit on this card's top border (.card clips its own overflow).
+                         She peeks over the edge right above the "Paused prototype" tag. Decorative. -->
+                    <div class="runa-anchor">
+                        <img class="runa runa--peek-card" src="mascot/web/runa/runa-peek-card.webp" width="178" height="123" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <article class="card card-pad feature reveal-item">
+                            <div class="feature-top">
+                                <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="13" y="3" width="22" height="42" rx="4"/><path d="M19 12h12v8h-7l-5 4zM29 26H19v8h6l4 3z"/></svg>
+                                <span class="tag">Paused prototype</span>
+                            </div>
+                            <h3 class="h3">WhatsApp pre-reservation bot</h3>
+                            <p>A prototype chatbot for restaurant pre-reservations, menu questions and dietary filtering — started from the front-of-house gaps I saw at work. Built while learning; paused before completion while I rethink the scope.</p>
+                            <div class="tags"><span class="tag">Prototype</span><span class="tag">WhatsApp</span><span class="tag">Learning</span></div>
+                        </article>
+                    </div>
 
                     <article class="card card-pad feature reveal-item">
                         <div class="feature-top">
@@ -257,8 +262,8 @@
     <footer class="footer">
         <div class="wrap">
             <div class="footer-grid">
-                <!-- Runa, lazy: lies on the footer line. Decorative. -->
-                <div class="runa-wrap runa-wrap--footer" aria-hidden="true"><img class="runa" src="mascot/web/runa/static/full/runa-lazy-full-v1-384.webp" width="384" height="166" alt="" loading="lazy" decoding="async"></div>
+                <!-- Runa rests on the footer rule. Decorative. -->
+                <img class="runa runa--footer-rest" src="mascot/web/runa/runa-footer-rest.webp" width="221" height="119" alt="" aria-hidden="true" loading="lazy" decoding="async">
                 <div>
                     <a href="index.html" class="logo">
                         <svg viewBox="0 0 28 28" aria-hidden="true">
