@@ -1243,20 +1243,12 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
    ------------------------------------------------------------ */
 .runa { position: absolute; z-index: 2; display: block; height: auto; pointer-events: none; user-select: none; -webkit-user-drag: none; }
 
-/* a card that Runa touches gets this wrapper, because .card clips its own overflow */
-.runa-anchor { position: relative; display: flex; }
-.runa-anchor > .feature { flex: 1; min-width: 0; }
-
-/* peek over a project card: paws on the card's top border, right above its status tag */
-.runa--peek-card { width: clamp(84px, 7vw, 100px); right: 22px; bottom: 100%; margin-bottom: -5px; }
-
 /* rest on the footer rule: the rule is her floor */
 .footer-grid { position: relative; }
 .runa--footer-rest { width: clamp(86px, 7.5vw, 104px); right: 0; bottom: 0; margin-bottom: -2px; }
 
 /* phones: the cards stack, so there is no room above a card. Content wins. */
 @media (max-width: 680px) {
-  .runa--peek-card { display: none; }
   .runa--footer-rest { width: 80px; }
 }
 @media (prefers-reduced-motion: reduce) {

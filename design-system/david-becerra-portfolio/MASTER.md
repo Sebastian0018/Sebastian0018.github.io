@@ -292,3 +292,7 @@ This replaces the Runa part of v5.2. David redrew Runa for the web: a black-and-
 - **David** (the illustrated person): a small walking figure in the left gutter beside the first Selected work card (`.david`, 96 px wide), shown only from 1400 px viewport width up and hidden below it. Decorative: `alt=""`, `aria-hidden`, static. **The artwork is a stand-in cut from the reference mockup (100 × 133 px); replace it with the original drawing when it exists** (`mascot/web/david/david-walk.webp`).
 - **Runa** sleeps on the Home footer rule again (the same footer image as Work, About and Contact). Home therefore has one Runa.
 - The reference mockup's own labels ("Sebastian Becerra", other nav items, its hero headline) are reference artwork only; the site keeps its own copy.
+
+## v5.5 — Peek-over-card Runa removed (2026-11-16)
+
+Runa no longer peeks over the "Paused prototype" card on Work (David's call). Runa now appears only in the footer on Home, Work, About and Contact. The `.runa-anchor` wrapper, `.runa--peek-card` rules and `runa-peek-card.webp` are gone.
