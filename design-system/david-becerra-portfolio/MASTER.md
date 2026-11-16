@@ -276,8 +276,9 @@ This replaces the Runa part of v5.2. David redrew Runa for the web: a black-and-
 **Direction A, "Minimal"** (chosen from three mocked-up directions):
 
 - `work.html`: she peeks over the top border of the "Paused prototype" card, right above its status tag (`.runa--peek-card`, 84–100 px wide). The card sits in a `.runa-anchor` wrapper because `.card` clips its own overflow.
-- Every page: she rests on the footer rule (`.runa--footer-rest`, 86–104 px wide). The rule is her floor.
-- Home, Contact and the 404 header no longer have a Runa.
+- Three pages only (Work, About, Contact): she rests on the footer rule (`.runa--footer-rest`, 86–104 px wide). The rule is her floor. She was on every footer at first; David cut it to three pages the same day.
+- Home, Photography, Maps and the 404 have no Runa at all.
+- In the footer she must stay the LAST child of `.footer-grid`: the phone layout gives the first block the full width (`.footer-grid > div:first-child`).
 - Phones (680 px and below): the card peek is hidden, because stacked cards leave no room above a card. The footer rest stays, at 80 px.
 
 **Code:** `style.css` section 21; images in `mascot/web/runa/` (`runa-peek-card.webp`, `runa-footer-rest.webp`, 8–10 KB each). All instances use `alt=""`, `aria-hidden="true"`, `loading="lazy"`, and are absolutely positioned, so the layout is identical if they fail to load.
