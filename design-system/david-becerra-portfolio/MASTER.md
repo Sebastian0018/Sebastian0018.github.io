@@ -296,3 +296,7 @@ This replaces the Runa part of v5.2. David redrew Runa for the web: a black-and-
 ## v5.5 — Peek-over-card Runa removed (2026-11-16)
 
 Runa no longer peeks over the "Paused prototype" card on Work (David's call). Runa now appears only in the footer on Home, Work, About and Contact. The `.runa-anchor` wrapper, `.runa--peek-card` rules and `runa-peek-card.webp` are gone.
+
+## v5.6 — New character art (2026-11-16)
+
+David's and Runa's own sheets replace the stand-ins. **David**: the walking pose (`mascot/web/david/david-walk-2.webp`, 192 × 317, shown at 96 px wide, still only from 1400 px viewport width up). **Runa**: the curled-asleep pose on the footer rule (`mascot/web/runa/runa-footer-sleep.webp`, 208 × 135, shown at 80-104 px) on Home, Work, About and Contact. The other poses are cut and kept locally in `mockups/characters/out/` (David: blueprint, map, standing; Runa: rest, peek, sit).
