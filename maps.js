@@ -11,6 +11,7 @@
     const PLATES = window.PLATES.slice();
     const file = (p, suffix) => `maps/img/${p.img || p.id}${suffix}.webp`;
     const stage = $('stage'), range = $('range'), panel = $('panel'), rail = $('rail'), select = $('under-select');
+    const barA = $('bar-a'), barB = $('bar-b'), modeCompare = $('mode-compare'), modeFull = $('mode-full'), openFull = $('open-full');
 
     /* ===== C. Index: rail tabs and the contents dialog ===== */
     const toc = $('toc'), tocGrid = $('toc-grid');
@@ -47,6 +48,9 @@
         stage.style.setProperty('--reveal', `${reveal}%`);
         stage.dataset.side = reveal > 97 ? 'top' : reveal < 3 ? 'under' : 'both';
         range.value = Math.round(reveal);
+        const full = reveal >= 97;                                  // the plate is shown whole; anything else is a comparison
+        modeCompare.setAttribute('aria-pressed', String(!full));
+        modeFull.setAttribute('aria-pressed', String(full));
     };
     // follow(): ease towards where the pointer is, so the line trails the hand slightly
     const follow = (v) => {
@@ -73,6 +77,10 @@
         };
         requestAnimationFrame(step);
     });
+
+    // Compare / Full map: two buttons for the same divider. Full map lays the plate down completely.
+    modeCompare.addEventListener('click', () => { if (reveal >= 97 || reveal <= 3) sweep(50, 700); });
+    modeFull.addEventListener('click', () => sweep(100, 700));
 
     const fromPointer = (e) => { const r = stage.getBoundingClientRect(); follow(((e.clientX - r.left) / r.width) * 100); };
     stage.addEventListener('pointerdown', (e) => {
@@ -119,6 +127,9 @@
     const renderChrome = () => {
         const m = PLATES[state.main];
         $('pair-a').innerHTML = `<span class="num">${m.no}</span>${m.title}`;
+        barA.textContent = m.tab; barB.textContent = PLATES[state.under].tab;
+        openFull.href = file(m, '');                                // the original full-size image of the open plate
+        openFull.setAttribute('aria-label', `Open ${m.title} full-size in a new tab`);
         select.innerHTML = PLATES.map((p, i) => i === state.main ? '' : `<option value="${i}"${i === state.under ? ' selected' : ''}>${p.no} · ${p.title}</option>`).join('');
         stage.setAttribute('aria-label', `${m.title}, laid over ${PLATES[state.under].title}`);
         tabs.forEach((t, i) => {

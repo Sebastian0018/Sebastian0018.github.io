@@ -300,3 +300,7 @@ Runa no longer peeks over the "Paused prototype" card on Work (David's call). Ru
 ## v5.6 — New character art (2026-11-16)
 
 David's and Runa's own sheets replace the stand-ins. **David**: the walking pose (`mascot/web/david/david-walk-2.webp`, 192 × 317, shown at 96 px wide, still only from 1400 px viewport width up). **Runa**: the curled-asleep pose on the footer rule (`mascot/web/runa/runa-footer-sleep.webp`, 208 × 135, shown at 80-104 px) on Home, Work, About and Contact. The other poses are cut and kept locally in `mockups/characters/out/` (David: blueprint, map, standing; Runa: rest, peek, sit).
+
+## v5.7 — Maps atlas: approved open-atlas layout (2026-11-16)
+
+Direction chosen by David (second open-atlas comparison mockup). The book keeps its structure and gets: a narrower left page (about a third of the spread) and a wider map page; 18 px outer corners with the stacked page edges; a bar above the map with the two layer names and **Compare / Full map** (two buttons for the same divider: Full map = the plate shown whole, Compare = divider back at 50 %); **Open full-size** under the map (links to the original `maps/img/<id>.webp` of the open plate, new tab); plate names, folios, keyboard range slider and `#plate` URLs unchanged. **David reads the map** (`mascot/web/david/david-map.webp`, 109 x 220, shown 104 px high) sits at the foot of the left page, in flow, decorative (`alt=""`, `aria-hidden`), hidden at 900 px and below, where the layout stacks.

@@ -1032,21 +1032,24 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 /* ----- 20.2 The open book ----- */
 .book { position: relative; margin-right: 150px; }
 .spread {
-    display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
-    background: var(--paper); border: 1px solid var(--ink); border-radius: 6px;
+    display: grid; grid-template-columns: minmax(0, .6fr) minmax(0, 1.1fr);
+    background: var(--paper); border: 1px solid var(--ink); border-radius: 18px;
     /* hard-edged page block: three more leaves under the open one */
     box-shadow: 3px 3px 0 var(--paper), 4px 4px 0 var(--ink), 7px 7px 0 var(--paper), 8px 8px 0 var(--ink), 11px 11px 0 var(--paper), 12px 12px 0 var(--ink);
     position: relative;
 }
 .spread::after { /* the gutter */
-    content: ""; position: absolute; top: 0; bottom: 0; left: 40%; width: 56px; transform: translateX(-50%);
+    content: ""; position: absolute; top: 0; bottom: 0; left: 35.3%; width: 56px; transform: translateX(-50%);
     background: linear-gradient(90deg, transparent, rgba(0,0,0,.06) 46%, rgba(0,0,0,.15) 50%, rgba(0,0,0,.06) 54%, transparent);
     pointer-events: none;
 }
-.page-l { padding: 40px 40px 52px 40px; position: relative; }
-.page-r { padding: 32px 32px 52px 40px; position: relative; }
+.page-l { padding: 40px 32px 52px 40px; position: relative; display: flex; flex-direction: column; }
+.page-l .txt { margin-bottom: 28px; }
+.page-r { padding: 28px 28px 52px 36px; position: relative; }
+/* David reads the map, at the foot of the left page. Decorative; in flow, so open sections push him down instead of overlapping */
+.maps-david { margin-top: auto; width: auto; height: 104px; align-self: flex-start; pointer-events: none; user-select: none; -webkit-user-drag: none; }
 .folio { position: absolute; bottom: 18px; font-family: var(--font-mono); font-size: 11px; color: var(--steel); }
-.page-l .folio { left: 40px; } .page-r .folio { right: 32px; }
+.page-l .folio { left: 40px; } .page-r .folio { right: 28px; }
 
 /* ----- 20.3 Left page: one thing loud, the rest on request ----- */
 .txt.is-in { animation: txt-in .55s cubic-bezier(.22,1,.36,1) both; }
@@ -1105,8 +1108,21 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 .stage .sr-range { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; width: 100%; height: 22px; margin: 0; opacity: 0; cursor: ew-resize; }
 .stage:has(.sr-range:focus-visible) { outline: 2px solid var(--orange); outline-offset: 3px; }
 
+/* layer names and the two views, above the map */
+.mapbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; border: 1px solid var(--ink); border-radius: 10px; padding: 5px 5px 5px 18px; margin-bottom: 14px; }
+.mapbar-layers { display: flex; align-items: center; min-width: 0; font-size: 13.5px; font-weight: 500; }
+.mapbar-layers span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mapbar-layers i { flex: none; width: 1px; height: 16px; background: var(--ink); margin: 0 20px; }
+.mapbar-modes { display: flex; gap: 8px; flex: none; }
+.mapbar-modes button { font: inherit; font-size: 13px; font-weight: 500; min-height: 36px; padding: 0 16px; background: var(--paper); color: var(--ink); border: 1px solid var(--ink); border-radius: var(--radius-pill); cursor: pointer; transition: background-color .2s ease, color .2s ease; }
+.mapbar-modes button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.mapbar-modes button:not([aria-pressed="true"]):hover { background: var(--ink); color: var(--paper); }
+.mapbar-modes button:focus-visible, .open-full:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.open-full { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 16px; font-size: 13px; font-weight: 500; color: var(--ink); text-decoration: none; border: 1px solid var(--ink); border-radius: var(--radius-pill); white-space: nowrap; transition: background-color .2s ease, color .2s ease; }
+.open-full:hover { background: var(--ink); color: var(--paper); }
+
 /* who is on each side of the divider */
-.pair { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; font-size: 13.5px; }
+.pair { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; margin-top: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--ink); font-size: 13.5px; }
 .pair .num { font-family: var(--font-mono); font-size: 11px; color: var(--steel); margin-right: 8px; }
 .pair-a { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pair-b { display: flex; align-items: center; gap: 8px; color: var(--steel); min-width: 0; }
@@ -1226,11 +1242,15 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
     .spread::after { display: none; }
     .page-r { order: -1; padding: 16px 16px 44px; border-bottom: 1px solid var(--ink); }
     .page-l { padding: 26px 20px 52px; }
+    .maps-david { display: none; }
+    .mapbar { padding-left: 14px; }
+    .mapbar-modes button, .open-full { min-height: 44px; }
+    .mapbar-layers i { margin: 0 12px; }
     .page-l .folio { left: 20px; } .page-r .folio { right: 16px; }
     .pair-b select { max-width: 150px; }
 }
 @media (prefers-reduced-motion: reduce) {
-    .rtab, .divider::after, .toc-grid img { transition: none; }
+    .rtab, .divider::after, .toc-grid img, .mapbar-modes button, .open-full { transition: none; }
     .txt.is-in, .more > :not(summary), .toc[open], .stage img.is-under.is-fading { animation: none; }
 }
 
