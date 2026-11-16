@@ -1262,3 +1262,22 @@ a.card:hover, .card--hover:hover { transform: translate(-2px, -2px); box-shadow:
 @media (prefers-reduced-motion: reduce) {
   .runa { animation: none !important; transition: none !important; }
 }
+
+/* ------------------------------------------------------------
+   22. Home — compact CTA in the hero, walking David at Selected work
+   Decorative art: alt="", aria-hidden, no pointer events, static. The layout is complete without it.
+   ------------------------------------------------------------ */
+/* "You don't have time? Click here →": a pill on the hero's right on wide screens, in flow under the status line otherwise */
+.hero-grid { position: relative; }
+.cta-pill { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; margin-top: 20px; padding: 6px 20px 6px 16px; border: 1px solid var(--ink); border-radius: var(--radius-pill); font-size: 15px; color: var(--steel); }
+.cta-pill svg { width: 30px; height: 26px; flex: none; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.cta-pill a { color: var(--ink); font-weight: 600; text-decoration: none; }
+.cta-pill .u { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+.cta-pill a:hover .u { text-decoration-color: var(--orange); }
+@media (min-width: 1100px) { .cta-pill { position: absolute; right: 0; bottom: 66px; margin: 0; } }
+
+/* walking David: left gutter beside the first project card, feet near the bottom of the card row.
+   Only where the gutter is wide enough; otherwise hidden. */
+.features { position: relative; }
+.david { position: absolute; right: calc(100% + 18px); bottom: 8px; width: 96px; height: auto; display: none; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+@media (min-width: 1400px) { .david { display: block; } }

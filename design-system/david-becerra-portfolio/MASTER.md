@@ -284,3 +284,11 @@ This replaces the Runa part of v5.2. David redrew Runa for the web: a black-and-
 **Code:** `style.css` section 21; images in `mascot/web/runa/` (`runa-peek-card.webp`, `runa-footer-rest.webp`, 8–10 KB each). All instances use `alt=""`, `aria-hidden="true"`, `loading="lazy"`, and are absolutely positioned, so the layout is identical if they fail to load.
 
 **Known limit:** the two images are cut out of David's reference sheet, where sample cards and floor lines are drawn through her. She is cut flat at those lines; the card border and the footer rule hide the cut. Purpose-drawn art (paws hanging over the edge) would replace them one-for-one.
+
+## v5.4 — Home brief: positioning, compact CTA, David (2026-11-16)
+
+- **Positioning line** (hero status line): "Civil engineering · Construction Tech · GIS · Boston", next to the "Open to work" chip. The Home meta description and its Open Graph / Twitter copies say the same and keep "learning Python and AI tools". Check the GIS wording against the CV before using it elsewhere.
+- **Compact CTA**: "You don't have time? Click here →", a pill on the hero's right (wide screens) or under the status line (below 1100 px). It links to `work.html` (David's choice: it shows the work done). Accessible name "Click here to see the work done"; 44 px tall; the focus ring is the site's global one.
+- **David** (the illustrated person): a small walking figure in the left gutter beside the first Selected work card (`.david`, 96 px wide), shown only from 1400 px viewport width up and hidden below it. Decorative: `alt=""`, `aria-hidden`, static. **The artwork is a stand-in cut from the reference mockup (100 × 133 px); replace it with the original drawing when it exists** (`mascot/web/david/david-walk.webp`).
+- **Runa** sleeps on the Home footer rule again (the same footer image as Work, About and Contact). Home therefore has one Runa.
+- The reference mockup's own labels ("Sebastian Becerra", other nav items, its hero headline) are reference artwork only; the site keeps its own copy.
